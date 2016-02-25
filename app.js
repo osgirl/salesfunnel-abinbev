@@ -1,13 +1,13 @@
-var staticData = require('./data/config');
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+import staticData from './data/config/index';
+import express from 'express';
+import path from 'path';
+import favicon from 'serve-favicon';
+import logger from 'morgan';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+import routes from './routes/index';
+import users from './routes/users';
 
 var app = express();
 
@@ -58,6 +58,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;

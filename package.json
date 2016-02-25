@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "forever -w ./bin/www",
+    "start": "babel-node --presets es2015 ./bin/www  --ignore public/javascripts --ignore node_modules",
+    "auto-start": "forever -w --exec \"npm start\"",
     "start-debug": "DEBUG=salesfunnel-abinbev:* npm start",
     "start-prod": "NODE_ENV=production node ./bin/www"
   },
@@ -17,12 +18,17 @@
     "serve-favicon": "~2.3.0"
   },
   "keywords": [
-    "easybird", "ab inbev", "salesfunnel"
+    "easybird",
+    "ab inbev",
+    "salesfunnel"
   ],
   "license": "MIT",
   "author": "easybird.be <jonathan@easybird.be> (http://easybird.be/)",
   "bugs": {
     "url": "https://github.com/easybird/salesfunnel-abinbev/issues"
   },
-  "homepage": "https://github.com/easybird/salesfunnel-abinbev#readme"
+  "homepage": "https://github.com/easybird/salesfunnel-abinbev#readme",
+  "devDependencies": {
+    "babel-cli": "6.5.1"
+  }
 }
