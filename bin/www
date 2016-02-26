@@ -3,7 +3,9 @@
 /**
  * Module dependencies.
  */
-
+require("babel-register")({
+    ignore: [/node_modules/, /public\/javascripts/]
+});
 var app = require('../app');
 var debug = require('debug')('salesfunnel-abinbev:server');
 var http = require('http');

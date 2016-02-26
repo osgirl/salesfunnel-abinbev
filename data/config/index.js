@@ -1,3 +1,5 @@
+import config from '../../config.json'
+
 var staticData = {};
 
 var getStaticData = function() {
@@ -7,14 +9,14 @@ var getStaticData = function() {
     return staticData;
 };
 
-function getConfig() {
-    return getStaticData().config
+var getConfig = function() {
+    return getStaticData().config;
 }
 
 function init() {
-    staticData['config'] = require('../../config.json')[process.env.NODE_ENV || "development"];
+    staticData['config'] = config[process.env.NODE_ENV || "development"];
 }
 
-module.exports = {
-    getConfig: getConfig
-};
+export default {
+    getConfig : getConfig
+}

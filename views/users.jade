@@ -1,0 +1,6 @@
+extends layout
+
+block mainContent
+    p dit zijn alle users:
+    each user in content.users
+        p=user.userName
