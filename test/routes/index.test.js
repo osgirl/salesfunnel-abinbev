@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import app from '../../app';
 import supertest from 'supertest';
-import SupertestHelpers from '../helpers/SupertestHelpers'
+import SupertestHelpers from '../helpers/supertest-helpers.js'
 
 var request = supertest(app);
 var helpers = new SupertestHelpers(['<html>', '</html>', '<body>', '</body>', '<head>', '</head>']);
