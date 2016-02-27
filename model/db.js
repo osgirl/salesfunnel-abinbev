@@ -1,41 +1,40 @@
 import mongoose from 'mongoose';
 import config from '../data/config/index.js';
-import User from './users/user-schema.js';
 
-// Build the connection string
-function getDbUri() {
-    var dbConfigUrl = process.env.DB_URI || config.getConfig().db.url;
-    return dbConfigUrl;
-}
-var dbURI = getDbUri();
+let dbURI = process.env.DB_URI || config.getConfig().db.url;
+let options = {
+    server: {socketOptions: {keepAlive: 1, connectTimeoutMS: 30000}},
+    replset: {socketOptions: {keepAlive: 1, connectTimeoutMS: 30000}}
+};
 
-// Create the database connection
-console.log('connecting to database: ' + dbURI);
-mongoose.connect(dbURI);
+function addConnectionEvents(callback) {
+    var conn = mongoose.connection;
 
-// CONNECTION EVENTS
-// When successfully connected
-mongoose.connection.on('connected', function () {
-    console.log('Mongoose default connection open to ' + dbURI);
-});
-
-// If the connection throws an error
-mongoose.connection.on('error',function (err) {
-    console.log('Mongoose default connection error: ' + err);
-});
-
-// When the connection is disconnected
-mongoose.connection.on('disconnected', function () {
-    console.log('Mongoose default connection disconnected');
-});
-
-// If the Node process ends, close the Mongoose connection
-process.on('SIGINT', function() {
-    mongoose.connection.close(function () {
-        console.log('Mongoose default connection disconnected through app termination');
-        process.exit(0);
+    conn.on('connected', function () {
+        console.log('Mongoose default connection open');
     });
-});
 
-// BRING IN SCHEMAS & MODELS
-export { User };
+    conn.once('open', function () {
+        callback();
+    });
+
+    conn.on('error', function (err) {
+        console.error.bind('Mongoose default connection error: ' + err);
+    });
+
+    conn.on('disconnected', function () {
+        console.log('Mongoose default connection disconnected');
+    });
+
+    process.on('SIGINT', function () {
+        mongoose.connection.close(function () {
+            console.log('Mongoose default connection disconnected through app termination');
+            process.exit(0);
+        });
+    });
+}
+
+export function connectToDatabase(callback) {
+        addConnectionEvents(callback);
+        mongoose.connect(dbURI, options);
+};

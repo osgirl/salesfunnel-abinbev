@@ -1,0 +1,24 @@
+language: node_js
+cache:
+  directories:
+    - node_modules
+node_js:
+  - 'stable'
+  - 'iojs'
+  - '4.0.0'
+before_script:
+  - npm prune
+script:
+  - npm run test-single
+  - npm run check-coverage
+after_success:
+  - npm run report-coverage
+deploy:
+  provider: heroku
+  api_key:
+    secure: JetUHO3GnNpLO4ImxZHuE9/IcgQGUrlW4Qo2bKF1T4MaAdTsKA4U3k0taVcRJPSV2sHHK/AyR+n2T2/iLSVVNLf9M2oM9I2SqDAT6PDCVduYpve4vCLWeZJGeou7SX7Z5QyRQNsoBS24S1GyqU12dMLXCH+I4DkENvM8S7dnP1oEXuj0oAo4+flj113pTfS1huq5PflV8IWac1PyAdwUoBOF7GMbHx8uL5h9s+LegVTMaqEikrTsyrCi1ZpZk/uNvlpk6wNFwr5OnXSeuxh513Na3Geuul3yH5OoQVvVaU60dmQbsJU0KXsbzjmTZK06ZC2KZ0iOUalZA7yxP7Hwe/iXnvryvNBFJp3SmgV1wav5nAUQmDfJEgTjZcKJr5oHVoePG7nIFZawk0G4HVrUBxeUZONUQo4JF4ZgPX48JcdpumyT6WNh5rmyeoNx1AO+nwb7e5IdXBWtjwgYC+bXiRSWXNtigl4FHguq3sm8hRxWCVWbtLZW/zy+/gy0ykd9zKxK2XtcX12VLmQzqAb9KpLomgpTmwS3vXfK2AiVGKQZc9Y4Kh3p6+9Jwg5rmT1vx/+yxMSBmLbnlRGn3Yw1+Bgzvm/lNDC5JuTfkYNKiOSTnytFW0K6FuDa72Whor3QFeh2kZz58C7F/AZBg+wpyDBz1MbXvwAqX86YAKvlUZA=
+  app: salesfunnel-abinbev
+  on:
+    repo: easybird/salesfunnel-abinbev
+    node: '4.0.0'
+    branch: develop

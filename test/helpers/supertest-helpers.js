@@ -4,7 +4,7 @@ class SupertestHelpers {
         this.mandatorySubstrings = mandatorySubstrings;
     }
 
-    errorCallback(error) {
+    throwError(error) {
         if (error) {
             throw new Error(error);
         }
@@ -16,13 +16,13 @@ class SupertestHelpers {
             .expect(200)
             .expect(res => {
                 if (res.text === undefined) {
-                    throw new Error("missing data");
+                    this.throwError("missing data");
                 }
                 this.containsAllSubstrings(
                     res.text,
                     this.mandatorySubstrings,
                     error => {
-                        this.errorCallback("the text: " + res.text + ' should contain all basic html tags.' + error)
+                        this.throwError("the text: " + res.text + ' should contain all basic html tags.' + error)
                     })
             });
 
@@ -31,13 +31,20 @@ class SupertestHelpers {
 
     containsAllSubstrings(str, items, errorCallback) {
         if (!errorCallback) {
-            errorCallback = this.errorCallback
+            errorCallback = this.throwError
         }
 
-        for (var i in items) {
-            var item = items[i];
-            if (str.indexOf(item) === -1) {
-                errorCallback("Does not contain substring: " + item);
+        loopItems(items);
+
+        function loopItems(items) {
+            for (var i in items) {
+                var item = items[i];
+                if (item instanceof Array ) {
+                    loopItems(item);
+                }
+                else if (str.indexOf(item) === -1) {
+                    errorCallback("Does not contain substring: " + item);
+                }
             }
         }
     }

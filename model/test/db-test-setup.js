@@ -1,35 +1,53 @@
 import fixtures from 'node-mongoose-fixtures';
 import staticData from '../../data/config/index';
 import userFixture from './user-fixture.js';
-import '../db.js';
+import { connectToDatabase } from '../db.js';
 
 var isDbReady = false;
 
-function prepareDb() {
-    var config = staticData.getConfig();
+function prepareDb(callback) {
+    connectToDatabase(doPrepareDb);
 
-    if (!config.db.isTestable) {
-        throw new Error("Don't use this DB for testing! - " + config.db.url)
+    function doPrepareDb() {
+        var config = staticData.getConfig();
+
+        if (!config.db.isTestable) {
+            throw new Error("Don't use this DB for testing! - " + config.db.url)
+        }
+        cleanDb(callback);
+        isDbReady = true;
     }
-    fixtures.reset();
-    isDbReady = true;
 }
 
-function addUserFixtures() {
+function addUserFixtures(callback) {
     if (!isDbReady) {
-        prepareDb();
+        prepareDb(doAddUserFixtures);
+    } else {
+        doAddUserFixtures()
     }
 
-    fixtures(
-        {
-            User: userFixture
-        }, function (err) {
-            if (err) {
-                console.log('error: ' + err)
-            }
-        });
+    function doAddUserFixtures() {
+        fixtures(
+            {User: userFixture},
+            function (err) {
+                if (err) {
+                    console.log('error: ' + err)
+                }
+            });
+        if (callback) {
+            callback();
+        }
+    }
+};
+
+function cleanDb(callback) {
+    fixtures.reset();
+    if (callback) {
+        callback();
+    }
 };
 
 export default {
-    addUserFixtures: addUserFixtures
+    addUserFixtures: addUserFixtures,
+    cleanDb: cleanDb
 };
