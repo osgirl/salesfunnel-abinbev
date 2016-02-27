@@ -10,7 +10,7 @@ function getDbUri() {
 var dbURI = getDbUri();
 
 // Create the database connection
-console.log('connecting to database: ' + dbURI);
+console.log('... connecting to database ...');
 mongoose.connect(dbURI);
 
 // CONNECTION EVENTS

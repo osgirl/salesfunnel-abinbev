@@ -17,3 +17,4 @@ deploy:
   app: salesfunnel-abinbev
   on:
     repo: easybird/salesfunnel-abinbev
+    all_branches: true
