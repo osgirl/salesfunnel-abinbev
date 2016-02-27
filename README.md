@@ -1,3 +1,31 @@
 # Sales Funnel reporting tool for AB Inbev
+This is a reporting tool about sales prospects
 
-==> FYI when going to prod (compile with babel.js and run with node: https://www.lookami.com/using-es6-es2015-in-a-node-js-express/
+## Technologies
+    Javascript (ES6 )
+    Html
+    Css
+    MongoDB
+
+## Frameworks used
+### Backend
+    Node.js
+    Express.js
+    Mongoose.js
+
+### Front-end
+    Jade Templating Engine
+    Css template: materialize css
+
+### Testing
+    Mocha
+    Chai
+    Supertest
+    Istanbul
+
+### Tools
+    Babel (compiling to ES5)
+    TravisCI (Continuous integration)
+    Ghooks (git pre-commits)
+    Istanbul (code coverage)
+    CodeCov (code coverage reporting)
