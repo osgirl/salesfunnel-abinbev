@@ -7,7 +7,8 @@
     "auto-start": "forever -w ./bin/www",
     "start-debug": "DEBUG=salesfunnel-abinbev:* npm start",
     "start-prod": "NODE_ENV=production node ./bin/www",
-    "test": "NODE_ENV=test mocha -w --compilers js:babel-register --recursive"
+    "test": "NODE_ENV=test mocha -w --compilers js:babel-register --recursive",
+    "test-single": "NODE_ENV=test mocha --compilers js:babel-register --recursive"
   },
   "dependencies": {
     "babel-preset-es2015": "6.5.0",
@@ -37,8 +38,14 @@
   "devDependencies": {
     "babel-cli": "6.5.1",
     "chai": "3.5.0",
+    "ghooks": "1.0.3",
     "mocha": "2.4.5",
     "node-mongoose-fixtures": "0.2.4",
     "supertest": "1.2.0"
+  },
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm run test-single"
+    }
   }
 }
