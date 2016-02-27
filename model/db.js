@@ -3,7 +3,11 @@ import config from '../data/config/index.js';
 import User from './users/user-schema.js';
 
 // Build the connection string
-var dbURI = config.getConfig().db.url;
+function getDbUri() {
+    var dbConfigUrl = process.env.DB_URI || config.getConfig().db.url;
+    return dbConfigUrl;
+}
+var dbURI = getDbUri();
 
 // Create the database connection
 console.log('connecting to database: ' + dbURI);
