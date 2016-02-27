@@ -7,9 +7,8 @@ router.get('/', function (req, res, next) {
     userService.getUsers(renderPage);
 
     function renderPage(err, users) {
-        if (err || !users) {
-            //TODO what to do when db down?
-            doRender(null)
+        if (err) {
+            next(err)
         } else {
             doRender(users);
         }

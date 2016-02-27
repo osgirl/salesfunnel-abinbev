@@ -3,13 +3,16 @@ cache:
   directories:
     - node_modules
 node_js:
-  - "4.0.0"
-  - "iojs"
-  - "stable"
+  - 'stable'
+  - 'iojs'
+  - '4.0.0'
 before_script:
   - npm prune
 script:
   - npm run test-single
+  - npm run check-coverage
+after_success:
+  - npm run report-coverage
 deploy:
   provider: heroku
   api_key:
@@ -17,4 +20,5 @@ deploy:
   app: salesfunnel-abinbev
   on:
     repo: easybird/salesfunnel-abinbev
-    all_branches: true
+    node: '4.0.0'
+    branch: develop
