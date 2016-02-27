@@ -1,3 +1,6 @@
+[![travis build](https://img.shields.io/travis/easybird/salesfunnel-abinbev.svg?style=flat-square)](https://travis-ci.org/easybird/salesfunnel-abinbev)
+[![codecov coverage](https://img.shields.io/codecov/c/github/easybird/salesfunnel-abinbev.svg)](https://codecov.io/github/easybird/salesfunnel-abinbev)
+
 # Sales Funnel reporting tool for AB Inbev
 This is a reporting tool about sales prospects
 
