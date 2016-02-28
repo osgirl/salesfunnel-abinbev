@@ -10,14 +10,15 @@ import dbTestSetup from '../../model/db-test-setup.js';
 var request = supertest(app);
 var helpers = new SupertestHelpers(['<html>', '</html>', '<body>', '</body>', '<head>', '</head>']);
 
-describe("API GET methods", function() {
+describe("API GET methods", function () {
 
     before(function (done) {
-        dbTestSetup.addTeamFixtures();
-        dbTestSetup.addRoleFixtures(done);
+        dbTestSetup.addTeamFixtures(
+            dbTestSetup.addRoleFixtures(done)
+        );
     });
 
-    it("GET '/' gives the homepage", function(done) {
+    it("GET '/' gives the homepage", function (done) {
         var roleNames = [];
         var teamNames = [];
 
