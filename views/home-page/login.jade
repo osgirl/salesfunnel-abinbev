@@ -1,0 +1,17 @@
+div.container
+    h2.header Login
+    div.row: form.col.s12
+        div.row: div.input-field.col.s12
+            i.material-icons.prefix email
+            input(id="email" type="email" class="validate" required="" aria-required="true")
+            label(for="email") Email
+        div.row: div.input-field.col.s12
+            i.material-icons.prefix vpn_key
+            input(id="password" type="password" class="validate" required="" aria-required="true")
+            label(for="password") Password
+        button.btn-large.waves-effect.waves-light(type="submit", name="action") Log in
+            i.material-icons.right send
+        div.row: div.col.s12
+            p.caption
+                | If you don't have an account yet,
+                a.goToSignup(href="#signup")  sign up first.

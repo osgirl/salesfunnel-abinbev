@@ -1,11 +1,22 @@
-(function($){
-    $(function(){
+(function ($) {
+    $(function () {
 
         $('.button-collapse').sideNav();
         $('.parallax').parallax();
 
-        $(document).ready(function(){
+        $(document).ready(function () {
             $('.scrollspy').scrollSpy();
+        });
+
+        $('a.goToSignup').click(function() {
+            $(document).ready(function () {
+                $('ul.tabs').tabs('select_tab', 'signup');
+            });
+        });
+        $('a.goToLogin').click(function() {
+            $(document).ready(function () {
+                $('ul.tabs').tabs('select_tab', 'login');
+            });
         });
 
     }); // end of document ready
