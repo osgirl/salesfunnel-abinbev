@@ -9,6 +9,24 @@ div.container
             i.material-icons.prefix email
             input(id="email" type="email" class="validate" required="" aria-required="true")
             label(for="email") Email
+        div.row
+            div.col.s1
+                i.material-icons.prefix contacts
+            div.input-field.col.s11
+                select
+                    option(value="" disabled selected) Choose your role
+                    each role in content.roles
+                        option(value=role.id)=role.roleName
+                label Role
+        div.row
+            div.col.s1
+                i.material-icons.prefix loyalty
+            div.input-field.col.s11
+                select
+                    option(value="" disabled selected) Choose your team
+                    each team in content.teams
+                        option(value=team.id)=team.teamName
+                label Team
         div.row: div.input-field.col.s12
             i.material-icons.prefix vpn_key
             input(id="password" type="password" class="validate" required="" aria-required="true")

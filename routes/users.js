@@ -8,7 +8,7 @@ router.get('/', function (req, res, next) {
 
     function renderPage(err, users) {
         if (err) {
-            next(err)
+            next(err);
         } else {
             doRender(users);
         }

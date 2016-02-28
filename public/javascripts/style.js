@@ -6,6 +6,7 @@
 
         $(document).ready(function () {
             $('.scrollspy').scrollSpy();
+            $('select').material_select();
         });
 
         $('a.goToSignup').click(function() {
