@@ -33,12 +33,6 @@ function cleanDb(callback) {
     }
 };
 
-function addAllFixtures() {
-    doAddFixtures({Role: roleFixture});
-    doAddFixtures({Team: teamFixture});
-    doAddFixtures({User: userFixture});
-}
-
 /**Helper functions**/
 function addFixture(callback) {
     if (!isDbReady) {
@@ -77,6 +71,5 @@ export default {
     addUserFixtures: addUserFixtures,
     addTeamFixtures: addTeamFixtures,
     addRoleFixtures: addRoleFixtures,
-    cleanDb: cleanDb,
-    addAllFixtures : addAllFixtures
+    cleanDb: cleanDb
 };
