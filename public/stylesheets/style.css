@@ -52,6 +52,10 @@ nav a {
     height: 48px;
 }
 
+.dropdown-content li > a, .dropdown-content li > span {
+    color: #ee6e73;
+}
+
 /*END Materialize overwrites */
 .header {
     color: #ee6e73;
@@ -66,4 +70,12 @@ p {
 
 a {
     color: #ee6e73
+}
+
+.input-field div.error {
+    position: relative;
+    top: -1rem;
+    left: 0rem;
+    font-size: 0.8rem;
+    color: #ee6e73;
 }
