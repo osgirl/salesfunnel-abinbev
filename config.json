@@ -17,10 +17,10 @@
   "test": {
     "layout": {
       "cssFramework": "/stylesheets/materialize.min.css",
-      "jquery": "https://code.jquery.com/jquery-2.1.1.min.js",
+      "jquery": "/javascripts/jquery-2.1.1.min.js",
       "jqueryValidation": "/javascripts/jquery.validate.min.js",
       "cssFrameworkJs": "/javascripts/materialize.min.js",
-      "font": "http://fonts.googleapis.com/icon?family=Material+Icons",
+      "font": "/font/material.icons.css",
       "cssJs": "/javascripts/style.js",
       "css": "/stylesheets/style.css",
       "externalScripts": false
@@ -32,16 +32,17 @@
   },
   "production": {
     "layout": {
-      "cssFramework": "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css",
-      "jquery": "https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js",
-      "jqueryValidation": "http://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js",
-      "cssFrameworkJs": "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js",
-      "font": "http://fonts.googleapis.com/icon?family=Material+Icons",
+      "cssFramework": "//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css",
+      "jquery": "//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js",
+      "jqueryValidation": "//cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js",
+      "cssFrameworkJs": "//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js",
+      "font": "//fonts.googleapis.com/icon?family=Material+Icons",
       "cssJs": "/javascripts/style.js",
       "css": "/stylesheets/style.css",
       "externalScripts": true
     },
     "db": {
+      "url": "mongodb://localhost:27017/salesfunnel"
     }
   }
 }
