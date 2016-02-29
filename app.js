@@ -6,8 +6,11 @@ import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import routes from './routes/index';
+import migrations from './migrations/helpers/migration-loader';
 
 var app = express();
+
+migrations.loadMigrations();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

@@ -69,10 +69,8 @@ function doAddFixtures(fixtureObject, callback) {
             if (err) {
                 console.log('error: ' + err)
             }
+            if (callback) callback();
         });
-    if (callback) {
-        callback();
-    }
 }
 
 export default {

@@ -25,9 +25,11 @@
     "express": "~4.13.1",
     "jade": "~1.11.0",
     "lodash": "4.5.1",
+    "migrate": "0.2.2",
     "mongodb": "2.1.7",
     "mongoose": "4.4.5",
     "morgan": "~1.6.1",
+    "node-mongoose-fixtures": "0.2.4",
     "serve-favicon": "~2.3.0"
   },
   "keywords": [
@@ -48,7 +50,6 @@
     "ghooks": "1.0.3",
     "istanbul": "^1.0.0-alpha.2",
     "mocha": "2.4.5",
-    "node-mongoose-fixtures": "0.2.4",
     "supertest": "1.2.0"
   },
   "config": {

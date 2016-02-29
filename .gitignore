@@ -1,6 +1,7 @@
 node_modules
 coverage
 npm-debug.log
+migrations/.migrate
 
 # Intellij - WebStorm
 .idea/
