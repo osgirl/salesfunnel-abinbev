@@ -1,0 +1,47 @@
+div.container
+    h2.header Sign up
+    div.row: form.col.s12#signupValidate
+        div.row: div.input-field.col.s12
+            i.material-icons.prefix perm_identity
+            input(id="uname" name="uname" type="text")
+            label(for="uname") Username
+        div.row: div.input-field.col.s12
+            i.material-icons.prefix email
+            input(id="cemail" name="cemail" type="email")
+            label(for="cemail") Email
+        div.row
+            div.col.s1
+                i.material-icons.prefix contacts
+            div.col.s11
+                label(for="crole") Role
+                select.error.browser-default(id="crole" name="crole" data-error=".errorTxt6")
+                    option(value="" disabled selected) Choose your role
+                    each role in content.roles
+                        option(value=role.id)=role.roleName
+                div.input-field
+                    div.errorTxt6
+        div.row
+            div.col.s1
+                i.material-icons.prefix loyalty
+            div.col.s11
+                label(for="cteam") Team
+                select.error.browser-default(id="cteam" name="cteam" data-error=".errorTxt7")
+                    option(value="" disabled selected) Choose your team
+                    each team in content.teams
+                        option(value=team.id)=team.teamName
+                div.input-field
+                    div.errorTxt7
+        div.row: div.input-field.col.s12
+            i.material-icons.prefix vpn_key
+            input(id="newpassword" name="newpassword" type="password")
+            label(for="password") Password
+        div.row: div.input-field.col.s12
+            i.material-icons.prefix vpn_key
+            input(id="cnewpassword" name="cnewpassword" type="password")
+            label(for="cpassword") Confirm your password
+        button.btn-large.waves-effect.waves-light(class="submit" type="submit" value="Submit") Sign up
+            i.material-icons.right send
+    div.row
+        p.caption
+            | Do you already have an account?
+            a.goToLogin(href="#login")  Login here.

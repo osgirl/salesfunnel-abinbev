@@ -2,9 +2,9 @@ import {expect} from 'chai';
 import app from '../../app';
 import supertest from 'supertest';
 import SupertestHelpers from '../helpers/supertest-helpers.js'
-import UserFixtures from '../../model/test/user-fixture.js';
+import UserFixtures from '../../model/users/user-fixture.js';
 import _ from 'lodash';
-import dbTestSetup from '../../model/test/db-test-setup.js';
+import dbTestSetup from '../../model/db-test-setup.js';
 
 var request = supertest(app);
 var helpers = new SupertestHelpers(['<html>', '</html>', '<body>', '</body>', '<head>', '</head>']);

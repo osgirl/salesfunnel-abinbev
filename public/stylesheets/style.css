@@ -1,3 +1,4 @@
+/*START Materialize overwrites */
 .parallax-container {
     min-height: 380px;
     line-height: 0;
@@ -7,6 +8,12 @@
 
 .parallax-container .section {
     width: 100%;
+}
+
+.caption {
+    font-size: 1.25rem;
+    font-weight: 300;
+    margin-bottom: 30px;
 }
 
 @media only screen and (max-width: 992px) {
@@ -24,4 +31,51 @@
     #index-banner .section {
         top: 0;
     }
+}
+
+.btn, .btn-large {
+    background-color: #ee6e73;
+}
+
+nav {
+    background-color: #ffffff;
+}
+
+nav ul a {
+    color: #ee6e73;
+}
+
+nav a {
+    color: #ee6e73;
+}
+.nav-wrapper .brand-logo img {
+    height: 48px;
+}
+
+.dropdown-content li > a, .dropdown-content li > span {
+    color: #ee6e73;
+}
+
+/*END Materialize overwrites */
+.header {
+    color: #ee6e73;
+    font-weight: 300;
+}
+
+p {
+    color: rgba(0,0,0,0.71);
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: #ee6e73
+}
+
+.input-field div.error {
+    position: relative;
+    top: -1rem;
+    left: 0rem;
+    font-size: 0.8rem;
+    color: #ee6e73;
 }

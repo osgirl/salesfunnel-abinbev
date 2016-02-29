@@ -1,0 +1,12 @@
+extends layout
+
+block mainContent
+    div.container
+        div.card.grey.lighten-5: div.row
+            div.col.s12: ul.tabs.amber
+                li.tab.col.s6: a.active(href="#login") Login
+                li.tab.col.s6: a(href="#signup") Sign up
+            div#login.col.s12
+                include home-page/login
+            div#signup.col.s12
+                include home-page/signup
