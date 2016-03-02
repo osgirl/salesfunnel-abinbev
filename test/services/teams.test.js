@@ -27,12 +27,12 @@ describe("when no teams in database", function() {
         dbTestSetup.cleanDb(done);
     });
 
-    it("should return an error", function() {
+    it("should return an empty teams object", function() {
         TeamService.getTeams(verifyResult);
 
         function verifyResult(err, result) {
             expect(result).to.be.empty;
-            expect(err.status).to.equal(404);
+            expect(err).to.be.null;
         }
     });
 });

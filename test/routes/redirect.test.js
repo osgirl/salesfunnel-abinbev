@@ -2,6 +2,7 @@ import {expect} from 'chai';
 import app from '../../app';
 import supertest from 'supertest';
 import SupertestHelpers from '../helpers/supertest-helpers.js'
+import { getRandomPathReq } from '../helpers/random-helpers.js'
 
 var request = supertest(app);
 var helpers = new SupertestHelpers([]);
@@ -24,7 +25,3 @@ describe("API GET methods", function() {
         .end(done);
     });
 });
-
-function getRandomPathReq() {
-    return '/' + Math.random().toString(36).substring(7)
-}

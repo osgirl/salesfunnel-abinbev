@@ -18,7 +18,6 @@ export function initialisePassport(app, secret) {
 export function addLocalStrategyForUserAuthentication() {
     passport.use(new Strategy(function (username, password, done) {
         //crypto.pbkdf2
-
         //later go to DB!
         if (username === password) {
             done(null, {

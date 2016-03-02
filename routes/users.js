@@ -1,10 +1,10 @@
 import express from 'express';
-import {userService} from '../services/index';
+import {UserService} from '../services/index';
 var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-    userService.getUsers(renderPage);
+    UserService.getUsers(renderPage);
 
     function renderPage(err, users) {
         if (err) {

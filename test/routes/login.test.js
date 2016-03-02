@@ -8,17 +8,23 @@ import _ from 'lodash';
 import dbTestSetup from '../../model/db-test-setup.js';
 var helpers = new SupertestHelpers(['<html>', '</html>', '<body>', '</body>', '<head>', '</head>']);
 var loginPage = '/login';
-var authenticatedUser = {username: 'admin@admin.com', password: 'admin@admin.com'}
+var authenticatedUser = {username: 'admin@admin.com', password: 'admin@admin.com'};
+var server = supertest.agent(app);
 
 describe("When the user is authenticated", function () {
-    var server = supertest.agent(app);
 
-    before(function (done) {
+    beforeEach(function (done) {
         server
             .post(loginPage)
             .send(authenticatedUser)
             .expect(302)
             .end(done);
+    });
+
+    afterEach(function (done) {
+        server
+            .get('/logout')
+            .end(done)
     });
 
     it(`GET '${loginPage}' redirects to the homePage`, function (done) {
@@ -37,14 +43,25 @@ describe("When the user is authenticated", function () {
 });
 
 describe("When the user is not authenticated", function () {
-    before(function (done) {
+    beforeEach(function (done) {
         dbTestSetup.addTeamFixtures(
             dbTestSetup.addRoleFixtures(done)
         );
     });
 
+    afterEach(function (done) {
+        dbTestSetup.cleanDb(logout);
+
+        function logout() {
+            server
+                .get('/logout')
+                .expect(302)
+                .end(done)
+        }
+    });
+
     it(`POST ${loginPage} logs the existing user in`, function (done) {
-        supertest.agent(app)
+        server
             .post(loginPage)
             .send(authenticatedUser)
             .expect(302)
@@ -52,17 +69,8 @@ describe("When the user is not authenticated", function () {
             .end(onResponse);
 
         function onResponse(err, res) {
-            logout(function () {
-                if (err) return done(err);
-                return done();
-            });
-        }
-
-        function logout(callback) {
-            supertest.agent(app)
-            .get('logout')
-            .expect(302)
-            .end(callback)
+            if (err) return done(err);
+            return done();
         }
     });
 
@@ -85,7 +93,7 @@ describe("When the user is not authenticated", function () {
     });
 
     it("GET '/' redirects to the loginPage", function (done) {
-        supertest(app)
+        server
             .get('/')
             .expect(302)
             .expect(function (res) {

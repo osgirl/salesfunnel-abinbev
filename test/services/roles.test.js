@@ -27,12 +27,12 @@ describe("when no roles in database", function() {
         dbTestSetup.cleanDb(done);
     });
 
-    it("should return an error", function() {
+    it("should return an an empty roles object", function() {
         RoleService.getRoles(verifyResult);
 
         function verifyResult(err, result) {
             expect(result).to.be.empty;
-            expect(err.status).to.equal(404);
+            expect(err).to.null;
         }
     });
 });

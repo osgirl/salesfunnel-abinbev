@@ -9,10 +9,9 @@ var isDbReady = false;
 
 function addUserFixtures(callback) {
     addFixture(function () {
-            doAddFixtures({User: userFixture}, callback)
+            doAddFixtures({Team: teamFixture, Role: roleFixture, User: userFixture}, callback)
         });
 };
-
 
 function addTeamFixtures(callback) {
     addFixture(function () {

@@ -29,6 +29,7 @@ initialisePassport(app, process.env.SESSION_SECRET || staticData.getConfig().ses
 app.use('/', routes.authenticatedRoutes);
 app.use('/logout', routes.logout);
 app.use('/login', routes.login);
+app.use('/signup', routes.signup);
 app.use('/users', routes.users);
 app.use('/*', routes.redirect);
 

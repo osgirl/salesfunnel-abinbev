@@ -1,7 +1,7 @@
-import userService from './user-service.js';
-import teamService from './role-service.js';
-import roleService from './team-service.js';
+import UserService from './user-service.js';
+import RoleService from './role-service.js';
+import TeamService from './team-service.js';
 
-export { userService };
-export { teamService };
-export { roleService };
+export { UserService };
+export { TeamService };
+export { RoleService };
