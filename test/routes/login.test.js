@@ -52,8 +52,17 @@ describe("When the user is not authenticated", function () {
             .end(onResponse);
 
         function onResponse(err, res) {
-            if (err) return done(err);
-            return done();
+            logout(function () {
+                if (err) return done(err);
+                return done();
+            });
+        }
+
+        function logout(callback) {
+            supertest.agent(app)
+            .get('logout')
+            .expect(302)
+            .end(callback)
         }
     });
 
