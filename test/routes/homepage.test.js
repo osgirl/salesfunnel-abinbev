@@ -30,12 +30,15 @@ describe("When the user is not authenticated", function () {
 });
 
 describe("When the user is authenticated", function () {
-    before(function (done) {
-        request
-            .post('/login')
-            .send(authenticatedUser)
-            .expect(302)
-            .end(done);
+    beforeEach(function (done) {
+        dbTestSetup.cleanDb(login);
+        function login () {
+            request
+                .post('/login')
+                .send(authenticatedUser)
+                .expect(302)
+                .end(done);
+        }
     });
 
     it(`GET '${homePage}' gives the homePage`, function (done) {

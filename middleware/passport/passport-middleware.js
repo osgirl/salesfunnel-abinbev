@@ -2,15 +2,29 @@ import passport from 'passport';
 import expressSession from 'express-session';
 import cookieParser from 'cookie-parser';
 import { Strategy } from 'passport-local';
+import mongoose from 'mongoose';
+import connectMongo from 'connect-mongo';
 
 /** Exported data **/
 export function initialisePassport(app, secret) {
+    var mongoStore = connectMongo(expressSession);
     app.use(cookieParser());
-    app.use(expressSession({
-        secret: secret,
-        resave: false,
-        saveUninitialized: false
-    }));
+    if (process.env.NODE_ENV !== "test") {
+        app.use(expressSession({
+            secret: secret,
+            resave: false,
+            saveUninitialized: false,
+            store: new mongoStore({
+                mongooseConnection: mongoose.connection
+            })
+        }));
+    } else {
+        app.use(expressSession({
+            secret: secret,
+            resave: false,
+            saveUninitialized: false
+        }));
+    }
     app.use(passport.initialize());
     app.use(passport.session());
 }
