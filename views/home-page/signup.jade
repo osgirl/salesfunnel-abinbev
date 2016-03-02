@@ -1,6 +1,6 @@
 div.container
     h2.header Sign up
-    div.row: form.col.s12#signupValidate
+    div.row: form.col.s12#signupValidate(method="post" action="signup")
         div.row: div.input-field.col.s12
             i.material-icons.prefix perm_identity
             input(id="uname" name="uname" type="text")

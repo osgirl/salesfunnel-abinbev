@@ -12,7 +12,8 @@
     },
     "db": {
       "url": "mongodb://localhost:27017/salesfunnel"
-    }
+    },
+    "sessionSecret": "secret"
   },
   "test": {
     "layout": {
@@ -28,7 +29,8 @@
     "db": {
       "url": "mongodb://localhost:27017/salesfunnel-test",
       "isTestable": true
-    }
+    },
+    "sessionSecret": "secret"
   },
   "production": {
     "layout": {
@@ -43,6 +45,7 @@
     },
     "db": {
       "url": "mongodb://localhost:27017/salesfunnel"
-    }
+    },
+    "sessionSecret": "secret"
   }
 }
