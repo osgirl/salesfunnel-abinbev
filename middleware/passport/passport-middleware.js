@@ -3,7 +3,8 @@ import expressSession from 'express-session';
 import cookieParser from 'cookie-parser';
 import { Strategy } from 'passport-local';
 import mongoose from 'mongoose';
-import connectMongo from 'connect-mongo';
+//https://github.com/kcbanner/connect-mongo
+import connectMongo from 'connect-mongo/es5';
 
 /** Exported data **/
 export function initialisePassport(app, secret) {
