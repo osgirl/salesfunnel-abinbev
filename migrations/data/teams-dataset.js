@@ -1,15 +1,12 @@
 var teamsDataset = [
     {
-        "teamName": "team1"
+        "teamName": "West"
     },
     {
-        "teamName": "team2"
+        "teamName": "East"
     },
     {
-        "teamName": "team3"
-    },
-    {
-        "teamName": "team4"
+        "teamName": "South"
     }
 ];
 

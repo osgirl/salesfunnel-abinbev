@@ -87,7 +87,6 @@ function signupRoute(req, res, next) {
     }
 
     function redirectWithError(error) {
-        console.log("error: " + error);
         if (!error) error = 'Unable to signup currently';
         res.redirect('/login' + '?error=' + error + "#signup");
     }
