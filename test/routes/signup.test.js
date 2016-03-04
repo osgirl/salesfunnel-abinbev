@@ -71,38 +71,38 @@ describe("When the user is not authenticated", function () {
             });
         }
     });
-    //
-    //it(`POST ${signupPage} a user with a password less then 8 characters returns a validation error`, function (done) {
-    //    var user = getSignupUser();
-    //    user.newpassword = 'shortPw';
-    //    user.cnewpassword = 'shortPw';
-    //
-    //    server
-    //        .post(signupPage)
-    //        .send(user)
-    //        .expect(302)
-    //        .expect(function (res) {
-    //            if (res.redirect === false) {
-    //                helpers.throwError("function should redirect")
-    //            }
-    //            if (res.header.location !== '/login' + '?error=' + PW_LENGTH_VIOLATION + "#signup") {
-    //                helpers.throwError(`should redirect to '/login' but instead was redirected to "${res.header.location}"`)
-    //            }
-    //        })
-    //        .end(done);
-    //
-    //    function onResponse(err, res) {
-    //        if (err) throw err;
-    //        verifyUsers(UserFixtures.length, done);
-    //    }
-    //
-    //    function verifyUsers(expectedResult, callback) {
-    //        UserService.getUsers(function (err, users) {
-    //            expect(users.length).to.equal(expectedResult);
-    //            callback();
-    //        });
-    //    }
-    //});
+
+    it(`POST ${signupPage} a user with a password less then 8 characters returns a validation error`, function (done) {
+        var user = getSignupUser();
+        user.newpassword = 'shortPw';
+        user.cnewpassword = 'shortPw';
+
+        server
+            .post(signupPage)
+            .send(user)
+            .expect(302)
+            .expect(function (res) {
+                if (res.redirect === false) {
+                    helpers.throwError("function should redirect")
+                }
+                if (res.header.location !== '/login' + '?error=' + PW_LENGTH_VIOLATION + "#signup") {
+                    helpers.throwError(`should redirect to '/login' but instead was redirected to "${res.header.location}"`)
+                }
+            })
+            .end(onResponse);
+
+        function onResponse(err, res) {
+            if (err) throw err;
+            verifyUsers(UserFixtures.length, done);
+        }
+
+        function verifyUsers(expectedResult, callback) {
+            UserService.getUsers(function (err, users) {
+                expect(users.length).to.equal(expectedResult);
+                callback();
+            });
+        }
+    });
 
     it(`POST ${signupPage} a user with an email addres that already exists returns a validation error`, function (done) {
         verifyUsers(UserFixtures.length, signup);
@@ -132,7 +132,6 @@ describe("When the user is not authenticated", function () {
 
         function verifyUsers(expectedResult, callback) {
             UserService.getUsers(function (err, users) {
-                console.log("USERS: " + JSON.stringify(users))
                 expect(users.length).to.equal(expectedResult);
                 callback();
             });
