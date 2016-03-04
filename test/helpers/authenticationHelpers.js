@@ -8,6 +8,7 @@ export const authenticatedUser = {username: UserFixtures[0].email, password: Use
 
 export function ensureUserIsAuthenticated(server) {
     var verifyPasswordStub;
+
     beforeEach(function ensureUserIsAuthenticated(done) {
         verifyPasswordStub = sinon.stub(cryptoPbkdf2, 'verifyPassword', function (hashedPassword, password, callback) {
             callback(null, true);

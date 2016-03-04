@@ -7,22 +7,16 @@ import _ from 'lodash';
 import dbTestSetup from '../../model/db-test-setup.js';
 import UserService from '../../services/user-service.js';
 import { getRandomString } from '../helpers/random-helpers.js'
+import { fillDbBefore } from '../helpers/db-helpers.js';
 
 describe("find all users", function () {
-    beforeEach(function (done) {
-        dbTestSetup.addUserFixtures(done);
-    });
-
-    afterEach(function (done) {
-        dbTestSetup.cleanDb(done);
-    });
+    fillDbBefore();
 
     it("should return all users", function (done) {
         UserService.getUsers(verifyResult);
 
         function verifyResult(err, result) {
             expect(UserFixtures.length).to.equal(result.length);
-
             done();
         }
     });

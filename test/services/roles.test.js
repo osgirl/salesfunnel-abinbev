@@ -2,14 +2,11 @@ import {expect} from 'chai';
 import app from '../../app';
 import RoleFixtures from '../../model/roles/role-fixture.js';
 import _ from 'lodash';
-import dbTestSetup from '../../model/db-test-setup.js';
 import RoleService from '../../services/role-service.js';
+import { cleanDbBefore, fillDbBefore } from '../helpers/db-helpers.js';
 
 describe("find all roles", function () {
-
-    before(function (done) {
-        dbTestSetup.addRoleFixtures(done);
-    });
+    fillDbBefore();
 
     it("should return all roles", function (done) {
         RoleService.getRoles(verifyResult);
@@ -22,17 +19,16 @@ describe("find all roles", function () {
     });
 });
 
-describe("when no roles in database", function() {
-    before(function (done) {
-        dbTestSetup.cleanDb(done);
-    });
+describe("when no roles in database", function () {
+    cleanDbBefore();
 
-    it("should return an an empty roles object", function() {
+    it("should return an empty roles object", function (done) {
         RoleService.getRoles(verifyResult);
 
         function verifyResult(err, result) {
             expect(result).to.be.empty;
             expect(err).to.null;
+            done();
         }
     });
 });

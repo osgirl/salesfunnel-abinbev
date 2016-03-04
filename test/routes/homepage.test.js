@@ -13,7 +13,6 @@ var homePage = '/';
 var request = supertest.agent(app);
 
 describe("When the user is not authenticated", function () {
-
     it(`GET '${homePage}' redirects to the loginPage`, function (done) {
         request.get(homePage)
             .expect(302)

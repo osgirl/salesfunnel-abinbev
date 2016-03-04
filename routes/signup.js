@@ -5,6 +5,11 @@ import { hashPassword } from '../middleware/crypto/crypto-pbkdf2.js';
 
 var router = express.Router();
 
+export const PW_NOT_EQUAL_VIOLATION = "Both passwords should be equal";
+export const PW_LENGTH_VIOLATION = "Password should be at least 8 characters";
+export const DUPLICATE_EMAIL_ERROR = "A user with this email is already registered";
+export const ANOTHER_ERROR = "'Unable to signup currently'";
+
 function ensureNotAuthenticated(req, res, next) {
     if (!req.isAuthenticated()) {
         next();
@@ -20,23 +25,32 @@ function signupRoute(req, res, next) {
     var body = req.body;
 
     validatePostBody(function (err) {
-        if (err) redirectWithError(err);
-        transformUserObject(function (err, user) {
-            if (err) redirectWithError(err);
-            saveUserObject(user, function (err, persistedUser) {
-                if (err) redirectWithError(err);
-                sendEmailToUser(persistedUser.email);
-                redirect(persistedUser);
-            })
-        });
+        if (err) {
+            redirectWithError(err);
+        } else {
+            transformUserObject(function (err, user) {
+                if (err) {
+                    redirectWithError(err);
+                } else {
+                    saveUserObject(user, function (err, persistedUser) {
+                        if (err) {
+                            redirectWithError(err);
+                        } else {
+                            sendEmailToUser(persistedUser.email);
+                            redirect(persistedUser);
+                        }
+                    })
+                }
+            });
+        }
     });
 
     function validatePostBody(callback) {
         if (body.newpassword !== body.cnewpassword) {
-            callback("both passwords should be equal");
+            callback(PW_NOT_EQUAL_VIOLATION);
         }
         if (!body.newpassword || body.newpassword.length < 8) {
-            callback("password should be at least 8 characters")
+            callback(PW_LENGTH_VIOLATION)
         }
         callback(null);
     }
@@ -60,9 +74,9 @@ function signupRoute(req, res, next) {
         UserService.createUser(user, function (err, persistedUser) {
             if (err) {
                 if (err.errmsg.indexOf('E11000 duplicate key error') > -1) {
-                    var error = 'a user with this email is already registered';
+                    var error = DUPLICATE_EMAIL_ERROR;
                 } else {
-                    var error = 'currently unable to signup';
+                    var error = ANOTHER_ERROR;
                 }
             }
             callback(error, persistedUser);
@@ -87,7 +101,7 @@ function signupRoute(req, res, next) {
     }
 
     function redirectWithError(error) {
-        if (!error) error = 'Unable to signup currently';
+        if (!error) error = ANOTHER_ERROR;
         res.redirect('/login' + '?error=' + error + "#signup");
     }
 };

@@ -11,13 +11,13 @@ var helpers = new SupertestHelpers(['<html>', '</html>', '<body>', '</body>', '<
 
 describe("API GET methods success", function () {
 
-    before(function (done) {
+    beforeEach(function (done) {
         dbTestSetup.cleanDb(function () {
             dbTestSetup.addUserFixtures(done);
         })
     });
 
-    after(function (done) {
+    afterEach(function (done) {
         dbTestSetup.cleanDb(done);
     });
 
