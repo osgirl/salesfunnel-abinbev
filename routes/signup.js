@@ -1,6 +1,8 @@
 import express from 'express';
 import { Promise } from 'bluebird';
 import UserService from '../services/user-service.js';
+import { hashPassword } from '../middleware/crypto/crypto-pbkdf2.js';
+
 var router = express.Router();
 
 function ensureNotAuthenticated(req, res, next) {
@@ -17,48 +19,58 @@ router.post('/', ensureNotAuthenticated, signupRoute);
 function signupRoute(req, res, next) {
     var body = req.body;
 
-    validatePostBody(function () {
-        transformUserObject(function (user) {
-            saveUserObject(user, function (persistedUser) {
-                sendEmailToUser(persistedUser.email, function () {
-                    redirect(persistedUser)
-                })
+    validatePostBody(function (err) {
+        if (err) redirectWithError(err);
+        transformUserObject(function (err, user) {
+            if (err) redirectWithError(err);
+            saveUserObject(user, function (err, persistedUser) {
+                if (err) redirectWithError(err);
+                sendEmailToUser(persistedUser.email);
+                redirect(persistedUser);
             })
         });
     });
 
     function validatePostBody(callback) {
         if (body.newpassword !== body.cnewpassword) {
-            //TODO how to handle error?
-            throw new Error("both passwords should be equal");
+            callback("both passwords should be equal");
         }
-        callback();
+        if (!body.newpassword || body.newpassword.length < 8) {
+            callback("password should be at least 8 characters")
+        }
+        callback(null);
     }
 
     function transformUserObject(callback) {
-        var user = {
-            userName: body.uname,
-            email: body.cemail,
-            roleRef: body.crole,
-            teamRef: body.cteam,
-            pw: body.newpassword
-        };
-        callback(user);
+        hashPassword(body.newpassword, createUserObject);
+
+        function createUserObject(err, hashedPassword) {
+            var user = {
+                userName: body.uname,
+                email: body.cemail,
+                roleRef: body.crole,
+                teamRef: body.cteam,
+                pw: hashedPassword
+            };
+            callback(err, user);
+        }
     }
 
     function saveUserObject(user, callback) {
         UserService.createUser(user, function (err, persistedUser) {
             if (err) {
-                //TODO how to handle error?
-                next(err);
+                if (err.errmsg.indexOf('E11000 duplicate key error') > -1) {
+                    var error = 'a user with this email is already registered';
+                } else {
+                    var error = 'currently unable to signup';
+                }
             }
-            callback(persistedUser);
+            callback(error, persistedUser);
         });
     }
 
-    function sendEmailToUser(email, callback) {
-    //    TODO implement send email to user!
-        callback();
+    function sendEmailToUser(email) {
+        //    TODO implement send email to user with node-email-templates!
     }
 
     function redirect(persistedUser) {
@@ -72,6 +84,12 @@ function signupRoute(req, res, next) {
                 user: persistedUser
             }
         })
+    }
+
+    function redirectWithError(error) {
+        console.log("error: " + error);
+        if (!error) error = 'Unable to signup currently';
+        res.redirect('/login' + '?error=' + error + "#signup");
     }
 };
 

@@ -4,28 +4,16 @@ import supertest from 'supertest';
 import SupertestHelpers from '../helpers/supertest-helpers.js'
 import TeamFixtures from '../../model/teams/team-fixture.js';
 import RoleFixtures from '../../model/roles/role-fixture.js';
+import { ensureUserIsAuthenticated, ensurePasswordVerificationIsSuccessful, authenticatedUser } from '../helpers/authenticationHelpers.js';
 import _ from 'lodash';
 import dbTestSetup from '../../model/db-test-setup.js';
+
 var helpers = new SupertestHelpers(['<html>', '</html>', '<body>', '</body>', '<head>', '</head>']);
 var loginPage = '/login';
-var authenticatedUser = {username: 'admin@admin.com', password: 'admin@admin.com'};
 var server = supertest.agent(app);
 
 describe("When the user is authenticated", function () {
-
-    beforeEach(function (done) {
-        server
-            .post(loginPage)
-            .send(authenticatedUser)
-            .expect(302)
-            .end(done);
-    });
-
-    afterEach(function (done) {
-        server
-            .get('/logout')
-            .end(done)
-    });
+    ensureUserIsAuthenticated(server);
 
     it(`GET '${loginPage}' redirects to the homePage`, function (done) {
         server.get(loginPage)
@@ -43,20 +31,24 @@ describe("When the user is authenticated", function () {
 });
 
 describe("When the user is not authenticated", function () {
+    ensurePasswordVerificationIsSuccessful();
+
     beforeEach(function (done) {
-        dbTestSetup.addTeamFixtures(
-            dbTestSetup.addRoleFixtures(done)
-        );
+        dbTestSetup.addUserFixtures(done);
     });
 
     afterEach(function (done) {
-        dbTestSetup.cleanDb(logout);
+        logout(cleanDb);
 
-        function logout() {
+        function logout(callback) {
             server
                 .get('/logout')
                 .expect(302)
-                .end(done)
+                .end(callback)
+        }
+
+        function cleanDb() {
+            dbTestSetup.cleanDb(done);
         }
     });
 
@@ -69,7 +61,7 @@ describe("When the user is not authenticated", function () {
             .end(onResponse);
 
         function onResponse(err, res) {
-            if (err) return done(err);
+            if (err) throw err;
             return done();
         }
     });

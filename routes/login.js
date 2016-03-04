@@ -32,6 +32,8 @@ function doRenderLoginPage(req, res, next) {
         });
 
     function renderPage(teams, roles) {
+        var error = req.query.error || req.flash('error');
+
         res.render('login-page', {
             metaData: {
                 title: 'Sales funnel - reporting tool - AB Inbev',
@@ -39,6 +41,7 @@ function doRenderLoginPage(req, res, next) {
             },
             isAuthenticated: false,
             content: {
+                error: error,
                 teams: teams,
                 roles: roles
             }
@@ -47,6 +50,6 @@ function doRenderLoginPage(req, res, next) {
     }
 };
 
-router.post('/', doUserAuthentication({successRedirect: '/', failureRedirect: '/'}));
+router.post('/', doUserAuthentication({successRedirect: '/', failureRedirect: '/login', failureFlash: true}));
 
 export default router;

@@ -12,7 +12,7 @@ function ensureAuthenticated(req, res, next) {
 
 /* GET home page. */
 router.get('/', ensureAuthenticated, function (req, res, next) {
-    req.userObject = getAuthenticatedUser(req.user)
+    req.userObject = getAuthenticatedUser(req.user.id)
         .then(function (userObject) {
             req.userObject = userObject;
             renderWelcomePage(req, res)

@@ -3,4 +3,4 @@ extends layout
 block mainContent
     div.container
         div.card.grey.lighten-5: div.row
-            p= 'Welcome ' + content.user.name
+            p= 'Welcome ' + JSON.stringify(content.user)

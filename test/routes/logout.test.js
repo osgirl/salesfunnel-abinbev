@@ -6,10 +6,10 @@ import TeamFixtures from '../../model/teams/team-fixture.js';
 import RoleFixtures from '../../model/roles/role-fixture.js';
 import _ from 'lodash';
 import dbTestSetup from '../../model/db-test-setup.js';
+import { ensureUserIsAuthenticated } from '../helpers/authenticationHelpers.js';
 
 var helpers = new SupertestHelpers(['<html>', '</html>', '<body>', '</body>', '<head>', '</head>']);
 var logoutPage = '/logout';
-var authenticatedUser = {username: 'admin@admin.com', password: 'admin@admin.com'};
 var request = supertest.agent(app);
 
 describe("When the user is not authenticated", function () {
@@ -30,23 +30,22 @@ describe("When the user is not authenticated", function () {
 });
 
 describe("When the user is authenticated", function () {
-    before(function (done) {
-        request
-            .post('/login')
-            .send(authenticatedUser)
-            .expect(302)
-            .end(done);
-    });
+    ensureUserIsAuthenticated(request);
 
     it(`GET '${logoutPage}' redirects to the loginPage`, function (done) {
             expectThatTheUserIsLoggedIn(function () {
-                doLogoutAndExpectRedirect(function() {
+                doLogoutAndExpectRedirect(function () {
                     expectThatTheUserIsLoggedOut(done)
                 })
             });
 
             function expectThatTheUserIsLoggedIn(callback) {
-                request.get('/').expect(200).end(callback)
+                request.get('/').expect(200).end(onResponse);
+
+                function onResponse(err, res) {
+                    if (err) throw err;
+                    callback();
+                }
             }
 
             function doLogoutAndExpectRedirect(callback) {
@@ -59,7 +58,12 @@ describe("When the user is authenticated", function () {
                         if (res.header.location !== '/') {
                             helpers.throwError(`should redirect to '/' but instead was redirected to "${res.header.location}"`)
                         }
-                    }).end(callback);
+                    }).end(onResponse);
+
+                function onResponse(err, res) {
+                    if (err) throw err;
+                    callback();
+                }
             }
 
             function expectThatTheUserIsLoggedOut(callback) {
@@ -73,7 +77,12 @@ describe("When the user is authenticated", function () {
                             helpers.throwError(`should redirect to '/login' but instead was redirected to "${res.header.location}"`)
                         }
                     })
-                    .end(callback);
+                    .end(onResponse);
+
+                function onResponse(err, res) {
+                    if (err) throw err;
+                    callback();
+                }
             }
         }
     )

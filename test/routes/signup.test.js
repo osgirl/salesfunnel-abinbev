@@ -8,27 +8,15 @@ import UserFixtures from '../../model/users/user-fixture.js';
 import _ from 'lodash';
 import dbTestSetup from '../../model/db-test-setup.js';
 import UserService from '../../services/user-service.js';
+import { ensureUserIsAuthenticated } from '../helpers/authenticationHelpers.js';
+
 var helpers = new SupertestHelpers(['<html>', '</html>', '<body>', '</body>', '<head>', '</head>']);
 var signupPage = '/signup';
 var server = supertest.agent(app);
-var authenticatedUser = {username: 'admin@admin.com', password: 'admin@admin.com'};
+var signupUser = { uname: UserFixtures[0].userName, cemail: UserFixtures[0].email, crole: UserFixtures[0].roleRef, cteam: UserFixtures[0].teamRef, newpassword: UserFixtures[0].pw, cnewpassword: UserFixtures[0].pw};
 
 describe("When the user is authenticated", function() {
-
-    beforeEach(function (done) {
-        server
-            .post('/login')
-            .send(authenticatedUser)
-            .expect(302)
-            .end(done);
-    });
-
-    afterEach(function (done) {
-        server
-            .get('/logout')
-            .expect(302)
-            .end(done)
-    });
+    ensureUserIsAuthenticated(server);
 
     it("it should not be possible to signup for a new account and he should be redirected to the homePage", function(done) {
         server.post(signupPage)
@@ -60,17 +48,15 @@ describe("When the user is not authenticated", function () {
             signupNewUser();
 
             function signupNewUser() {
-                supertest.agent(app)
+                server
                     .post(signupPage)
-                    .send(UserFixtures[0])
+                    .send(signupUser)
                     .expect(200)
                     .end(onResponse);
 
                 function onResponse(err, res) {
-                    verifyUsers(function () {
-                        if (err) return done(err);
-                        return done();
-                    });
+                    if (err) throw err;
+                    verifyUsers(done);
                 }
 
                 function verifyUsers(callback) {

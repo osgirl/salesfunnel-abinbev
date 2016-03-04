@@ -6,10 +6,10 @@ import TeamFixtures from '../../model/teams/team-fixture.js';
 import RoleFixtures from '../../model/roles/role-fixture.js';
 import _ from 'lodash';
 import dbTestSetup from '../../model/db-test-setup.js';
+import { ensureUserIsAuthenticated, authenticatedUser } from '../helpers/authenticationHelpers.js';
 
 var helpers = new SupertestHelpers(['<html>', '</html>', '<body>', '</body>', '<head>', '</head>']);
 var homePage = '/';
-var authenticatedUser = {username: 'admin@admin.com', password: 'admin@admin.com'};
 var request = supertest.agent(app);
 
 describe("When the user is not authenticated", function () {
@@ -30,16 +30,7 @@ describe("When the user is not authenticated", function () {
 });
 
 describe("When the user is authenticated", function () {
-    beforeEach(function (done) {
-        dbTestSetup.cleanDb(login);
-        function login () {
-            request
-                .post('/login')
-                .send(authenticatedUser)
-                .expect(302)
-                .end(done);
-        }
-    });
+    ensureUserIsAuthenticated(request);
 
     it(`GET '${homePage}' gives the homePage`, function (done) {
         var reponse = request.get(homePage);
