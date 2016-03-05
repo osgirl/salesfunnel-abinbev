@@ -2,6 +2,7 @@ import express from 'express';
 import { Promise } from 'bluebird';
 import UserService from '../services/user-service.js';
 import { hashPassword } from '../middleware/crypto/crypto-pbkdf2.js';
+import { sendVerificationEmails } from '../services/email-service.js';
 
 var router = express.Router();
 
@@ -35,7 +36,7 @@ function signupRoute(req, res, next) {
 
     function handlePersistedUser(err, persistedUser) {
         if (err) return redirectWithError(err);
-        sendEmailToUser(persistedUser.email);
+        sendVerificationEmails(persistedUser);
         redirect(persistedUser);
     }
 
@@ -94,10 +95,6 @@ function doSaveUserObject(user, callback) {
         }
         return callback(error, persistedUser);
     });
-}
-
-function sendEmailToUser(email) {
-    //    TODO implement send email to user with node-email-templates!
 }
 
 export default router;

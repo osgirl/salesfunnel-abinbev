@@ -4,8 +4,8 @@ import { Schema } from 'mongoose';
 var userSchema = new Schema({
     userName: String,
     email: { type: String, index: {unique: true}},
-    roleRef: { type: Schema.Types.ObjectId, ref: 'Role'},
-    teamRef: { type: Schema.Types.ObjectId, ref: 'Team'},
+    roleRef: { type: String, ref: 'Role', required: true},
+    teamRef: { type: String, ref: 'Team'},
     pw: String,
     isValidated: Boolean
 }, {collection: 'users'});

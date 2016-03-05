@@ -1,15 +1,15 @@
 var roleFixture = [
     {
-        _id: "46d44d664bfbadf7477ab375",
-        roleName: "rep"
+        "_id": "NSM",
+        "roleName": "National Sales Manager"
     },
     {
-        _id: "45d44d664bfbadf7477ab375",
-        roleName: "sales manager"
+        "_id": "SM",
+        "roleName": "Sales Manager"
     },
     {
-        _id: "65d44d664bfbadf7477ab375",
-        roleName: "opperchief"
+        "_id": "M1",
+        "roleName": "M1"
     }
 ];
 

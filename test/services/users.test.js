@@ -68,7 +68,6 @@ describe("when no users in database", function () {
         UserService.createUser({
             userName: userName,
             email: "anoer@test.com",
-            roleRef: getRandomString(),
             teamRef: TeamFixtures[0]._id,
             pw: getRandomString()
         }, verifyResult);
