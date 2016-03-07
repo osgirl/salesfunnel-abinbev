@@ -5,8 +5,10 @@ import SupertestHelpers from '../helpers/supertest-helpers.js'
 import TeamFixtures from '../../model/teams/team-fixture.js';
 import RoleFixtures from '../../model/roles/role-fixture.js';
 import { ensureUserIsAuthenticated, ensurePasswordVerificationIsSuccessful, authenticatedUser } from '../helpers/authenticationHelpers.js';
+import { getRandomString } from '../helpers/random-helpers.js';
 import _ from 'lodash';
 import dbTestSetup from '../../model/db-test-setup.js';
+import { DEFAULT_ENSURE_AUTHENTICATED_ERROR } from '../../middleware/authentication/ensureAuthentication.js';
 
 var helpers = new SupertestHelpers(['<html>', '</html>', '<body>', '</body>', '<head>', '</head>']);
 var loginPage = '/login';
@@ -76,15 +78,17 @@ describe("When the user is not authenticated", function () {
         _.forEach(RoleFixtures, function (RoleFixture) {
             roleNames.push(RoleFixture.roleName);
         });
-        var reponse = supertest(app).get(loginPage);
+        var response = supertest(app).get(loginPage);
 
-        helpers.verifySuccess(reponse)
+        helpers.verifySuccess(response)
             .expect(function (res) {
                 helpers.containsAllSubstrings(res.text, ['<title>Sales funnel - reporting tool - AB Inbev</title>', roleNames, teamNames])
             }).end(done);
     });
 
     it("GET '/' redirects to the loginPage", function (done) {
+        var expectedURI = `/login?error=${DEFAULT_ENSURE_AUTHENTICATED_ERROR}`;
+
         server
             .get('/')
             .expect(302)
@@ -92,11 +96,24 @@ describe("When the user is not authenticated", function () {
                 if (res.redirect === false) {
                     helpers.throwError("function should redirect")
                 }
-                if (res.header.location !== loginPage) {
-                    helpers.throwError(`should redirect to "${loginPage}" but instead was redirected to "${res.header.location}"`)
+                if (res.header.location !== expectedURI) {
+                    helpers.throwError(`should redirect to "${expectedURI}" but instead was redirected to "${res.header.location}"`)
                 }
             })
             .end(done);
+    });
+
+    var infoMessage = getRandomString();
+
+    it(`GET '/info=${infoMessage} shows info message on the login page`, function (done) {
+        var expectedURI = `/login?info=${infoMessage}`;
+
+        var response = supertest(app).get(expectedURI);
+
+        helpers.verifySuccess(response)
+            .expect(function (res) {
+                helpers.containsAllSubstrings(res.text, ['<title>Sales funnel - reporting tool - AB Inbev</title>', infoMessage])
+            }).end(done);
     });
 
 });

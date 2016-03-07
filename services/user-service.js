@@ -8,7 +8,8 @@ function getUsers(callback) {
 }
 
 function createUser(user, callback) {
-    user.isValidated = false;
+    user.isVerified = false;
+    user.verificationEmailCounter = 0;
 
     return new User(user).save(function (err, persistedUser) {
         callback(err, persistedUser);
@@ -22,16 +23,38 @@ function findByEmail(email, callback) {
     });
 }
 
-function findById(userId, callback) {
-    User.findById(userId, (err, user) => {
-        if (err) callback(err, null);
-        callback(null, user);
+function findById(userId) {
+    return new Promise(function (resolve, reject) {
+        User.findById(userId, (err, user) => {
+            if (err) return reject(err);
+            return resolve(user);
+        });
     });
+}
+
+function updateAccountVerified(userId) {
+    return new Promise(function (resolve, reject) {
+        User.findOneAndUpdate({_id: userId}, {$set: {isVerified: true}}, {new: true}, function(err, updatedUser) {
+            if (err) return reject(err);
+            return resolve(updatedUser)
+        })
+    })
+}
+
+function updateVerificationEmailCounter(userId, verificationEmailCounter) {
+    return new Promise(function (resolve, reject) {
+        User.findOneAndUpdate({_id: userId}, {$set: {verificationEmailCounter: verificationEmailCounter}}, {new: true}, function(err, updatedUser) {
+            if (err) return reject(err);
+            return resolve(updatedUser)
+        })
+    })
 }
 
 export default {
     getUsers: getUsers,
     createUser: createUser,
     findByEmail: findByEmail,
-    findById: findById
+    findById: findById,
+    updateAccountVerified: updateAccountVerified,
+    updateVerificationEmailCounter: updateVerificationEmailCounter
 };

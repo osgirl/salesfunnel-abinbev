@@ -1,6 +1,7 @@
-import {expect} from 'chai';
+import {expect, assert} from 'chai';
 import app from '../../app';
 import UserFixtures from '../../model/users/user-fixture.js';
+import { getNewUserAccount } from '../../model/users/user-fixture.js';
 import RoleFixtures from '../../model/roles/role-fixture.js';
 import TeamFixtures from '../../model/teams/team-fixture.js';
 import _ from 'lodash';
@@ -9,16 +10,47 @@ import UserService from '../../services/user-service.js';
 import { getRandomString } from '../helpers/random-helpers.js'
 import { fillDbBefore } from '../helpers/db-helpers.js';
 
-describe("find all users", function () {
+describe("when there are users in the DB", function () {
     fillDbBefore();
 
-    it("should return all users", function (done) {
+    it("getUsers, should return all users", function (done) {
         UserService.getUsers(verifyResult);
 
         function verifyResult(err, result) {
             expect(UserFixtures.length).to.equal(result.length);
             done();
         }
+    });
+
+    it(`findById, should return the user`, function (done) {
+        var userFixture = getNewUserAccount();
+        UserService.findById(userFixture._id)
+            .then(function (result) {
+                try {
+                    assert.equal(result._id, userFixture._id, 'should be equal');
+                    expect(result.email).to.equal(userFixture.email);
+                    done()
+                }
+                catch (e) {
+                    done(e)
+                }
+            })
+    });
+
+    it(`updateAccountVerified, should return a user with isVerified === true`, function (done) {
+        var userFixture = getNewUserAccount();
+
+        expect(userFixture.isVerified).to.be.false;
+        UserService.updateAccountVerified(userFixture._id)
+            .then(function (result) {
+                try {
+                    expect(result.isVerified).to.be.true;
+                    done()
+                }
+                catch (e) {
+                    done(e)
+                }
+            })
     });
 });
 
@@ -101,5 +133,17 @@ describe("when no users in database", function () {
             done();
         }
 
+    });
+
+    it(`findById, should return an empty result`, function (done) {
+        UserService.findById(UserFixtures[0]._id)
+            .then(function (result) {
+                try {
+                    expect(result).to.be.null;
+                    done();
+                } catch(e) {
+                    done(e);
+                }
+            });
     });
 });

@@ -76,13 +76,20 @@ export function doUserAuthentication(redirectObject) {
 
 export function getAuthenticatedUser(userId) {
     return new Promise(function (resolve, reject) {
-        UserService.findById(userId, (err, user) => {
-            if (err) reject(err);
-            resolve({
-                id: user._id,
-                email: user.email,
-                userName: user.userName
+        return UserService.findById(userId)
+            .then(function (user) {
+                if (user) {
+                    return resolve({
+                        id: user._id,
+                        email: user.email,
+                        userName: user.userName
+                    })
+                } else {
+                    return reject(new Error('User not found'))
+                }
+            })
+            .catch(function (err) {
+                return reject(err)
             });
-        });
     });
 }

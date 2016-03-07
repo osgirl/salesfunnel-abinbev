@@ -83,3 +83,7 @@ a {
 .error .chip {
     color: #ee6e73;
 }
+
+.info .chip {
+    color: #4caf50;
+}

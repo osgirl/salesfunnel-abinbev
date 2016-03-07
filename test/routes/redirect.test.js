@@ -7,10 +7,10 @@ import { getRandomPathReq } from '../helpers/random-helpers.js'
 var request = supertest(app);
 var helpers = new SupertestHelpers([]);
 
-describe("API GET methods", function() {
+describe("API GET methods", function () {
     var randomText = getRandomPathReq();
     var homePage = '/';
-    it(`GET ${randomText} redirects to the homepage`, function(done) {
+    it(`GET ${randomText} redirects to the homepage`, function (done) {
 
         request.get(`/*${randomText}`)
             .expect(302)
@@ -22,6 +22,50 @@ describe("API GET methods", function() {
                     helpers.throwError(`should redirect to "${homePage}" but instead was redirected to "${res.header.location}"`)
                 }
             })
-        .end(done);
+            .end(done);
+    });
+
+    it(`POST ${randomText} redirects to the homepage`, function (done) {
+
+        request.post(`/*${randomText}`)
+            .expect(302)
+            .expect(function (res) {
+                if (res.redirect === false) {
+                    helpers.throwError("function should redirect")
+                }
+                if (res.header.location !== homePage) {
+                    helpers.throwError(`should redirect to "${homePage}" but instead was redirected to "${res.header.location}"`)
+                }
+            })
+            .end(done);
+    });
+    it(`PUT ${randomText} redirects to the homepage`, function (done) {
+
+        request.put(`/*${randomText}`)
+            .expect(302)
+            .expect(function (res) {
+                if (res.redirect === false) {
+                    helpers.throwError("function should redirect")
+                }
+                if (res.header.location !== homePage) {
+                    helpers.throwError(`should redirect to "${homePage}" but instead was redirected to "${res.header.location}"`)
+                }
+            })
+            .end(done);
+    });
+
+    it(`DELETE ${randomText} redirects to the homepage`, function (done) {
+
+        request.delete(`/*${randomText}`)
+            .expect(302)
+            .expect(function (res) {
+                if (res.redirect === false) {
+                    helpers.throwError("function should redirect")
+                }
+                if (res.header.location !== homePage) {
+                    helpers.throwError(`should redirect to "${homePage}" but instead was redirected to "${res.header.location}"`)
+                }
+            })
+            .end(done);
     });
 });

@@ -5,6 +5,7 @@ import sinon from 'sinon';
 var cryptoPbkdf2 = require("../../middleware/crypto/crypto-pbkdf2");
 
 export const authenticatedUser = {username: UserFixtures[0].email, password: UserFixtures[0].pw};
+export const authenticatedUserObject = UserFixtures[0];
 
 export function ensureUserIsAuthenticated(server) {
     var verifyPasswordStub;

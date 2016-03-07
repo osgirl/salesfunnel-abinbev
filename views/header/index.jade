@@ -1,6 +1,7 @@
 .parallax-container
-    .parallax: img(src="images/wallpaper.jpg")
+    .parallax: img(src="/images/wallpaper.jpg")
 .section.white
     .row.container
         h2.header Sales funnel reporting tool
-        p.caption=metaData.description
+        if metaData
+            p.caption=metaData.description

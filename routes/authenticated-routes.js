@@ -1,14 +1,7 @@
 import express from 'express';
 import { getAuthenticatedUser } from '../middleware/passport/passport-middleware.js';
+import { ensureAuthenticated } from '../middleware/authentication/ensureAuthentication.js';
 var router = express.Router();
-
-function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        next();
-    } else {
-        res.redirect('/login');
-    }
-}
 
 /* GET home page. */
 router.get('/', ensureAuthenticated, function (req, res, next) {
@@ -25,6 +18,8 @@ router.get('/', ensureAuthenticated, function (req, res, next) {
 });
 
 function renderWelcomePage(req, res) {
+    var error = req.query.error;
+
     res.render('welcome-page', {
         metaData: {
             title: 'Sales funnel - reporting tool - AB Inbev',
@@ -32,6 +27,7 @@ function renderWelcomePage(req, res) {
         },
         isAuthenticated: true,
         content: {
+            error: error,
             user: req.user
         }
     });

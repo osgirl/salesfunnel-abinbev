@@ -33,6 +33,7 @@ function doRenderLoginPage(req, res, next) {
 
     function renderPage(teams, roles) {
         var error = req.query.error || req.flash('error');
+        var info = req.query.info;
 
         res.render('login-page', {
             metaData: {
@@ -42,6 +43,7 @@ function doRenderLoginPage(req, res, next) {
             isAuthenticated: false,
             content: {
                 error: error,
+                info: info,
                 teams: teams,
                 roles: roles
             }

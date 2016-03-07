@@ -7,7 +7,9 @@ var userSchema = new Schema({
     roleRef: { type: String, ref: 'Role', required: true},
     teamRef: { type: String, ref: 'Team'},
     pw: String,
-    isValidated: Boolean
+    isVerified: Boolean,
+    verificationToken: String,
+    verificationEmailCounter: Number
 }, {collection: 'users'});
 
 export default mongoose.model('User', userSchema);

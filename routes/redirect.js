@@ -1,7 +1,7 @@
 import express from 'express';
 var router = express.Router();
 
-router.get('/*', function (req, res) {
+router.all('/*', function (req, res) {
     res.redirect("/")
 });
 

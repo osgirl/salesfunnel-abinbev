@@ -1,16 +1,13 @@
 import {expect} from 'chai';
-import app from '../../app';
+import app from '../../../app';
 import supertest from 'supertest';
-import SupertestHelpers from '../helpers/supertest-helpers.js'
-import TeamFixtures from '../../model/teams/team-fixture.js';
-import RoleFixtures from '../../model/roles/role-fixture.js';
-import UserFixtures from '../../model/users/user-fixture.js';
+import SupertestHelpers from '../../helpers/supertest-helpers.js'
+import UserFixtures from '../../../model/users/user-fixture.js';
 import _ from 'lodash';
-import dbTestSetup from '../../model/db-test-setup.js';
-import UserService from '../../services/user-service.js';
-import { ensureUserIsAuthenticated } from '../helpers/authenticationHelpers.js';
-import { PW_NOT_EQUAL_VIOLATION, PW_LENGTH_VIOLATION, DUPLICATE_EMAIL_ERROR } from '../../routes/signup.js';
-import { fillDbBefore} from '../helpers/db-helpers.js';
+import UserService from '../../../services/user-service.js';
+import { ensureUserIsAuthenticated } from '../../helpers/authenticationHelpers.js';
+import { PW_NOT_EQUAL_VIOLATION, PW_LENGTH_VIOLATION, DUPLICATE_EMAIL_ERROR } from '../../../routes/signup/signup.js';
+import { fillDbBefore} from '../../helpers/db-helpers.js';
 
 var helpers = new SupertestHelpers(['<html>', '</html>', '<body>', '</body>', '<head>', '</head>']);
 var signupPage = '/signup';
@@ -37,12 +34,22 @@ describe("When the user is authenticated", function () {
                 if (res.redirect === false) {
                     helpers.throwError("function should redirect")
                 }
-                if (res.header.location !== '/') {
-                    helpers.throwError(`should redirect to '/' but instead was redirected to "${res.header.location}"`)
+            })
+            .end(done);
+    });
+
+    it("it should not be possible to signup for a new account and this message should be shown to the user after redirection", function(done) {
+        var expectedURI = `/?error=Please log out before signing up another user`;
+        server.post(signupPage)
+            .expect(302)
+            .expect(function (res) {
+                if (res.header.location !== expectedURI) {
+                    helpers.throwError(`should redirect to ${expectedURI} but instead was redirected to "${res.header.location}"`)
                 }
             })
             .end(done);
     });
+
 });
 
 describe("When the user is not authenticated", function () {
@@ -172,4 +179,5 @@ describe("When the user is not authenticated", function () {
             });
         }
     });
+
 });

@@ -14,14 +14,14 @@ var request = supertest.agent(app);
 
 describe("When the user is not authenticated", function () {
 
-    it(`GET '${logoutPage}' redirects to '/`, function (done) {
+    it(`GET '${logoutPage}' redirects to '/login`, function (done) {
         request.get(logoutPage)
             .expect(302)
             .expect(function (res) {
                 if (res.redirect === false) {
                     helpers.throwError("function should redirect")
                 }
-                if (res.header.location !== '/') {
+                if (res.header.location !== '/login') {
                     helpers.throwError(`should redirect to '/' but instead was redirected to "${res.header.location}"`)
                 }
             })
@@ -55,8 +55,8 @@ describe("When the user is authenticated", function () {
                         if (res.redirect === false) {
                             helpers.throwError("function should redirect")
                         }
-                        if (res.header.location !== '/') {
-                            helpers.throwError(`should redirect to '/' but instead was redirected to "${res.header.location}"`)
+                        if (res.header.location !== '/login') {
+                            helpers.throwError(`should redirect to '/login' but instead was redirected to "${res.header.location}"`)
                         }
                     }).end(onResponse);
 
@@ -73,7 +73,7 @@ describe("When the user is authenticated", function () {
                         if (res.redirect === false) {
                             helpers.throwError("function should redirect as the user is not logged in anymore")
                         }
-                        if (res.header.location !== '/login') {
+                        if (res.header.location.indexOf('/login') === -1) {
                             helpers.throwError(`should redirect to '/login' but instead was redirected to "${res.header.location}"`)
                         }
                     })
