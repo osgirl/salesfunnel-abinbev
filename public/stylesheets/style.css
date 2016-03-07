@@ -79,3 +79,11 @@ a {
     font-size: 0.8rem;
     color: #ee6e73;
 }
+
+.error .chip {
+    color: #ee6e73;
+}
+
+.info .chip {
+    color: #4caf50;
+}

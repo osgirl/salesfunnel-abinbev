@@ -8,33 +8,42 @@ import { connectToDatabase } from './db.js';
 var isDbReady = false;
 
 function addUserFixtures(callback) {
-    addFixture(function () {
-            doAddFixtures({User: userFixture}, callback)
+    addDbAction(function () {
+            doAddFixtures({Team: teamFixture, Role: roleFixture, User: userFixture}, callback)
         });
 };
 
+function addAllFixtures(callback) {
+    addDbAction(function () {
+            doAddFixtures({Team: teamFixture, Role: roleFixture, User: userFixture}, callback)
+        });
+};
 
 function addTeamFixtures(callback) {
-    addFixture(function () {
+    addDbAction(function () {
         doAddFixtures({Team: teamFixture}, callback)
     })
 }
 
 function addRoleFixtures(callback) {
-    addFixture(function () {
+    addDbAction(function () {
         doAddFixtures({Role: roleFixture}, callback)
     });
 }
 
 function cleanDb(callback) {
-    fixtures.reset();
-    if (callback) {
-        callback();
+    addDbAction(doCleanDb);
+
+    function doCleanDb() {
+        fixtures.reset();
+        if (callback) {
+            callback();
+        }
     }
 };
 
 /**Helper functions**/
-function addFixture(callback) {
+function addDbAction(callback) {
     if (!isDbReady) {
         prepareDb(callback);
     } else {
@@ -50,8 +59,8 @@ function addFixture(callback) {
             if (!config.db.isTestable) {
                 throw new Error("Don't use this DB for testing! - " + config.db.url)
             }
-            cleanDb(callback);
             isDbReady = true;
+            callback();
         }
     }
 }
@@ -71,5 +80,6 @@ export default {
     addUserFixtures: addUserFixtures,
     addTeamFixtures: addTeamFixtures,
     addRoleFixtures: addRoleFixtures,
+    addAllFixtures: addAllFixtures,
     cleanDb: cleanDb
 };

@@ -1,12 +1,15 @@
 var rolesDataset = [
     {
-        "roleName": "rep"
+        "_id": "NSM",
+        "roleName": "National Sales Manager"
     },
     {
-        "roleName": "sales manager"
+        "_id": "SM",
+        "roleName": "Sales Manager"
     },
     {
-        "roleName": "opperchief"
+        "_id": "M1",
+        "roleName": "M1"
     }
 ];
 

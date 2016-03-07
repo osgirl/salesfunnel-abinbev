@@ -1,0 +1,18 @@
+extends layout
+
+block mainContent
+    div.container
+        include home-page/info-form
+        include home-page/error-form
+        div.col.s12.offset-m2
+            div.card-panel.grey.lighten-5.z-depth-1
+                div.row.valign-wrapper
+                    div.col.s2
+                        i.large.material-icons thumb_up
+                    div.col.s10
+                        h4 Thank you #{content.user.userName} for signing up.
+                        p You should have received an email on #{content.user.email}.
+                        p Please verify your account by clicking on the link in the email.
+                        p After your verification and the approval of your manager, you will be able to start using the application.
+                        p If you didn't receive the email,
+                            a(href=content.resendEmailUrl)  please click here to resend.

@@ -1,10 +1,12 @@
 div.container
     h2.header Login
-    div.row: form.col.s12#loginValidate
+    include ./info-form
+    include ./error-form
+    div.row: form.col.s12#loginValidate(method="post" action="login")
         div.row: div.input-field.col.s12
             i.material-icons.prefix email
-            input(id="email" type="email" name="email")
-            label(for="email") Email
+            input(id="username" type="email" name="username")
+            label(for="username") Email
         div.row: div.input-field.col.s12
             i.material-icons.prefix vpn_key
             input(id="password" type="password" name="password")

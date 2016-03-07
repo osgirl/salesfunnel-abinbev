@@ -1,0 +1,7 @@
+extends layout
+
+block mainContent
+    div.container
+        include ./home-page/error-form
+        div.card.grey.lighten-5: div.row
+            p= 'Welcome ' + JSON.stringify(content.user)

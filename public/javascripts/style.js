@@ -54,7 +54,7 @@
             });
             $('#loginValidate').validate({ // initialize the plugin
                 rules: {
-                    email: {
+                    username: {
                         required: true,
                         email: true
                     },
@@ -63,7 +63,7 @@
                     }
                 },
                 messages: {
-                    cemail: {
+                    username: {
                         email: "Please enter a valid email"
                     }
                 },

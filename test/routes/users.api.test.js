@@ -11,8 +11,14 @@ var helpers = new SupertestHelpers(['<html>', '</html>', '<body>', '</body>', '<
 
 describe("API GET methods success", function () {
 
-    before(function (done) {
-        dbTestSetup.addUserFixtures(done);
+    beforeEach(function (done) {
+        dbTestSetup.cleanDb(function () {
+            dbTestSetup.addUserFixtures(done);
+        })
+    });
+
+    afterEach(function (done) {
+        dbTestSetup.cleanDb(done);
     });
 
     it("GET '/users' returns all users", function (done) {
@@ -29,16 +35,4 @@ describe("API GET methods success", function () {
             }).end(done);
     });
 
-});
-
-describe("API GET methods failure", function() {
-    before(function (done) {
-        dbTestSetup.cleanDb(done);
-    });
-
-    it("GET '/users' returns error page when DB is down", function (done) {
-        request.get("/users")
-            .expect(404)
-            .end(done);
-    });
 });

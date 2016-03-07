@@ -1,6 +1,7 @@
 div.container
     h2.header Sign up
-    div.row: form.col.s12#signupValidate
+    include ./error-form
+    div.row: form.col.s12#signupValidate(method="post" action="signup")
         div.row: div.input-field.col.s12
             i.material-icons.prefix perm_identity
             input(id="uname" name="uname" type="text")
@@ -17,7 +18,7 @@ div.container
                 select.error.browser-default(id="crole" name="crole" data-error=".errorTxt6")
                     option(value="" disabled selected) Choose your role
                     each role in content.roles
-                        option(value=role.id)=role.roleName
+                        option(value=role._id)=role.roleName
                 div.input-field
                     div.errorTxt6
         div.row
@@ -28,7 +29,7 @@ div.container
                 select.error.browser-default(id="cteam" name="cteam" data-error=".errorTxt7")
                     option(value="" disabled selected) Choose your team
                     each team in content.teams
-                        option(value=team.id)=team.teamName
+                        option(value=team._id)=team.teamName
                 div.input-field
                     div.errorTxt7
         div.row: div.input-field.col.s12

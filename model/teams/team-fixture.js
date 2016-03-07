@@ -1,15 +1,15 @@
 var teamFixture = [
     {
-        "teamName": "team1"
+        "_id": "W",
+        "teamName": "West"
     },
     {
-        "teamName": "team2"
+        "_id": "E",
+        "teamName": "East"
     },
     {
-        "teamName": "team3"
-    },
-    {
-        "teamName": "team4"
+        "_id": "S",
+        "teamName": "South"
     }
 ];
 

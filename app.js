@@ -3,10 +3,10 @@ import express from 'express';
 import path from 'path';
 import favicon from 'serve-favicon';
 import logger from 'morgan';
-import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import routes from './routes/index';
 import migrations from './migrations/helpers/migration-loader';
+import { initialisePassport } from './middleware/passport/passport-middleware.js';
 
 var app = express();
 
@@ -19,14 +19,17 @@ app.set('view engine', 'jade');
 app.locals.layout = staticData.getConfig().layout;
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+initialisePassport(app, process.env.SESSION_SECRET || staticData.getConfig().sessionSecret);
 
-app.use('/', routes.homePage);
+app.use('/', routes.authenticatedRoutes);
+app.use('/logout', routes.logout);
+app.use('/login', routes.login);
+app.use('/signup', routes.signup);
 app.use('/users', routes.users);
 app.use('/*', routes.redirect);
 
