@@ -3,7 +3,18 @@ import path from 'path';
 import UserService from '../services/user-service.js';
 
 export function sendVerificationEmails(user, baseUrl) {
-    var client = new postmark.Client('ddd92f99-b69e-4393-8e7d-85e114ad0345');
+    var client;
+
+    if(process.env.NODE_ENV === "test") {
+        client = {
+            sendEmailWithTemplate: function(emailObject, callbackFunction) {
+                callbackFunction()
+            }
+        }
+    } else {
+        client = new postmark.Client('ddd92f99-b69e-4393-8e7d-85e114ad0345');
+    }
+
 
     return new Promise(function (resolve, reject) {
         if (user.verificationEmailCounter > 5) {
