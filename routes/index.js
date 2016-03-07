@@ -1,4 +1,3 @@
-import users from './users.js';
 import login from './login.js';
 import signup from './signup/signup.js';
 import logout from './logout.js';
@@ -7,7 +6,6 @@ import redirect from './redirect.js';
 
 export default {
     authenticatedRoutes: authenticatedRoutes,
-    users: users,
     login: login,
     signup: signup,
     logout: logout,
