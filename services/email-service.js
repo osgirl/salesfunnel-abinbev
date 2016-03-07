@@ -22,7 +22,7 @@ export function sendVerificationEmails(user, baseUrl) {
         }
 
         var emailObject = {
-            "From": "Cazamundo GCV <jonathan@cazamundo.be>",
+            "From": "Sales Registration App <jonathan@cazamundo.be>",
             "To": user.email,
             "TemplateId": 463782,
             "TemplateModel": {

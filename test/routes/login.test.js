@@ -8,7 +8,6 @@ import { ensureUserIsAuthenticated, ensurePasswordVerificationIsSuccessful, auth
 import { getRandomString } from '../helpers/random-helpers.js';
 import _ from 'lodash';
 import dbTestSetup from '../../model/db-test-setup.js';
-import { DEFAULT_ENSURE_AUTHENTICATED_ERROR } from '../../middleware/authentication/ensureAuthentication.js';
 
 var helpers = new SupertestHelpers(['<html>', '</html>', '<body>', '</body>', '<head>', '</head>']);
 var loginPage = '/login';
@@ -87,7 +86,7 @@ describe("When the user is not authenticated", function () {
     });
 
     it("GET '/' redirects to the loginPage", function (done) {
-        var expectedURI = `/login?error=${DEFAULT_ENSURE_AUTHENTICATED_ERROR}`;
+        var expectedURI = `/login`;
 
         server
             .get('/')

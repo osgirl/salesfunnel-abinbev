@@ -1,5 +1,4 @@
 export const DEFAULT_ENSURE_NOT_AUTHENTICATED_ERROR = "This action cannot be performed when logged in";
-export const DEFAULT_ENSURE_AUTHENTICATED_ERROR = "This action cannot be performed when not logged in";
 
 export function ensureNotAuthenticated(req, res, next) {
     if (!req.isAuthenticated()) return next();
@@ -8,5 +7,6 @@ export function ensureNotAuthenticated(req, res, next) {
 
 export function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) return next();
-    return res.redirect(`/login?error=${req.authenticationError || DEFAULT_ENSURE_AUTHENTICATED_ERROR}`);
+    if (req.authenticationError) return res.redirect(`/login?error=${req.authenticationError}`);
+    return res.redirect('/login');
 }

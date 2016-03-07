@@ -16,6 +16,7 @@ export const DUPLICATE_EMAIL_ERROR = "A user with this email is already register
 export const ANOTHER_ERROR = "'Unable to signup currently'";
 export const EMAIL_RESEND_SUCCESS = "A new verification email has been send to your email address";
 export const EMAIL_RESEND_FAILURE = "We are sorry, we were not able to resend you an email";
+export const TEAM_ROLE_VIOLATION = "Only a National Sales Manager can be in an overall team";
 
 addVerifyAccountRoutes(router);
 addConfirmTokenRoutes(router);
@@ -98,6 +99,9 @@ function validatePostBody(body, callback) {
     }
     if (!body.newpassword || body.newpassword.length < 8) {
         return callback(PW_LENGTH_VIOLATION)
+    }
+    if (body.cteam === "NA" && body.crole !== "NSM") {
+        return callback(TEAM_ROLE_VIOLATION)
     }
     return callback(null);
 }

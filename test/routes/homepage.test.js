@@ -8,7 +8,6 @@ import RoleFixtures from '../../model/roles/role-fixture.js';
 import _ from 'lodash';
 import dbTestSetup from '../../model/db-test-setup.js';
 import { ensureUserIsAuthenticated, authenticatedUser } from '../helpers/authenticationHelpers.js';
-import { DEFAULT_ENSURE_AUTHENTICATED_ERROR } from '../../middleware/authentication/ensureAuthentication.js';
 
 var helpers = new SupertestHelpers(['<html>', '</html>', '<body>', '</body>', '<head>', '</head>']);
 var homePage = '/';
@@ -16,7 +15,7 @@ var request = supertest.agent(app);
 
 describe("When the user is not authenticated", function () {
     it(`GET '${homePage}' redirects to the loginPage`, function (done) {
-        var expectedURI = `/login?error=${DEFAULT_ENSURE_AUTHENTICATED_ERROR}`;
+        var expectedURI = `/login`;
 
         request.get(homePage)
             .expect(302)

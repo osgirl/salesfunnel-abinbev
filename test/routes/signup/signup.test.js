@@ -6,7 +6,7 @@ import UserFixtures from '../../../model/users/user-fixture.js';
 import _ from 'lodash';
 import UserService from '../../../services/user-service.js';
 import { ensureUserIsAuthenticated } from '../../helpers/authenticationHelpers.js';
-import { PW_NOT_EQUAL_VIOLATION, PW_LENGTH_VIOLATION, DUPLICATE_EMAIL_ERROR } from '../../../routes/signup/signup.js';
+import { PW_NOT_EQUAL_VIOLATION, PW_LENGTH_VIOLATION, DUPLICATE_EMAIL_ERROR, TEAM_ROLE_VIOLATION } from '../../../routes/signup/signup.js';
 import { fillDbBefore} from '../../helpers/db-helpers.js';
 
 var helpers = new SupertestHelpers(['<html>', '</html>', '<body>', '</body>', '<head>', '</head>']);
@@ -169,6 +169,68 @@ describe("When the user is not authenticated", function () {
             function onResponse(err, res) {
                 if (err) throw err;
                 verifyUsers(UserFixtures.length, done);
+            }
+        }
+
+        function verifyUsers(expectedResult, callback) {
+            UserService.getUsers(function (err, users) {
+                expect(users.length).to.equal(expectedResult);
+                callback();
+            });
+        }
+    });
+
+    it(`POST ${signupPage} a user who choses Overall team and is not a National Sales Manager returns a validation error`, function (done) {
+        var user = getSignupUser();
+        user.cteam = 'NA';
+        user.crole = 'M1';
+        verifyUsers(UserFixtures.length, signup);
+
+        function signup() {
+            server
+                .post(signupPage)
+                .send(user)
+                .expect(302)
+                .expect(function (res) {
+                    if (res.redirect === false) {
+                        helpers.throwError("function should redirect")
+                    }
+                    if (res.header.location !== '/login' + '?error=' + TEAM_ROLE_VIOLATION + "#signup") {
+                        helpers.throwError(`should redirect to '/login' but instead was redirected to "${res.header.location}"`)
+                    }
+                })
+                .end(onResponse);
+
+            function onResponse(err, res) {
+                if (err) throw err;
+                verifyUsers(UserFixtures.length, done);
+            }
+        }
+
+        function verifyUsers(expectedResult, callback) {
+            UserService.getUsers(function (err, users) {
+                expect(users.length).to.equal(expectedResult);
+                callback();
+            });
+        }
+    });
+
+    it(`POST ${signupPage} with role NSM and with team Overall is allowed`, function (done) {
+        var user = getSignupUser();
+        user.cteam = 'NA';
+
+        verifyUsers(UserFixtures.length, signup);
+
+        function signup() {
+            server
+                .post(signupPage)
+                .send(user)
+                .expect(200)
+                .end(onResponse);
+
+            function onResponse(err, res) {
+                if (err) throw err;
+                verifyUsers(UserFixtures.length + 1, done);
             }
         }
 

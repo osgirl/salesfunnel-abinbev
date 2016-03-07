@@ -70,7 +70,7 @@ function doAddFixtures(fixtureObject, callback) {
         fixtureObject,
         function (err) {
             if (err) {
-                console.log('error: ' + err)
+                callback(err)
             }
             if (callback) callback();
         });
