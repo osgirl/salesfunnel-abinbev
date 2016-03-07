@@ -10,10 +10,7 @@ var userFixture = [
         pw: "testtest",
         verificationToken : getRandomUUID(),
         verificationEmailCounter: 0,
-        isVerified: false,
-        confirmationToken : getRandomUUID(),
-        isConfirmed: false,
-        confirmationEmailCounter: 0
+        isVerified: false
     },
     {
         _id: getNewObjectId(),
@@ -24,10 +21,7 @@ var userFixture = [
         pw: "testmsqifj",
         verificationToken: getRandomUUID(),
         verificationEmailCounter: 0,
-        isVerified: true,
-        confirmationToken : getRandomUUID(),
-        isConfirmed: false,
-        confirmationEmailCounter: 0
+        isVerified: true
     }
 ];
 

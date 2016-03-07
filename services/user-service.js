@@ -12,9 +12,6 @@ function createUser(user, callback) {
     user.isVerified = false;
     user.verificationEmailCounter = 0;
     user.verificationToken = uuid.v4();
-    user.isConfirmed = false;
-    user.confirmationEmailCounter = 0;
-    user.confirmationToken = uuid.v4();
 
     return new User(user).save(function (err, persistedUser) {
         callback(err, persistedUser);
