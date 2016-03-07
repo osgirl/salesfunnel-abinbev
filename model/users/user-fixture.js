@@ -1,23 +1,33 @@
+import { getNewObjectId, getRandomUUID } from '../../test/helpers/random-helpers.js';
+
 var userFixture = [
     {
-        _id: "56d87adfe3a87534acab700a",
+        _id: getNewObjectId(),
         userName: "test-name",
         email: "testit@test.com",
         roleRef: "NSM",
         teamRef: "W",
         pw: "testtest",
-        verificationToken : "a0694a5e-fa05-4440-95f2-2facb337f940",
-        isVerified: false
+        verificationToken : getRandomUUID(),
+        verificationEmailCounter: 0,
+        isVerified: false,
+        confirmationToken : getRandomUUID(),
+        isConfirmed: false,
+        confirmationEmailCounter: 0
     },
     {
-        _id: "56d8a504d7c69164afe4b734",
+        _id: getNewObjectId(),
         userName: "anotherTestName",
         email: "another@test.com",
         roleRef: "M1",
         teamRef: "E",
         pw: "testmsqifj",
-        verificationToken: "a0694a5e-fa05-4440-95f2-2facb337f930",
-        isVerified: true
+        verificationToken: getRandomUUID(),
+        verificationEmailCounter: 0,
+        isVerified: true,
+        confirmationToken : getRandomUUID(),
+        isConfirmed: false,
+        confirmationEmailCounter: 0
     }
 ];
 

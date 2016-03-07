@@ -27,7 +27,7 @@ describe("when there are users in the DB", function () {
         UserService.findById(userFixture._id)
             .then(function (result) {
                 try {
-                    assert.equal(result._id, userFixture._id, 'should be equal');
+                    expect(result._id).to.deep.equal(userFixture._id);
                     expect(result.email).to.equal(userFixture.email);
                     done()
                 }

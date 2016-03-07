@@ -9,7 +9,10 @@ var userSchema = new Schema({
     pw: String,
     isVerified: Boolean,
     verificationToken: String,
-    verificationEmailCounter: Number
+    verificationEmailCounter: Number,
+    isConfirmed: Boolean,
+    confirmationToken: String,
+    confirmationEmailCounter: Number
 }, {collection: 'users'});
 
 export default mongoose.model('User', userSchema);

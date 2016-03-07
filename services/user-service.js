@@ -1,4 +1,5 @@
 import User from '../model/users/user-schema.js';
+import uuid from 'uuid';
 
 function getUsers(callback) {
     User.find({}, null, {sort: {userName: -1}}, function (err, users) {
@@ -10,6 +11,10 @@ function getUsers(callback) {
 function createUser(user, callback) {
     user.isVerified = false;
     user.verificationEmailCounter = 0;
+    user.verificationToken = uuid.v4();
+    user.isConfirmed = false;
+    user.confirmationEmailCounter = 0;
+    user.confirmationToken = uuid.v4();
 
     return new User(user).save(function (err, persistedUser) {
         callback(err, persistedUser);

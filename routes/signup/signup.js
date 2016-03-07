@@ -7,7 +7,6 @@ import { hashPassword } from '../../middleware/crypto/crypto-pbkdf2.js';
 import { sendVerificationEmails } from '../../services/email-service.js';
 import { ensureNotAuthenticated } from '../../middleware/authentication/ensureAuthentication.js';
 import { getBaseUrl } from '../helpers/route-helpers.js';
-import uuid from 'uuid';
 
 var router = express.Router();
 
@@ -112,8 +111,7 @@ function doTransformUserObject(body, callback) {
             email: body.cemail,
             roleRef: body.crole,
             teamRef: body.cteam,
-            pw: hashedPassword,
-            verificationToken: uuid.v4()
+            pw: hashedPassword
         };
         return callback(err, user);
     }
