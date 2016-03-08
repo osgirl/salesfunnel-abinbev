@@ -1,36 +1,77 @@
 import express from 'express';
 import { getAuthenticatedUser } from '../middleware/passport/passport-middleware.js';
 import { ensureAuthenticated } from '../middleware/authentication/ensureAuthentication.js';
+import { getResendEmailUrl } from './signup/signup.js';
+import { getRep } from '../model/roles/role-fixture.js';
 var router = express.Router();
 
 /* GET home page. */
-router.get('/', ensureAuthenticated, function (req, res, next) {
-    req.userObject = getAuthenticatedUser(req.user.id)
+router.get('/',
+    ensureAuthenticated,
+    getAuthenticatedUserObject,
+    renderUnverifiedWelcomePage,
+    renderM1Page,
+    renderManagementPage
+    );
+
+function getAuthenticatedUserObject(req, res, next) {
+    getAuthenticatedUser(req.user.id)
         .then(function (userObject) {
+
             req.userObject = userObject;
-            renderWelcomePage(req, res)
+
+            var frontendUser = {
+                userName: userObject.userName,
+                email: userObject.email
+            };
+
+            var error = req.query.error;
+            var info = req.query.info;
+
+            req.renderData = {
+                metaData: {
+                    title: 'Sales funnel - reporting tool - AB Inbev',
+                    description: 'This is a reporting tool by and from AB Inbev to report about sales prospects'
+                },
+                isAuthenticated: true,
+                content: {
+                    error: error,
+                    info: info,
+                    user: frontendUser
+                }
+            };
+
+            next();
         })
         .catch(function (err) {
-            //TODO add better error handling instead of swallowing
-            console.log(err);
-            next();
+            next(err);
         });
-});
+}
 
-function renderWelcomePage(req, res) {
-    var error = req.query.error;
+function renderUnverifiedWelcomePage(req, res, next) {
+    if (!req.userObject || req.userObject.isVerified) {
+        return next();
+    }
 
-    res.render('welcome-page', {
-        metaData: {
-            title: 'Sales funnel - reporting tool - AB Inbev',
-            description: 'This is a reporting tool by and from AB Inbev to report about sales prospects'
-        },
-        isAuthenticated: true,
-        content: {
-            error: error,
-            user: req.user
-        }
-    });
+    req.renderData.content['resendEmailUrl'] = getResendEmailUrl(req.userObject._id);
+
+    res.render('unverified-homepage', req.renderData);
+}
+
+function renderM1Page(req, res, next) {
+    if (req.userObject.roleRef !== getRep()._id) {
+        return next();
+    }
+
+    res.render('registration-homepage', req.renderData)
+}
+
+function renderManagementPage(req, res, next) {
+    if (req.userObject.roleRef === getRep()._id) {
+        return next();
+    }
+
+    res.render('salesfunnel-homepage', req.renderData)
 }
 
 export default router;

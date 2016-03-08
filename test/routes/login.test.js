@@ -4,7 +4,8 @@ import supertest from 'supertest';
 import SupertestHelpers from '../helpers/supertest-helpers.js'
 import TeamFixtures from '../../model/teams/team-fixture.js';
 import RoleFixtures from '../../model/roles/role-fixture.js';
-import { ensureUserIsAuthenticated, ensurePasswordVerificationIsSuccessful, authenticatedUser } from '../helpers/authenticationHelpers.js';
+import { ensureVerifiedUserIsAuthenticated, ensurePasswordVerificationIsSuccessful } from '../helpers/authentication-helpers.js';
+import { getVerifiedUserAccountLoginFormData } from '../../model/users/user-fixture.js';
 import { getRandomString } from '../helpers/random-helpers.js';
 import _ from 'lodash';
 import dbTestSetup from '../../model/db-test-setup.js';
@@ -14,7 +15,7 @@ var loginPage = '/login';
 var server = supertest.agent(app);
 
 describe("When the user is authenticated", function () {
-    ensureUserIsAuthenticated(server);
+    ensureVerifiedUserIsAuthenticated(server);
 
     it(`GET '${loginPage}' redirects to the homePage`, function (done) {
         server.get(loginPage)
@@ -56,7 +57,7 @@ describe("When the user is not authenticated", function () {
     it(`POST ${loginPage} logs the existing user in`, function (done) {
         server
             .post(loginPage)
-            .send(authenticatedUser)
+            .send(getVerifiedUserAccountLoginFormData())
             .expect(302)
             .expect('Location', '/')
             .end(onResponse);

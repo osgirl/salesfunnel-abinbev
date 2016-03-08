@@ -1,6 +1,5 @@
 import express from 'express';
 import { addVerifyAccountRoutes } from './verify-account.js';
-import { addConfirmTokenRoutes} from './confirm-token.js';
 import { Promise } from 'bluebird';
 import UserService from '../../services/user-service.js';
 import { hashPassword } from '../../middleware/crypto/crypto-pbkdf2.js';
@@ -18,8 +17,12 @@ export const EMAIL_RESEND_SUCCESS = "A new verification email has been send to y
 export const EMAIL_RESEND_FAILURE = "We are sorry, we were not able to resend you an email";
 export const TEAM_ROLE_VIOLATION = "Only a National Sales Manager can be in an overall team";
 
+export function getResendEmailUrl(userId) {
+    return `/signup/resend/${userId}`;
+}
+
 addVerifyAccountRoutes(router);
-addConfirmTokenRoutes(router);
+
 router.post('/',
     function (req, res, next) {
         req.authenticationError = `Please log out before signing up another user`;
@@ -29,7 +32,6 @@ router.post('/',
     signupRoute);
 
 router.get('/resend/:userId',
-    ensureNotAuthenticated,
     resendEmailRoute);
 
 function signupRoute(req, res, next) {
@@ -77,7 +79,7 @@ function resendEmailRoute(req, res, next) {
 }
 
 function redirectToValidateEmailPage(res, persistedUser, info, error) {
-    var resendEmailUrl = `/signup/resend/${persistedUser._id}`;
+    var resendEmailUrl = getResendEmailUrl(persistedUser._id);
     return res.render('validate-email-page', {
         metaData: {
             title: 'Sales funnel - reporting tool - AB Inbev',

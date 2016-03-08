@@ -14,3 +14,13 @@ var roleFixture = [
 ];
 
 export default roleFixture;
+
+export function getNationalSalesManager() {
+    return roleFixture[0];
+}
+export function getSalesManager() {
+    return roleFixture[1];
+}
+export function getRep() {
+    return roleFixture[2];
+}

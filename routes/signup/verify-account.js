@@ -1,8 +1,7 @@
-import { ensureNotAuthenticated } from '../../middleware/authentication/ensureAuthentication.js';
 import { verifyEmailAndUpdateUser } from '../../services/email-service.js';
 
 export const VERIFICATION_FAILURE = "This invitation link isn't valid. Perhaps you already used it?";
-export const VERIFICATION_SUCCESS = "Verifying your account was successful, please login now to start working";
+export const VERIFICATION_SUCCESS = "Verifying your account was successful, you can start using the application";
 
 export function addVerifyAccountRoutes(router) {
 
@@ -11,7 +10,6 @@ export function addVerifyAccountRoutes(router) {
             req.authenticationError = `Please log out before verifying somebody else his token`;
             next();
         },
-        ensureNotAuthenticated,
         verifyTokenRoute);
 
 

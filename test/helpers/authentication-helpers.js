@@ -1,13 +1,39 @@
-import UserFixtures from '../../model/users/user-fixture.js';
+import { getNewUserAccountLoginFormData, getVerifiedUserAccountLoginFormData, getVerifiedUserAccount } from '../../model/users/user-fixture.js';
 import dbTestSetup from '../../model/db-test-setup.js';
 import sinon from 'sinon';
 
 var cryptoPbkdf2 = require("../../middleware/crypto/crypto-pbkdf2");
 
-export const authenticatedUser = {username: UserFixtures[0].email, password: UserFixtures[0].pw};
-export const authenticatedUserObject = UserFixtures[0];
+export function ensureUnverifiedUserIsAuthenticated(server) {
+    var newUserAccountLoginFormData = getNewUserAccountLoginFormData();
 
-export function ensureUserIsAuthenticated(server) {
+    ensureUserIsAuthenticated(server, newUserAccountLoginFormData);
+
+    return newUserAccountLoginFormData;
+}
+
+export function ensureVerifiedUserIsAuthenticated(server, roleRef) {
+    var verifiedUserAccountLoginFormData = getVerifiedUserAccountLoginFormData();
+    var originalRoleRef = getVerifiedUserAccount().roleRef;
+
+    if (roleRef) {
+        beforeEach(function overwriteRoleRef(done) {
+            getVerifiedUserAccount().roleRef = roleRef;
+            done();
+        });
+
+        afterEach(function overwriteRoleRef(done) {
+            getVerifiedUserAccount().roleRef = originalRoleRef;
+            done();
+        });
+    }
+
+    ensureUserIsAuthenticated(server, verifiedUserAccountLoginFormData);
+
+    return verifiedUserAccountLoginFormData;
+}
+
+export function ensureUserIsAuthenticated(server, loginFormData, roleRef) {
     var verifyPasswordStub;
 
     beforeEach(function ensureUserIsAuthenticated(done) {
@@ -24,7 +50,7 @@ export function ensureUserIsAuthenticated(server) {
         function login() {
             server
                 .post('/login')
-                .send(authenticatedUser)
+                .send(loginFormData)
                 .expect(302)
                 .end(onResponse);
 
@@ -55,6 +81,7 @@ export function ensureUserIsAuthenticated(server) {
             dbTestSetup.cleanDb(done);
         }
     });
+
 }
 
 export function ensurePasswordVerificationIsSuccessful() {
