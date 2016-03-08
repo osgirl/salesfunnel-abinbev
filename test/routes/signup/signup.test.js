@@ -2,10 +2,10 @@ import {expect} from 'chai';
 import app from '../../../app';
 import supertest from 'supertest';
 import SupertestHelpers from '../../helpers/supertest-helpers.js'
-import UserFixtures from '../../../model/users/user-fixture.js';
+import { getUserFixture, getNewUserAccount } from '../../../model/users/user-fixture.js';
 import _ from 'lodash';
 import UserService from '../../../services/user-service.js';
-import { ensureUserIsAuthenticated } from '../../helpers/authenticationHelpers.js';
+import { ensureVerifiedUserIsAuthenticated } from '../../helpers/authentication-helpers.js';
 import { PW_NOT_EQUAL_VIOLATION, PW_LENGTH_VIOLATION, DUPLICATE_EMAIL_ERROR, TEAM_ROLE_VIOLATION } from '../../../routes/signup/signup.js';
 import { fillDbBefore} from '../../helpers/db-helpers.js';
 
@@ -14,18 +14,19 @@ var signupPage = '/signup';
 var server = supertest.agent(app);
 
 function getSignupUser() {
+    var user = getNewUserAccount();
     return {
-        uname: UserFixtures[0].userName,
+        uname: user.userName,
         cemail: "anotherEmail@email.com",
-        crole: UserFixtures[0].roleRef,
-        cteam: UserFixtures[0].teamRef,
-        newpassword: UserFixtures[0].pw,
-        cnewpassword: UserFixtures[0].pw
+        crole: user.roleRef,
+        cteam: user.teamRef,
+        newpassword: user.pw,
+        cnewpassword: user.pw
     }
 };
 
 describe("When the user is authenticated", function () {
-    ensureUserIsAuthenticated(server);
+    ensureVerifiedUserIsAuthenticated(server);
 
     it("it should not be possible to signup for a new account and he should be redirected to the homePage", function (done) {
         server.post(signupPage)
@@ -56,7 +57,7 @@ describe("When the user is not authenticated", function () {
     fillDbBefore();
 
     it(`POST ${signupPage} a valid user creates a new user and redirects to the validateEmail page`, function (done) {
-        verifyUsers(UserFixtures.length, signup);
+        verifyUsers(getUserFixture().length, signup);
 
         function signup() {
             server
@@ -67,7 +68,7 @@ describe("When the user is not authenticated", function () {
 
             function onResponse(err, res) {
                 if (err) throw err;
-                verifyUsers(UserFixtures.length + 1, done);
+                verifyUsers(getUserFixture().length + 1, done);
             }
         }
 
@@ -100,7 +101,7 @@ describe("When the user is not authenticated", function () {
 
         function onResponse(err, res) {
             if (err) throw err;
-            verifyUsers(UserFixtures.length, done);
+            verifyUsers(getUserFixture().length, done);
         }
 
         function verifyUsers(expectedResult, callback) {
@@ -112,9 +113,9 @@ describe("When the user is not authenticated", function () {
     });
 
     it(`POST ${signupPage} a user with an email addres that already exists returns a validation error`, function (done) {
-        verifyUsers(UserFixtures.length, signup);
+        verifyUsers(getUserFixture().length, signup);
         var user = getSignupUser();
-        user.cemail = UserFixtures[0].email;
+        user.cemail = getNewUserAccount().email;
 
         function signup() {
             server
@@ -133,7 +134,7 @@ describe("When the user is not authenticated", function () {
 
             function onResponse(err, res) {
                 if (err) throw err;
-                verifyUsers(UserFixtures.length, done);
+                verifyUsers(getUserFixture().length, done);
             }
         }
 
@@ -149,7 +150,7 @@ describe("When the user is not authenticated", function () {
         var user = getSignupUser();
         user.newpassword = 'shortPw';
         user.cnewpassword = 'anotherPw';
-        verifyUsers(UserFixtures.length, signup);
+        verifyUsers(getUserFixture().length, signup);
 
         function signup() {
             server
@@ -168,7 +169,7 @@ describe("When the user is not authenticated", function () {
 
             function onResponse(err, res) {
                 if (err) throw err;
-                verifyUsers(UserFixtures.length, done);
+                verifyUsers(getUserFixture().length, done);
             }
         }
 
@@ -184,7 +185,7 @@ describe("When the user is not authenticated", function () {
         var user = getSignupUser();
         user.cteam = 'NA';
         user.crole = 'M1';
-        verifyUsers(UserFixtures.length, signup);
+        verifyUsers(getUserFixture().length, signup);
 
         function signup() {
             server
@@ -203,7 +204,7 @@ describe("When the user is not authenticated", function () {
 
             function onResponse(err, res) {
                 if (err) throw err;
-                verifyUsers(UserFixtures.length, done);
+                verifyUsers(getUserFixture().length, done);
             }
         }
 
@@ -219,7 +220,7 @@ describe("When the user is not authenticated", function () {
         var user = getSignupUser();
         user.cteam = 'NA';
 
-        verifyUsers(UserFixtures.length, signup);
+        verifyUsers(getUserFixture().length, signup);
 
         function signup() {
             server
@@ -230,7 +231,7 @@ describe("When the user is not authenticated", function () {
 
             function onResponse(err, res) {
                 if (err) throw err;
-                verifyUsers(UserFixtures.length + 1, done);
+                verifyUsers(getUserFixture().length + 1, done);
             }
         }
 

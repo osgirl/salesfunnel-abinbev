@@ -2,17 +2,10 @@ import express from 'express';
 import { addLocalStrategyForUserAuthentication, doUserAuthentication } from '../middleware/passport/passport-middleware.js';
 import { Promise } from 'bluebird';
 import {RoleService, TeamService} from '../services/index';
+import { ensureNotAuthenticated } from '../middleware/authentication/ensureAuthentication.js';
 var router = express.Router();
 
 addLocalStrategyForUserAuthentication();
-
-function ensureNotAuthenticated(req, res, next) {
-    if (!req.isAuthenticated()) {
-        next();
-    } else {
-        res.redirect('/');
-    }
-}
 
 /* GET home page. */
 router.get('/', ensureNotAuthenticated, doRenderLoginPage);

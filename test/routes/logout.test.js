@@ -6,7 +6,7 @@ import TeamFixtures from '../../model/teams/team-fixture.js';
 import RoleFixtures from '../../model/roles/role-fixture.js';
 import _ from 'lodash';
 import dbTestSetup from '../../model/db-test-setup.js';
-import { ensureUserIsAuthenticated } from '../helpers/authenticationHelpers.js';
+import { ensureVerifiedUserIsAuthenticated } from '../helpers/authentication-helpers.js';
 
 var helpers = new SupertestHelpers(['<html>', '</html>', '<body>', '</body>', '<head>', '</head>']);
 var logoutPage = '/logout';
@@ -30,7 +30,7 @@ describe("When the user is not authenticated", function () {
 });
 
 describe("When the user is authenticated", function () {
-    ensureUserIsAuthenticated(request);
+    ensureVerifiedUserIsAuthenticated(request);
 
     it(`GET '${logoutPage}' redirects to the loginPage`, function (done) {
             expectThatTheUserIsLoggedIn(function () {

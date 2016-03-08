@@ -79,11 +79,7 @@ export function getAuthenticatedUser(userId) {
         return UserService.findById(userId)
             .then(function (user) {
                 if (user) {
-                    return resolve({
-                        id: user._id,
-                        email: user.email,
-                        userName: user.userName
-                    })
+                    return resolve(user)
                 } else {
                     return reject(new Error('User not found'))
                 }

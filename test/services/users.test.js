@@ -1,7 +1,6 @@
 import {expect, assert} from 'chai';
 import app from '../../app';
-import UserFixtures from '../../model/users/user-fixture.js';
-import { getNewUserAccount } from '../../model/users/user-fixture.js';
+import { getNewUserAccount, getUserFixture } from '../../model/users/user-fixture.js';
 import RoleFixtures from '../../model/roles/role-fixture.js';
 import TeamFixtures from '../../model/teams/team-fixture.js';
 import _ from 'lodash';
@@ -17,7 +16,7 @@ describe("when there are users in the DB", function () {
         UserService.getUsers(verifyResult);
 
         function verifyResult(err, result) {
-            expect(UserFixtures.length).to.equal(result.length);
+            expect(getUserFixture().length).to.equal(result.length);
             done();
         }
     });
@@ -136,7 +135,7 @@ describe("when no users in database", function () {
     });
 
     it(`findById, should return an empty result`, function (done) {
-        UserService.findById(UserFixtures[0]._id)
+        UserService.findById(getNewUserAccount._id)
             .then(function (result) {
                 try {
                     expect(result).to.be.null;
