@@ -3,12 +3,34 @@
 /**
  * Module dependencies.
  */
-require("babel-register")({
-    ignore: [/node_modules/, /public\/javascripts/]
-});
 
-var db = require('../model/db');
-db.connectToDatabase(startExpress);
+makeWebpackCompileFrontEnd();
+
+function makeWebpackCompileFrontEnd() {
+    var webpack = require('webpack');
+    var webpackConfig = process.env.NODE_ENV === "production"  ? require('../webpack.prod.config.js') : require('../webpack.config.js');
+
+    webpack(webpackConfig, function (err, stats) {
+        var jsonStats = stats.toJson();
+        if(err) throw new Error(err);
+        if(jsonStats.errors.length > 0) throw new Error(jsonStats.errors);
+        if(jsonStats.warnings.length > 0)
+            console.log(jsonStats.warnings);
+        compileBackEnd();
+    });
+}
+
+function compileBackEnd() {
+    require("babel-register")({
+        ignore: [/node_modules/, /public\/javascripts/]
+    });
+    startupDb();
+}
+
+function startupDb() {
+    var db = require('../model/db');
+    db.connectToDatabase(startExpress);
+}
 
 function startExpress() {
     var app = require('../app');

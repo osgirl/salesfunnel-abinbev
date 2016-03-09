@@ -15,10 +15,12 @@ This is a reporting tool about sales prospects
     Node.js
     Express.js
     Mongoose.js
+    Isomorphic React.js
 
 ### Front-end
     Jade Templating Engine
     Css template: materialize css
+    React.js
 
 ### Testing
     Mocha
@@ -32,3 +34,4 @@ This is a reporting tool about sales prospects
     Ghooks (git pre-commits)
     Istanbul (code coverage)
     CodeCov (code coverage reporting)
+    Webpack (compiling ES6 React to small front-end javascript bundles)

@@ -6,3 +6,10 @@ block mainContent
         include home-page/error-form
         div.card.grey.lighten-5: div.row
             p= 'Welcome M1' + JSON.stringify(content.user)
+            div#registration-app
+                !=react.renderedApp
+
+block append javascripts
+    script.
+        var registrationProps = !{JSON.stringify(react.initProps).replace(/<\//g, "<\\/")};
+    script(type = 'text/javascript' src=react.bundle)

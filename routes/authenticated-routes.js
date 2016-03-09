@@ -1,8 +1,12 @@
 import express from 'express';
+import config from '../config.json';
 import { getAuthenticatedUser } from '../middleware/passport/passport-middleware.js';
 import { ensureAuthenticated } from '../middleware/authentication/ensureAuthentication.js';
 import { getResendEmailUrl } from './signup/signup.js';
 import { getRep } from '../model/roles/role-fixture.js';
+import ReactDOMServer from 'react-dom/server';
+import React from 'react';
+import Registration from '../frontend-app/registration-app/Registration.js';
 var router = express.Router();
 
 /* GET home page. */
@@ -12,7 +16,7 @@ router.get('/',
     renderUnverifiedWelcomePage,
     renderM1Page,
     renderManagementPage
-    );
+);
 
 function getAuthenticatedUserObject(req, res, next) {
     getAuthenticatedUser(req.user.id)
@@ -62,6 +66,14 @@ function renderM1Page(req, res, next) {
     if (req.userObject.roleRef !== getRep()._id) {
         return next();
     }
+
+    var props = {msg: "BUTTON"};
+
+    req.renderData.react = {
+        renderedApp: ReactDOMServer.renderToString(React.createFactory(Registration)(props)),
+        bundle: config.react.htmlDir + config.react.components.registration.bundle,
+        initProps: props
+    };
 
     res.render('registration-homepage', req.renderData)
 }
