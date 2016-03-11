@@ -1,11 +1,13 @@
 extends layout
 
+block header
+    include ./header/registration-header
+
 block mainContent
     div.container
         include home-page/info-form
         include home-page/error-form
-        div.card.grey.lighten-5: div.row
-            p= 'Welcome M1' + JSON.stringify(content.user)
+        div.card.grey.lighten-5: div.container
             div#registration-app
                 !=react.renderedApp
 

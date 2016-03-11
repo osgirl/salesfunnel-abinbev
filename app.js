@@ -30,6 +30,7 @@ app.use('/', routes.authenticatedRoutes);
 app.use('/logout', routes.logout);
 app.use('/login', routes.login);
 app.use('/signup', routes.signup);
+app.use('/registration', routes.registration);
 app.use('/*', routes.redirect);
 
 // ERROR HANDLERS

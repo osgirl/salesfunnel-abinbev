@@ -4,6 +4,7 @@ import { getAuthenticatedUser } from '../middleware/passport/passport-middleware
 import { ensureAuthenticated } from '../middleware/authentication/ensureAuthentication.js';
 import { getResendEmailUrl } from './signup/signup.js';
 import { getRep } from '../model/roles/role-fixture.js';
+import { getBaseUrl } from './helpers/route-helpers.js';
 import ReactDOMServer from 'react-dom/server';
 import React from 'react';
 import Registration from '../frontend-app/registration-app/Registration.js';
@@ -67,7 +68,10 @@ function renderM1Page(req, res, next) {
         return next();
     }
 
-    var props = {msg: "BUTTON"};
+    var props = {
+        user: req.renderData.content.user,
+        baseUrl: getBaseUrl(req)
+    };
 
     req.renderData.react = {
         renderedApp: ReactDOMServer.renderToString(React.createFactory(Registration)(props)),
