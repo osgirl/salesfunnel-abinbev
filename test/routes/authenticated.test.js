@@ -129,14 +129,15 @@ describe("When the SM is authenticated and fully verified", function() {
 
 describe("When the Rep is authenticated and fully verified", function() {
     var rep = getRep();
-    var userFormData = ensureVerifiedUserIsAuthenticated(request, rep._id);
+    ensureVerifiedUserIsAuthenticated(request, rep._id);
+
     it(`GET '${homePage}' gives the M1 homePage`, function(done) {
 
     var response = request.get(homePage);
-
+    var user = getVerifiedUserAccount();
     helpers.verifySuccess(response)
         .expect(function (res) {
-            helpers.containsAllSubstrings(res.text, ['<title>Sales funnel - reporting tool - AB Inbev</title>', userFormData.username,  `Welcome ${rep.roleName}`])
+            helpers.containsAllSubstrings(res.text, ['<title>Sales funnel - reporting tool - AB Inbev</title>', 'Register the sales of the day',  `Welcome ${user.userName}`])
         }).end(done);
     });
 

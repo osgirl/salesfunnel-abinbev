@@ -24,10 +24,8 @@ html
                     include header/index
                 block mainContent
             //-Import jQuery before materialize.js
-        script(type='text/javascript' src=layout.jquery)
-        script(type='text/javascript' src=layout.cssFrameworkJs)
-        script(type='text/javascript' src=layout.jqueryValidation)
-        script(type='text/javascript' src=layout.cssJs)
-
-
-
+        block javascripts
+            script(type='text/javascript' src=layout.jquery)
+            script(type='text/javascript' src=layout.cssFrameworkJs)
+            script(type='text/javascript' src=layout.jqueryValidation)
+            script(type='text/javascript' src=layout.cssJs)

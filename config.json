@@ -8,6 +8,7 @@
       "font": "/font/material.icons.css",
       "cssJs": "/javascripts/style.js",
       "css": "/stylesheets/style.css",
+      "reactBundle": "/javascripts/react-bundle.js",
       "externalScripts": false
     },
     "db": {
@@ -24,6 +25,7 @@
       "font": "/font/material.icons.css",
       "cssJs": "/javascripts/style.js",
       "css": "/stylesheets/style.css",
+      "reactBundle": "/javascripts/react-bundle.js",
       "externalScripts": false
     },
     "db": {
@@ -41,11 +43,27 @@
       "font": "//fonts.googleapis.com/icon?family=Material+Icons",
       "cssJs": "/javascripts/style.js",
       "css": "/stylesheets/style.css",
+      "reactBundle": "/javascripts/react-bundle.js",
       "externalScripts": true
     },
     "db": {
       "url": "mongodb://localhost:27017/salesfunnel"
     },
     "sessionSecret": "secret"
+  },
+  "react": {
+    "appDir": "frontend-app",
+    "buildDir": "public/javascripts/react",
+    "htmlDir": "/javascripts/react/",
+    "components": {
+      "registration": {
+        "entry": "registration-app/registration-app.js",
+        "bundle": "registration.bundle.js"
+      },
+      "salesfunnel": {
+        "entry": "salesfunnel-app/salesfunnel-app.js",
+        "bundle": "salesfunnel.bundle.js"
+      }
+    }
   }
 }
