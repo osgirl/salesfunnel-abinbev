@@ -8,7 +8,9 @@
       "font": "/font/material.icons.css",
       "cssJs": "/javascripts/style.js",
       "css": "/stylesheets/style.css",
+      "funnelCss": "/stylesheets/pykcharts.1.1.0.min.css",
       "reactBundle": "/javascripts/react-bundle.js",
+      "funnelJs": "/javascripts/pykcharts.1.1.0.min.js",
       "externalScripts": false
     },
     "db": {
@@ -25,6 +27,8 @@
       "font": "/font/material.icons.css",
       "cssJs": "/javascripts/style.js",
       "css": "/stylesheets/style.css",
+      "funnelCss": "/stylesheets/pykcharts.1.1.0.min.css",
+      "funnelJs": "/javascripts/pykcharts.1.1.0.min.js",
       "reactBundle": "/javascripts/react-bundle.js",
       "externalScripts": false
     },
@@ -43,6 +47,8 @@
       "font": "//fonts.googleapis.com/icon?family=Material+Icons",
       "cssJs": "/javascripts/style.js",
       "css": "/stylesheets/style.css",
+      "funnelCss": "/stylesheets/pykcharts.1.1.0.min.css",
+      "funnelJs": "/javascripts/pykcharts.1.1.0.min.js",
       "reactBundle": "/javascripts/react-bundle.js",
       "externalScripts": true
     },
