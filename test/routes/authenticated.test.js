@@ -65,14 +65,14 @@ describe("When the user is authenticated but not yet verified", function () {
 });
 
 describe("When the user is authenticated and fully verified", function () {
-    var userFormData = ensureVerifiedUserIsAuthenticated(request);
+    ensureVerifiedUserIsAuthenticated(request);
 
     it(`GET '${homePage}' gives the homePage`, function (done) {
         var response = request.get(homePage);
 
         helpers.verifySuccess(response)
             .expect(function (res) {
-                helpers.containsAllSubstrings(res.text, ['<title>Sales funnel - reporting tool - AB Inbev</title>', userFormData.username, "Welcome"])
+                helpers.containsAllSubstrings(res.text, ['<title>Sales funnel - reporting tool - AB Inbev</title>', "Welcome"])
             }).end(done);
     });
 
@@ -82,7 +82,7 @@ describe("When the user is authenticated and fully verified", function () {
 
         helpers.verifySuccess(response)
             .expect(function (res) {
-                helpers.containsAllSubstrings(res.text, [userFormData.username, errorText])
+                helpers.containsAllSubstrings(res.text, [errorText])
             }).end(done);
     });
 
@@ -92,7 +92,7 @@ describe("When the user is authenticated and fully verified", function () {
 
         helpers.verifySuccess(response)
             .expect(function (res) {
-                helpers.containsAllSubstrings(res.text, [userFormData.username, infoText])
+                helpers.containsAllSubstrings(res.text, [infoText])
             }).end(done);
     });
 });

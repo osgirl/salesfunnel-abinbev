@@ -11,39 +11,13 @@ block mainContent
         include home-page/info-form
         include home-page/error-form
         div.card.grey.lighten-5: div.container
-            div#my_chart
+            div#salesfunnel-app
+                !=react.renderedApp
 
 block append javascripts
     script(type = 'text/javascript' src=layout.funnelJs)
+    script
+        include pyk-charts/funnel-chart.js
     script.
-        window.PykChartsInit = function (e) {
-            var k = new PykCharts.oneD.funnel({
-                "selector": "#my_chart",
-                "data": [{
-                    "name": "visits",
-                    "weight": "100",
-                    "tooltip": "<b>Total sales:</b> 100"
-                },
-                    {
-                        "name": "proposals",
-                        "weight": "75",
-                        "tooltip": "<b>Total sales:</b> 75"
-                    }, {
-                        "name": "negos",
-                        "weight": "50",
-                        "tooltip": "<b>Total sales:</b> 50"
-                    }, {
-                        "name": "deals",
-                        "weight": "5",
-                        "tooltip": "<b>Total sales:</b> 25"
-                    }
-                ],
-                "color_mode": "shade",
-                "shade_color": "#ffb300",
-                "credit_my_site_name": "Cazamundo GCV",
-                "credit_my_site_url": "http://www.cazamundo.be",
-                "data_source_name": "AB Inbev",
-                "data_source_url": "http://www.ab-inbev.com/"
-            });
-            k.execute();
-        }
+        var salesfunnelProps = !{JSON.stringify(react.initProps).replace(/<\//g, "<\\/")};
+    script(type = 'text/javascript' src=react.bundle)
