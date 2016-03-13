@@ -3,11 +3,13 @@ import config from '../config.json';
 import { getAuthenticatedUser } from '../middleware/passport/passport-middleware.js';
 import { ensureAuthenticated } from '../middleware/authentication/ensureAuthentication.js';
 import { getResendEmailUrl } from './signup/signup.js';
-import { getRep } from '../model/roles/role-fixture.js';
+import { getRep, getNationalSalesManager } from '../model/roles/role-fixture.js';
 import { getBaseUrl } from './helpers/route-helpers.js';
 import ReactDOMServer from 'react-dom/server';
 import React from 'react';
 import Registration from '../frontend-app/registration-app/Registration.js';
+import Salesfunnel from '../frontend-app/salesfunnel-app/Salesfunnel.js';
+import { getCalculatedRegistrationData} from '../services/registration-service.js';
 var router = express.Router();
 
 /* GET home page. */
@@ -69,7 +71,6 @@ function renderM1Page(req, res, next) {
     }
 
     var props = {
-        user: req.renderData.content.user,
         baseUrl: getBaseUrl(req)
     };
 
@@ -87,7 +88,39 @@ function renderManagementPage(req, res, next) {
         return next();
     }
 
-    res.render('salesfunnel-homepage', req.renderData)
+    if (req.userObject.roleRef === getNationalSalesManager()._id) {
+        var header = "Check out the global sales";
+        var teamRef = undefined;
+    } else {
+        var teamRef = req.userObject.teamRef;
+        var header = "Check out the sales of team " + req.userObject.teamRef;
+    }
+
+    getCalculatedRegistrationData(teamRef)
+        .then(function (result) {
+            doRenderManagementPage(result);
+        })
+        .catch(function (err) {
+            console.log("Unable to retrieve registration data: " + JSON.stringify(err));
+            //TODO how to handle this error?
+            return res.status('400').send("Unable to retrieve the data");
+        });
+
+    function doRenderManagementPage(data) {
+        var props = {
+            baseUrl: getBaseUrl(req),
+            data: data,
+            header: header
+        };
+
+        req.renderData.react = {
+            renderedApp: ReactDOMServer.renderToString(React.createFactory(Salesfunnel)(props)),
+            bundle: config.react.htmlDir + config.react.components.salesfunnel.bundle,
+            initProps: props
+        };
+
+        return res.render('salesfunnel-homepage', req.renderData)
+    }
 }
 
 export default router;

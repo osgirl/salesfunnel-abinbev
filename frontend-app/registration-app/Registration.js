@@ -14,7 +14,6 @@ class Registration extends React.Component {
     constructor(props) {
         super(props);
 
-        this.requiredText = "This field is required";
         this.isValid = true;
 
         this.state = {

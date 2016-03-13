@@ -1,9 +1,23 @@
 extends layout
 
+block append stylesheets
+    link(rel='stylesheet' type='text/css' href=layout.funnelCss media='screen,projection')
+
+block header
+    include ./header/salesfunnel-header
+
 block mainContent
     div.container
         include home-page/info-form
         include home-page/error-form
-        div.card.grey.lighten-5: div.row
-            p= 'Welcome Sales Manager' + JSON.stringify(content.user)
-            p= 'Welcome National Sales Manager' + JSON.stringify(content.user)
+        div.card.grey.lighten-5: div.container
+            div#salesfunnel-app
+                !=react.renderedApp
+
+block append javascripts
+    script(type = 'text/javascript' src=layout.funnelJs)
+    script
+        include pyk-charts/funnel-chart.js
+    script.
+        var salesfunnelProps = !{JSON.stringify(react.initProps).replace(/<\//g, "<\\/")};
+    script(type = 'text/javascript' src=react.bundle)

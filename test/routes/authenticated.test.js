@@ -65,14 +65,14 @@ describe("When the user is authenticated but not yet verified", function () {
 });
 
 describe("When the user is authenticated and fully verified", function () {
-    var userFormData = ensureVerifiedUserIsAuthenticated(request);
+    ensureVerifiedUserIsAuthenticated(request);
 
     it(`GET '${homePage}' gives the homePage`, function (done) {
         var response = request.get(homePage);
 
         helpers.verifySuccess(response)
             .expect(function (res) {
-                helpers.containsAllSubstrings(res.text, ['<title>Sales funnel - reporting tool - AB Inbev</title>', userFormData.username, "Welcome"])
+                helpers.containsAllSubstrings(res.text, ['<title>Sales funnel - reporting tool - AB Inbev</title>', "Welcome"])
             }).end(done);
     });
 
@@ -82,7 +82,7 @@ describe("When the user is authenticated and fully verified", function () {
 
         helpers.verifySuccess(response)
             .expect(function (res) {
-                helpers.containsAllSubstrings(res.text, [userFormData.username, errorText])
+                helpers.containsAllSubstrings(res.text, [errorText])
             }).end(done);
     });
 
@@ -92,36 +92,37 @@ describe("When the user is authenticated and fully verified", function () {
 
         helpers.verifySuccess(response)
             .expect(function (res) {
-                helpers.containsAllSubstrings(res.text, [userFormData.username, infoText])
+                helpers.containsAllSubstrings(res.text, [infoText])
             }).end(done);
     });
 });
 
 describe("When the NSM is authenticated and fully verified", function() {
     var nationalSalesManager = getNationalSalesManager();
-    var userFormData = ensureVerifiedUserIsAuthenticated(request, nationalSalesManager._id);
+    ensureVerifiedUserIsAuthenticated(request, nationalSalesManager._id);
 
     it(`GET '${homePage}' gives the National Sales Manager homePage`, function(done) {
         var response = request.get(homePage);
+        var user = getVerifiedUserAccount();
 
         helpers.verifySuccess(response)
             .expect(function (res) {
-                helpers.containsAllSubstrings(res.text, ['<title>Sales funnel - reporting tool - AB Inbev</title>', userFormData.username, `Welcome ${nationalSalesManager.roleName}`])
+                helpers.containsAllSubstrings(res.text, ['<title>Sales funnel - reporting tool - AB Inbev</title>', `Welcome ${user.userName}`])
             }).end(done);
     });
 });
 
 describe("When the SM is authenticated and fully verified", function() {
     var salesManager = getSalesManager();
-    var userFormData = ensureVerifiedUserIsAuthenticated(request, salesManager._id);
+    ensureVerifiedUserIsAuthenticated(request, salesManager._id);
 
     it(`GET '${homePage}' gives the Sales Manager homePage`, function(done) {
 
         var response = request.get(homePage);
-
+        var user = getVerifiedUserAccount();
     helpers.verifySuccess(response)
         .expect(function (res) {
-            helpers.containsAllSubstrings(res.text, ['<title>Sales funnel - reporting tool - AB Inbev</title>', userFormData.username, `Welcome ${salesManager.roleName}`])
+            helpers.containsAllSubstrings(res.text, ['<title>Sales funnel - reporting tool - AB Inbev</title>', `Welcome ${user.userName}`])
         }).end(done);
     });
 
