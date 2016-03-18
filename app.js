@@ -31,6 +31,7 @@ app.use('/logout', routes.logout);
 app.use('/login', routes.login);
 app.use('/signup', routes.signup);
 app.use('/registration', routes.registration);
+app.use('/salesfunnel', routes.salesfunnel);
 app.use('/*', routes.redirect);
 
 // ERROR HANDLERS

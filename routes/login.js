@@ -1,7 +1,8 @@
 import express from 'express';
 import { addLocalStrategyForUserAuthentication, doUserAuthentication } from '../middleware/passport/passport-middleware.js';
 import { Promise } from 'bluebird';
-import {RoleService, TeamService} from '../services/index';
+import { getTeams } from '../services/team-service.js';
+import {RoleService} from '../services/index';
 import { ensureNotAuthenticated } from '../middleware/authentication/ensureAuthentication.js';
 var router = express.Router();
 
@@ -11,7 +12,6 @@ addLocalStrategyForUserAuthentication();
 router.get('/', ensureNotAuthenticated, doRenderLoginPage);
 
 function doRenderLoginPage(req, res, next) {
-    var getTeams = Promise.promisify(TeamService.getTeams);
     var getRoles = Promise.promisify(RoleService.getRoles);
 
     Promise.all([getTeams(), getRoles()])

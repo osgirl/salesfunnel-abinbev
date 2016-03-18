@@ -21,7 +21,7 @@ export function getRegistrationsByTeamRef(teamRef) {
 }
 
 export function getCalculatedRegistrationData(teamId) {
-    var promise = teamId ? getRegistrationsByTeamRef(teamId) : getRegistrations();
+    var promise = (teamId !== "NA") ? getRegistrationsByTeamRef(teamId) : getRegistrations();
 
     return promise
         .then(function (result) {

@@ -2,12 +2,12 @@ import React from 'react';
 import DatePicker from 'material-ui/lib/date-picker/date-picker';
 import RaisedButton from 'material-ui/lib/raised-button';
 import { initMaterialUi } from '../common/mui-theme.js';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import { RegistrationNumberField } from './Registration-number-field.js';
 import TextField from 'material-ui/lib/text-field';
 import Snackbar from 'material-ui/lib/snackbar';
 import { saveRegistrationData } from '../helpers/api-calls.js';
-injectTapEventPlugin();
+import DropDownMenu from 'material-ui/lib/DropDownMenu';
+import MenuItem from 'material-ui/lib/menus/menu-item';
 
 class Registration extends React.Component {
 
