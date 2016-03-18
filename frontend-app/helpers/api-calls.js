@@ -15,7 +15,7 @@ export function saveRegistrationData(baseUrl, registrationForm) {
     return axios.post(url, registrationData);
 }
 
-export function getSalesFunnelData(baseUrl, teamRef) {
-    var url = `${baseUrl}salesfunnel/${teamRef}`;
+export function getSalesFunnelData(baseUrl, teamRef, periodRef) {
+    var url = `${baseUrl}salesfunnel/${teamRef}/${periodRef}`;
     return axios.get(url);
 }

@@ -2,13 +2,13 @@ import React from 'react';
 import DropDownMenu from 'material-ui/lib/DropDownMenu';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 
-class TeamDropDown extends React.Component {
+class PeriodDropDown extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            value: props.teamData.teamRef
+            value: props.periodData.periodRef
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -18,15 +18,14 @@ class TeamDropDown extends React.Component {
         this.props.callback(value);
     }
 
-    createMenuItems(teamData) {
-        return teamData.teams.map((team, index) => {
-            return <MenuItem value={team._id} primaryText={team.teamName} key={index}/>
+    createMenuItems(periodData) {
+        return periodData.periods.map((period, index) => {
+            return <MenuItem value={period._id} primaryText={period.name} key={index}/>
         });
-
     }
 
     render() {
-        var menuItems = this.createMenuItems(this.props.teamData);
+        var menuItems = this.createMenuItems(this.props.periodData);
         return (
             <DropDownMenu value={this.state.value} onChange={this.handleChange}>
                 {menuItems}
@@ -36,4 +35,4 @@ class TeamDropDown extends React.Component {
 
 }
 
-export default TeamDropDown;
+export default PeriodDropDown;

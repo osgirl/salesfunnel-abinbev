@@ -11,6 +11,7 @@ import Registration from '../frontend-app/registration-app/Registration.js';
 import Salesfunnel from '../frontend-app/salesfunnel-app/Salesfunnel.js';
 import { getCalculatedRegistrationData} from '../services/registration-service.js';
 import { getTeams, getTeamById } from '../services/team-service.js';
+import { getPeriods, DEFAULT_PERIOD } from '../services/period-service.js';
 import { Promise } from 'bluebird';
 
 var router = express.Router();
@@ -104,10 +105,14 @@ function renderManagementPage(req, res, next) {
             });
         }
     }
-
-    Promise.all([teamCall(), getCalculatedRegistrationData(teamRef)])
+    var periodRef = DEFAULT_PERIOD._id;
+    var periodData = {
+        fromDate: DEFAULT_PERIOD.getFromDate(),
+        toDate: DEFAULT_PERIOD.getToDate()
+    };
+    Promise.all([teamCall(), getCalculatedRegistrationData(teamRef, periodData), getPeriods()])
         .then(function (results) {
-            doRenderManagementPage(results[0], results[1]);
+            doRenderManagementPage(results[0], results[1], results[2]);
         })
         .catch(function (err) {
             console.log("Unable to retrieve registration data: " + JSON.stringify(err));
@@ -115,7 +120,7 @@ function renderManagementPage(req, res, next) {
             return res.status('400').send("Unable to retrieve the data");
         });
 
-    function doRenderManagementPage(teams, data) {
+    function doRenderManagementPage(teams, data, periods) {
         function calculateNoData() {
             if (data.visits === 0) return true;
             return false;
@@ -129,6 +134,10 @@ function renderManagementPage(req, res, next) {
             teamData: {
                 teamRef: teamRef,
                 teams: teams
+            },
+            periodData: {
+                periodRef: periodRef,
+                periods: periods
             }
         };
 

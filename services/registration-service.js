@@ -2,26 +2,34 @@ import Registration from '../model/registration/registration-schema.js';
 import _ from 'lodash';
 
 
-export function getRegistrations() {
+export function getRegistrations(fromDate, toDate) {
     return new Promise(function (resolve, reject) {
-        Registration.find({}, (err, registrations) => {
+        Registration.find({
+            date: {$gte: fromDate.toDate(), $lte: toDate.toDate()}
+        }, (err, registrations) => {
             if (err) return reject(err);
             return resolve(registrations);
         });
     });
 }
 
-export function getRegistrationsByTeamRef(teamRef) {
+export function getRegistrationsByTeamRef(teamRef, fromDate, toDate) {
     return new Promise(function (resolve, reject) {
-        Registration.find({teamRef: teamRef}, (err, registrations) => {
+        Registration.find({
+            teamRef: teamRef,
+            date: {$gte: fromDate.toDate(), $lte: toDate.toDate()}
+        }, (err, registrations) => {
             if (err) return reject(err);
             return resolve(registrations);
         });
     });
 }
 
-export function getCalculatedRegistrationData(teamId) {
-    var promise = (teamId !== "NA") ? getRegistrationsByTeamRef(teamId) : getRegistrations();
+export function getCalculatedRegistrationData(teamId, periodData) {
+    var fromDate = periodData.fromDate;
+    var toDate = periodData.toDate;
+
+    var promise = (teamId !== "NA") ? getRegistrationsByTeamRef(teamId, fromDate, toDate) : getRegistrations(fromDate, toDate);
 
     return promise
         .then(function (result) {
@@ -32,12 +40,12 @@ export function getCalculatedRegistrationData(teamId) {
 
             _(result).forEach(function (registration) {
                 totalVisits = totalVisits + registration.visits;
-                totalProposals = totalProposals  + registration.proposals;
+                totalProposals = totalProposals + registration.proposals;
                 totalNegos = totalNegos + registration.negos;
                 totalDeals = totalDeals + registration.deals;
             });
 
-            return new Promise(function(resolve, reject) {
+            return new Promise(function (resolve, reject) {
                 return resolve({
                     visits: totalVisits,
                     proposals: totalProposals,

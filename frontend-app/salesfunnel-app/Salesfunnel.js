@@ -1,6 +1,7 @@
 import React from 'react';
 import { initMaterialUi } from '../common/mui-theme.js';
 import TeamDropDown from './team-dropdown.js';
+import PeriodDropDown from './period-dropdown.js';
 import { getSalesFunnelData } from '../helpers/api-calls.js';
 
 class Salesfunnel extends React.Component {
@@ -8,24 +9,45 @@ class Salesfunnel extends React.Component {
     constructor(props) {
         super(props);
         this.changeTeamName = this.changeTeamName.bind(this);
-
+        this.changePeriod = this.changePeriod.bind(this);
         this.state = {
-            noData: this.props.noData
+            noData: this.props.noData,
+            chosenTeam: this.props.teamData.teamRef,
+            chosenPeriod: this.props.periodData.periodRef
         };
-
     }
 
     changeTeamName(teamRef) {
-        getSalesFunnelData(this.props.baseUrl, teamRef)
+        getSalesFunnelData(this.props.baseUrl, teamRef, this.state.chosenPeriod)
             .then(response => {
-                console.log(JSON.stringify(response));
                 if (response.data.visits === 0) {
                     this.setState({
-                        noData: true
+                        noData: true,
+                        chosenTeam: teamRef
                     });
                 } else {
                     this.setState({
-                        noData: false
+                        noData: false,
+                        chosenTeam: teamRef
+                    });
+                    this.funnelChart.updateData(response.data);
+                }
+            }
+        );
+    }
+
+    changePeriod(periodRef) {
+        getSalesFunnelData(this.props.baseUrl, this.state.chosenTeam, periodRef)
+            .then(response => {
+                if (response.data.visits === 0) {
+                    this.setState({
+                        noData: true,
+                        chosenPeriod: periodRef
+                    });
+                } else {
+                    this.setState({
+                        noData: false,
+                        chosenPeriod: periodRef
                     });
                     this.funnelChart.updateData(response.data);
                 }
@@ -34,7 +56,6 @@ class Salesfunnel extends React.Component {
     }
 
     render() {
-        console.log("teamData: " + JSON.stringify(this.props.teamData));
         return (
             <div>
                 <div className="row">
@@ -45,10 +66,16 @@ class Salesfunnel extends React.Component {
                 </div>
                 {this.state.noData && <p>No data yet for this team</p>}
                 <div className = "row">
-                    <div className = "col s12 m6 l3">
+                    <div className = "col s6">
                         <TeamDropDown
                             callback={this.changeTeamName}
                             teamData={this.props.teamData}
+                        />
+                    </div>
+                    <div className = "col s6">
+                        <PeriodDropDown
+                            callback={this.changePeriod}
+                            periodData={this.props.periodData}
                         />
                     </div>
                 </div>
