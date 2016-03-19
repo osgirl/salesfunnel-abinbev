@@ -20,7 +20,6 @@ function getSalesfunnelData(req, res, next) {
 
             getCalculatedRegistrationData(req.params.teamRef, periodData)
                 .then(function (results) {
-                    console.log("result: " + results);
                     res.status('200').send(results);
                 })
                 .catch(function (err) {

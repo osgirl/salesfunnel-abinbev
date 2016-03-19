@@ -1,8 +1,8 @@
 import React from 'react';
-import { initMaterialUi } from '../common/mui-theme.js';
 import TeamDropDown from './team-dropdown.js';
 import PeriodDropDown from './period-dropdown.js';
 import { getSalesFunnelData } from '../helpers/api-calls.js';
+import App from '../common/App.js';
 
 class Salesfunnel extends React.Component {
 
@@ -57,32 +57,34 @@ class Salesfunnel extends React.Component {
 
     render() {
         return (
-            <div>
-                <div className="row">
-                    <div className="col s12">
-                        <h5 className="header">{this.props.header}
-                        </h5>
+            <App>
+                <div>
+                    <div className="row">
+                        <div className="col s12">
+                            <h5 className="header">{this.props.header}
+                            </h5>
+                        </div>
                     </div>
-                </div>
                 {this.state.noData && <p>No data yet for this team</p>}
-                <div className = "row">
-                    <div className = "col s6">
-                        <TeamDropDown
-                            callback={this.changeTeamName}
-                            teamData={this.props.teamData}
-                        />
+                    <div className = "row">
+                        <div className = "col s6">
+                            <TeamDropDown
+                                callback={this.changeTeamName}
+                                teamData={this.props.teamData}
+                            />
+                        </div>
+                        <div className = "col s6">
+                            <PeriodDropDown
+                                callback={this.changePeriod}
+                                periodData={this.props.periodData}
+                            />
+                        </div>
                     </div>
-                    <div className = "col s6">
-                        <PeriodDropDown
-                            callback={this.changePeriod}
-                            periodData={this.props.periodData}
-                        />
-                    </div>
-                </div>
-                <div className="row">
+                    <div className="row">
                     {!this.state.noData && <div id="my_chart" />}
+                    </div>
                 </div>
-            </div>
+            </App>
         )
     }
 
@@ -98,4 +100,4 @@ class Salesfunnel extends React.Component {
     }
 }
 
-export default initMaterialUi(Salesfunnel);
+export default Salesfunnel;
