@@ -9,7 +9,12 @@ import ReactDOMServer from 'react-dom/server';
 import React from 'react';
 import Registration from '../frontend-app/registration-app/Registration.js';
 import Salesfunnel from '../frontend-app/salesfunnel-app/Salesfunnel.js';
-import { getCalculatedRegistrationData} from '../services/registration-service.js';
+import { getCalculatedTeamRegistrationData} from '../services/registration-service.js';
+import { getTeams, getTeamById } from '../services/team-service.js';
+import UserService from '../services/user-service.js';
+import { getPeriods, DEFAULT_PERIOD } from '../services/period-service.js';
+import { Promise } from 'bluebird';
+
 var router = express.Router();
 
 /* GET home page. */
@@ -90,15 +95,25 @@ function renderManagementPage(req, res, next) {
 
     if (req.userObject.roleRef === getNationalSalesManager()._id) {
         var header = "Check out the global sales";
-        var teamRef = undefined;
+        var teamRef = req.userObject.teamRef;
+        var teamCall = getTeams;
     } else {
         var teamRef = req.userObject.teamRef;
-        var header = "Check out the sales of team " + req.userObject.teamRef;
+        var header = "Check out the sales of your team";
+        var teamCall = function() {
+            return getTeamById(req.userObject.teamRef).then(result => {
+                return [result];
+            });
+        }
     }
-
-    getCalculatedRegistrationData(teamRef)
-        .then(function (result) {
-            doRenderManagementPage(result);
+    var periodRef = DEFAULT_PERIOD._id;
+    var periodData = {
+        fromDate: DEFAULT_PERIOD.getFromDate(),
+        toDate: DEFAULT_PERIOD.getToDate()
+    };
+    Promise.all([teamCall(), getCalculatedTeamRegistrationData(teamRef, periodData), getPeriods(), UserService.getSearchableUsers(teamRef)])
+        .then(function (results) {
+            doRenderManagementPage(results[0], results[1], results[2], results[3]);
         })
         .catch(function (err) {
             console.log("Unable to retrieve registration data: " + JSON.stringify(err));
@@ -106,15 +121,41 @@ function renderManagementPage(req, res, next) {
             return res.status('400').send("Unable to retrieve the data");
         });
 
-    function doRenderManagementPage(data) {
+    function doRenderManagementPage(teams, data, periods, users) {
+        function calculateNoData() {
+            if (data.visits === 0) return true;
+            return false;
+        }
+
         var props = {
             baseUrl: getBaseUrl(req),
             data: data,
-            header: header
+            header: header,
+            noData: calculateNoData(),
+            teamData: {
+                teamRef: teamRef,
+                teams: teams
+            },
+            periodData: {
+                periodRef: periodRef,
+                periods: periods
+            },
+            userData: {
+                users: users
+            }
         };
 
+        try {
+            var salesRegistrationFactory = React.createFactory(Salesfunnel)(props);
+            var salesRegistrationApp = ReactDOMServer.renderToString(salesRegistrationFactory);
+        } catch(err) {
+            console.log("Unable to render React component: " + JSON.stringify(err));
+            //TODO how to handle this error?
+            return res.status('400').send("Unable to retrieve the data");
+        }
+
         req.renderData.react = {
-            renderedApp: ReactDOMServer.renderToString(React.createFactory(Salesfunnel)(props)),
+            renderedApp: salesRegistrationApp,
             bundle: config.react.htmlDir + config.react.components.salesfunnel.bundle,
             initProps: props
         };

@@ -1,13 +1,13 @@
 import React from 'react';
 import DatePicker from 'material-ui/lib/date-picker/date-picker';
 import RaisedButton from 'material-ui/lib/raised-button';
-import { initMaterialUi } from '../common/mui-theme.js';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import { RegistrationNumberField } from './Registration-number-field.js';
 import TextField from 'material-ui/lib/text-field';
 import Snackbar from 'material-ui/lib/snackbar';
 import { saveRegistrationData } from '../helpers/api-calls.js';
-injectTapEventPlugin();
+import DropDownMenu from 'material-ui/lib/DropDownMenu';
+import MenuItem from 'material-ui/lib/menus/menu-item';
+import App from '../common/App.js';
 
 class Registration extends React.Component {
 
@@ -175,72 +175,74 @@ class Registration extends React.Component {
 
     render() {
         return (
-            <div>
-                <div className="row">
-                    <div className="col s12">
-                        <h5 className="header">Register the sales of the day
-                        </h5>
+            <App>
+                <div>
+                    <div className="row">
+                        <div className="col s12">
+                            <h5 className="header">Register the sales of the day
+                            </h5>
+                        </div>
                     </div>
-                </div>
-                <div className="row">
-                    <div className="col s12 m6">
-                        <p>Pick a date:</p>
+                    <div className="row">
+                        <div className="col s12 m6">
+                            <p>Pick a date:</p>
+                        </div>
+                        <div className="col s12 m6">
+                            <DatePicker
+                                hintText="Portrait Dialog"
+                                value={this.state.controlledDate}
+                                onChange={this._handleDateChange.bind(this)}
+                                maxDate={new Date()}/>
+                        </div>
                     </div>
-                    <div className="col s12 m6">
-                        <DatePicker
-                            hintText="Portrait Dialog"
-                            value={this.state.controlledDate}
-                            onChange={this._handleDateChange.bind(this)}
-                            maxDate={new Date()}/>
+                    <RegistrationNumberField
+                        id="visits"
+                        hintText="Visits"
+                        floatingLabelText="Total visits of the day"
+                        errorText={this.state.visits.errorText}
+                        value={this.state.visits.value}
+                        textChanged={this.visitsTextChanged.bind(this)}
+                    />
+                    <RegistrationNumberField
+                        id="negos"
+                        hintText="Nego's"
+                        floatingLabelText="Total nego's of the day"
+                        errorText={this.state.negos.errorText}
+                        value={this.state.negos.value}
+                        textChanged={this.negosTextChanged.bind(this)}
+                    />
+                    <RegistrationNumberField
+                        id="proposals"
+                        hintText="Proposals"
+                        floatingLabelText="Total proposals of the day"
+                        errorText={this.state.proposals.errorText}
+                        value={this.state.proposals.value}
+                        textChanged={this.proposalsTextChanged.bind(this)}
+                    />
+                    <RegistrationNumberField
+                        id="deals"
+                        hintText="Deals"
+                        floatingLabelText="Total confirmed deals of the day"
+                        errorText={this.state.deals.errorText}
+                        value={this.state.deals.value}
+                        textChanged={this.dealsTextChanged.bind(this)}
+                    />
+                    <div className = "row col s12">
+                        <RaisedButton
+                            label="Submit your sales"
+                            secondary={true}
+                            style={{margin: 12}}
+                            onMouseUp={this.submitSales.bind(this)}
+                        />
                     </div>
-                </div>
-                <RegistrationNumberField
-                    id="visits"
-                    hintText="Visits"
-                    floatingLabelText="Total visits of the day"
-                    errorText={this.state.visits.errorText}
-                    value={this.state.visits.value}
-                    textChanged={this.visitsTextChanged.bind(this)}
-                />
-                <RegistrationNumberField
-                    id="negos"
-                    hintText="Nego's"
-                    floatingLabelText="Total nego's of the day"
-                    errorText={this.state.negos.errorText}
-                    value={this.state.negos.value}
-                    textChanged={this.negosTextChanged.bind(this)}
-                />
-                <RegistrationNumberField
-                    id="proposals"
-                    hintText="Proposals"
-                    floatingLabelText="Total proposals of the day"
-                    errorText={this.state.proposals.errorText}
-                    value={this.state.proposals.value}
-                    textChanged={this.proposalsTextChanged.bind(this)}
-                />
-                <RegistrationNumberField
-                    id="deals"
-                    hintText="Deals"
-                    floatingLabelText="Total confirmed deals of the day"
-                    errorText={this.state.deals.errorText}
-                    value={this.state.deals.value}
-                    textChanged={this.dealsTextChanged.bind(this)}
-                />
-                <div className = "row col s12">
-                    <RaisedButton
-                        label="Submit your sales"
-                        secondary={true}
-                        style={{margin: 12}}
-                        onMouseUp={this.submitSales.bind(this)}
+                    <Snackbar
+                        open={this.state.alert.open}
+                        message={this.state.alert.message}
+                        autoHideDuration={4000}
+                        onRequestClose={this.handleRequestSnackBarClose.bind(this)}
                     />
                 </div>
-                <Snackbar
-                    open={this.state.alert.open}
-                    message={this.state.alert.message}
-                    autoHideDuration={4000}
-                    onRequestClose={this.handleRequestSnackBarClose.bind(this)}
-                />
-            </div>
+            </App>
         )
     }
 }
@@ -250,4 +252,4 @@ Registration.propTypes = {
     baseUrl: React.PropTypes.string
 };
 
-export default initMaterialUi(Registration);
+export default Registration;

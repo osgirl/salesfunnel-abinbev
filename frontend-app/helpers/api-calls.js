@@ -14,3 +14,13 @@ export function saveRegistrationData(baseUrl, registrationForm) {
 
     return axios.post(url, registrationData);
 }
+
+export function getTeamSalesFunnelData(baseUrl, teamRef, periodRef) {
+    var url = `${baseUrl}salesfunnel/teams/${teamRef}/${periodRef}`;
+    return axios.get(url);
+}
+
+export function getUserSalesFunnelData(baseUrl, userRef, periodRef) {
+    var url = `${baseUrl}salesfunnel/users/${userRef}/${periodRef}`;
+    return axios.get(url);
+}

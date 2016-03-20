@@ -1,12 +1,19 @@
 import Team from '../model/teams/team-schema.js';
 
-function getTeams(callback) {
-    Team.find({}, null, {}, function (err, teams) {
-            callback(err, teams)
-        }
-    );
+export function getTeams() {
+    return new Promise(function (resolve, reject) {
+        Team.find({}, (err, teams) => {
+            if (err) return reject(err);
+            return resolve(teams);
+        });
+    });
 }
 
-export default {
-    getTeams: getTeams
-};
+export function getTeamById(teamId) {
+    return new Promise(function (resolve, reject) {
+        Team.findOne({ '_id' : teamId}, (err, team) => {
+            if (err) return reject(err);
+            return resolve(team || {});
+        });
+    });
+}
