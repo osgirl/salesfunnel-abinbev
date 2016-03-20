@@ -30,10 +30,19 @@ class Salesfunnel extends React.Component {
                         noData: false,
                         chosenTeam: teamRef
                     });
-                    this.funnelChart.updateData(response.data);
+                    this.updateFunnelChart(response.data);
                 }
             }
         );
+    }
+
+    updateFunnelChart(funnelChartData) {
+        var scrollPosition = {
+            x: window.scrollX,
+            y: window.scrollY
+        };
+        this.funnelChart.updateData(funnelChartData);
+        window.scrollTo(scrollPosition.x, scrollPosition.y);
     }
 
     changePeriod(periodRef) {
@@ -49,7 +58,7 @@ class Salesfunnel extends React.Component {
                         noData: false,
                         chosenPeriod: periodRef
                     });
-                    this.funnelChart.updateData(response.data);
+                    this.updateFunnelChart(response.data);
                 }
             }
         );
