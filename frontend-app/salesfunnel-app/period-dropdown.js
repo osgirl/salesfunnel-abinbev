@@ -27,7 +27,10 @@ class PeriodDropDown extends React.Component {
     render() {
         var menuItems = this.createMenuItems(this.props.periodData);
         return (
-            <DropDownMenu value={this.state.value} onChange={this.handleChange}>
+            <DropDownMenu
+                value={this.state.value}
+                onChange={this.handleChange}
+            >
                 {menuItems}
             </DropDownMenu>
         )

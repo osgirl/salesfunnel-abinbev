@@ -1,60 +1,22 @@
 import Registration from '../model/registration/registration-schema.js';
 import _ from 'lodash';
 
-
-export function getRegistrations(fromDate, toDate) {
-    return new Promise(function (resolve, reject) {
-        Registration.find({
-            date: {$gte: fromDate.toDate(), $lte: toDate.toDate()}
-        }, (err, registrations) => {
-            if (err) return reject(err);
-            return resolve(registrations);
-        });
-    });
-}
-
-export function getRegistrationsByTeamRef(teamRef, fromDate, toDate) {
-    return new Promise(function (resolve, reject) {
-        Registration.find({
-            teamRef: teamRef,
-            date: {$gte: fromDate.toDate(), $lte: toDate.toDate()}
-        }, (err, registrations) => {
-            if (err) return reject(err);
-            return resolve(registrations);
-        });
-    });
-}
-
-export function getCalculatedRegistrationData(teamId, periodData) {
+export function getCalculatedTeamRegistrationData(teamId, periodData) {
     var fromDate = periodData.fromDate;
     var toDate = periodData.toDate;
 
     var promise = (teamId !== "NA") ? getRegistrationsByTeamRef(teamId, fromDate, toDate) : getRegistrations(fromDate, toDate);
 
     return promise
-        .then(function (result) {
-            var totalVisits = 0;
-            var totalProposals = 0;
-            var totalNegos = 0;
-            var totalDeals = 0;
+        .then(calculateAndResolveRegistrationData);
+}
 
-            _(result).forEach(function (registration) {
-                totalVisits = totalVisits + registration.visits;
-                totalProposals = totalProposals + registration.proposals;
-                totalNegos = totalNegos + registration.negos;
-                totalDeals = totalDeals + registration.deals;
-            });
+export function getCalculatedUserRegistrationData(userId, periodData) {
+    var fromDate = periodData.fromDate;
+    var toDate = periodData.toDate;
 
-            return new Promise(function (resolve, reject) {
-                return resolve({
-                    visits: totalVisits,
-                    proposals: totalProposals,
-                    negos: totalNegos,
-                    deals: totalDeals
-                })
-            })
-        })
-        ;
+    return getRegistrationsByUserRef(userId, fromDate, toDate)
+        .then(calculateAndResolveRegistrationData);
 }
 
 export function saveRegistration(userId, teamId, date, registrationData) {
@@ -80,4 +42,66 @@ export function saveRegistration(userId, teamId, date, registrationData) {
             return resolve(persistedRegistration)
         })
     })
+}
+
+function getRegistrations(fromDate, toDate) {
+    return new Promise(function (resolve, reject) {
+        Registration.find({
+            date: {$gte: fromDate.toDate(), $lte: toDate.toDate()}
+        }, (err, registrations) => {
+            if (err) return reject(err);
+            return resolve(registrations);
+        });
+    });
+}
+
+function getRegistrationsByTeamRef(teamRef, fromDate, toDate) {
+    return new Promise(function (resolve, reject) {
+        Registration.find({
+            teamRef: teamRef,
+            date: {$gte: fromDate.toDate(), $lte: toDate.toDate()}
+        }, (err, registrations) => {
+            if (err) return reject(err);
+            return resolve(registrations);
+        });
+    });
+}
+
+function getRegistrationsByUserRef(userRef, fromDate, toDate) {
+    return new Promise(function (resolve, reject) {
+        Registration.find({
+            userRef: userRef,
+            date: {$gte: fromDate.toDate(), $lte: toDate.toDate()}
+        }, (err, registrations) => {
+            if (err) return reject(err);
+            return resolve(registrations);
+        });
+    });
+}
+
+function calculateAndResolveRegistrationData(result) {
+    return new Promise(function (resolve, reject) {
+        return resolve(calculateRegistrationData(result))
+    });
+
+    function calculateRegistrationData(result) {
+        var totalVisits = 0;
+        var totalProposals = 0;
+        var totalNegos = 0;
+        var totalDeals = 0;
+
+        _(result).forEach(function (registration) {
+            totalVisits = totalVisits + registration.visits;
+            totalProposals = totalProposals + registration.proposals;
+            totalNegos = totalNegos + registration.negos;
+            totalDeals = totalDeals + registration.deals;
+        });
+
+        return {
+            visits: totalVisits,
+            proposals: totalProposals,
+            negos: totalNegos,
+            deals: totalDeals
+        }
+    }
 }

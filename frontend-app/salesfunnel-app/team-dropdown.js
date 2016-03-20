@@ -28,7 +28,11 @@ class TeamDropDown extends React.Component {
     render() {
         var menuItems = this.createMenuItems(this.props.teamData);
         return (
-            <DropDownMenu value={this.state.value} onChange={this.handleChange}>
+            <DropDownMenu
+                value={this.state.value}
+                onChange={this.handleChange}
+            >
+
                 {menuItems}
             </DropDownMenu>
         )

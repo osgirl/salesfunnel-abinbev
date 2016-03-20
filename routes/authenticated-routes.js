@@ -9,8 +9,9 @@ import ReactDOMServer from 'react-dom/server';
 import React from 'react';
 import Registration from '../frontend-app/registration-app/Registration.js';
 import Salesfunnel from '../frontend-app/salesfunnel-app/Salesfunnel.js';
-import { getCalculatedRegistrationData} from '../services/registration-service.js';
+import { getCalculatedTeamRegistrationData} from '../services/registration-service.js';
 import { getTeams, getTeamById } from '../services/team-service.js';
+import UserService from '../services/user-service.js';
 import { getPeriods, DEFAULT_PERIOD } from '../services/period-service.js';
 import { Promise } from 'bluebird';
 
@@ -110,9 +111,9 @@ function renderManagementPage(req, res, next) {
         fromDate: DEFAULT_PERIOD.getFromDate(),
         toDate: DEFAULT_PERIOD.getToDate()
     };
-    Promise.all([teamCall(), getCalculatedRegistrationData(teamRef, periodData), getPeriods()])
+    Promise.all([teamCall(), getCalculatedTeamRegistrationData(teamRef, periodData), getPeriods(), UserService.getSearchableUsers(teamRef)])
         .then(function (results) {
-            doRenderManagementPage(results[0], results[1], results[2]);
+            doRenderManagementPage(results[0], results[1], results[2], results[3]);
         })
         .catch(function (err) {
             console.log("Unable to retrieve registration data: " + JSON.stringify(err));
@@ -120,7 +121,7 @@ function renderManagementPage(req, res, next) {
             return res.status('400').send("Unable to retrieve the data");
         });
 
-    function doRenderManagementPage(teams, data, periods) {
+    function doRenderManagementPage(teams, data, periods, users) {
         function calculateNoData() {
             if (data.visits === 0) return true;
             return false;
@@ -138,6 +139,9 @@ function renderManagementPage(req, res, next) {
             periodData: {
                 periodRef: periodRef,
                 periods: periods
+            },
+            userData: {
+                users: users
             }
         };
 
