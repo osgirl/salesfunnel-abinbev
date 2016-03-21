@@ -37,6 +37,10 @@
     background-color: #ee6e73;
 }
 
+.btn:hover, .btn-large:hover {
+    background-color: #FFC107;
+}
+
 nav {
     background-color: #ffffff;
 }
