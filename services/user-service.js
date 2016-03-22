@@ -20,11 +20,13 @@ function createUser(user, callback) {
     });
 }
 
-function findByEmail(email, callback) {
-    User.find({email: email}, (err, users) => {
-        if (err) throw err;
-        callback(null, users[0]);
-    });
+function findByEmail(email) {
+    return new Promise(function (resolve, reject) {
+        User.find({email: email}, (err, users) => {
+            if (err) return reject(err);
+            return resolve(users[0]);
+        });
+    })
 }
 
 function findById(userId) {
