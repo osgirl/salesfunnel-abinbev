@@ -6,7 +6,7 @@ import { ensureVerifiedUserIsAuthenticated } from '../helpers/authentication-hel
 import dbTestSetup from '../../model/db-test-setup.js';
 import { getVerifiedUserAccount } from '../../model/users/user-fixture.js';
 import PasswordResetRepository from '../../model/password-reset/password-reset-schema.js';
-import {PASSWORD_RESET_SENT, VERIFICATION_FAILURE } from '../../routes/reset-password.js';
+import {PASSWORD_RESET_SENT, VERIFICATION_FAILURE, VERIFICATION_SUCCESS } from '../../routes/reset-password.js';
 import { getRandomString } from '../helpers/random-helpers.js';
 
 var helpers = new SupertestHelpers(['<html>', '</html>', '<body>', '</body>', '<head>', '</head>']);
@@ -223,6 +223,38 @@ describe("When the user is not authenticated and did do a new password request",
 
         server
             .get(`${createNewPasswordPage}/${getRandomString()}`)
+            .expect(302)
+            .expect(function (res) {
+                if (res.header.location !== expectedURI) {
+                    helpers.throwError(`should redirect to ${expectedURI} but instead was redirected to "${res.header.location}"`)
+                }
+            })
+            .end(done);
+    });
+
+    it(`POST ${createNewPasswordPage} with an invalid pwResetToken does render the login page with an error message`, function(done) {
+        var expectedURI = '/login' + '?error=' + VERIFICATION_FAILURE;
+
+        var password = getRandomString();
+        server
+            .post(`${createNewPasswordPage}/${getRandomString()}`)
+            .send({newpassword: password, cnewpassword: password})
+            .expect(302)
+            .expect(function (res) {
+                if (res.header.location !== expectedURI) {
+                    helpers.throwError(`should redirect to ${expectedURI} but instead was redirected to "${res.header.location}"`)
+                }
+            })
+            .end(done);
+    });
+
+    it(`POST ${createNewPasswordPage} with an valid pwResetToken and a valid password renders the login page with an info message`, function(done) {
+        var expectedURI = '/login' + '?info=' + VERIFICATION_SUCCESS;
+        var password = getRandomString();
+
+        server
+            .post(`${createNewPasswordPage}/${persistedPwResetToken}`)
+            .send({newpassword: password, cnewpassword: password})
             .expect(302)
             .expect(function (res) {
                 if (res.header.location !== expectedURI) {
