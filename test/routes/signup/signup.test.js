@@ -56,7 +56,7 @@ describe("When the user is authenticated", function () {
 describe("When the user is not authenticated", function () {
     fillDbBefore();
 
-    it(`POST ${signupPage} a valid user creates a new user and redirects to the validateEmail page`, function (done) {
+    it(`POST ${signupPage} a valid user creates a new user and returns successful`, function (done) {
         verifyUsers(getUserFixture().length, signup);
 
         function signup() {

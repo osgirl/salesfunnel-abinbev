@@ -5,9 +5,9 @@ import UserService from '../services/user-service.js';
 export function sendVerificationEmails(user, baseUrl) {
     var client;
 
-    if(process.env.NODE_ENV === "test") {
+    if (process.env.NODE_ENV === "test") {
         client = {
-            sendEmailWithTemplate: function(emailObject, callbackFunction) {
+            sendEmailWithTemplate: function (emailObject, callbackFunction) {
                 callbackFunction()
             }
         }
@@ -48,6 +48,42 @@ export function sendVerificationEmails(user, baseUrl) {
 
     function createVerificationUrl(baseUrl, user) {
         return path.join(baseUrl, 'signup', 'accept', user.id, user.verificationToken);
+    }
+}
+
+export function sendPasswordResetEmail(user, pwResetToken, baseUrl) {
+    var client;
+
+    if (process.env.NODE_ENV === "test") {
+        client = {
+            sendEmailWithTemplate: function (emailObject, callbackFunction) {
+                callbackFunction()
+            }
+        }
+    } else {
+        client = new postmark.Client('ddd92f99-b69e-4393-8e7d-85e114ad0345');
+    }
+
+    return new Promise(function (resolve, reject) {
+        var emailObject = {
+            "From": "Sales Registration App <jonathan@cazamundo.be>",
+            "To": user.email,
+            "TemplateId": 503183,
+            "TemplateModel": {
+                "product_name": "The Sales Registration App",
+                "name": user.userName,
+                "action_url": createResetPasswordUrl(baseUrl, pwResetToken),
+                "sender_name": "AB Inbev Sales Management Team"
+            }
+        };
+        var callbackFunction = function (err) {
+            if (err) return reject(new Error("Problem sending reset password email: " + err.status + '-' + err.message));
+        };
+        return client.sendEmailWithTemplate(emailObject, callbackFunction);
+    });
+
+    function createResetPasswordUrl(baseUrl, pwResetToken) {
+        return path.join(baseUrl, 'reset-password', 'reset', pwResetToken);
     }
 }
 

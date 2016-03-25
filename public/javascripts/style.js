@@ -7,6 +7,30 @@
         $(document).ready(function () {
             $('.scrollspy').scrollSpy();
             $('select').material_select();
+            $('#newPassword').validate({ // initialize the plugin
+                rules: {
+                    newpassword: {
+                        required: true,
+                        minlength: 8
+                    },
+                    cnewpassword: {
+                        required: true,
+                        minlength: 8,
+                        equalTo: "#newpassword"
+                    }
+                },
+                messages: {
+                },
+                errorElement: 'div',
+                errorPlacement: function (error, element) {
+                    var placement = $(element).data('error');
+                    if (placement) {
+                        $(placement).append(error)
+                    } else {
+                        error.insertAfter(element);
+                    }
+                }
+            });
             $('#signupValidate').validate({ // initialize the plugin
                 rules: {
                     uname: {
@@ -77,6 +101,29 @@
                     }
                 }
             });
+            $('#resetPasswordValidate').validate({ // initialize the plugin
+                rules: {
+                    email: {
+                        required: true,
+                        email: true
+                    }
+                },
+                messages: {
+                    email: {
+                        email: "Please enter a valid email"
+                    }
+                },
+                errorElement: 'div',
+                errorPlacement: function (error, element) {
+                    var placement = $(element).data('error');
+                    if (placement) {
+                        $(placement).append(error)
+                    } else {
+                        error.insertAfter(element);
+                    }
+                }
+            });
+
         });
 
         $('a.goToSignup').click(function () {

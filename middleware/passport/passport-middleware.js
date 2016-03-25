@@ -5,7 +5,7 @@ import { Strategy } from 'passport-local';
 import mongoose from 'mongoose';
 import UserService from '../../services/user-service.js';
 import flash from 'connect-flash';
-import { verifyPassword, hashPassword } from '../crypto/crypto-pbkdf2.js';
+import { verifyPassword } from '../crypto/crypto-pbkdf2.js';
 //https://github.com/kcbanner/connect-mongo
 import connectMongo from 'connect-mongo/es5';
 
@@ -37,23 +37,26 @@ export function initialisePassport(app, secret) {
 
 export function addLocalStrategyForUserAuthentication() {
     passport.use(new Strategy(function (username, password, done) {
-        UserService.findByEmail(username, (err, user) => {
-            if (err) return done(err);
-            if (!user) {
-                return done(null, false, {message: 'The user with email ' + username + ' does not exist.'});
-            }
-            return verifyPassword(user.pw, password, (err, isValid) => {
-                if (err) return done(err);
-                if (!isValid) return done(null, false, {message: 'The password is incorrect'});
+            UserService.findByEmail(username)
+                .then(function (user) {
+                    if (!user) {
+                        return done(null, false, {message: 'The user with email ' + username + ' does not exist.'});
+                    }
+                    return verifyPassword(user.pw, password, (err, isValid) => {
+                        if (err) return done(err);
+                        if (!isValid) return done(null, false, {message: 'The password is incorrect'});
 
-                return done(null, {
-                    id: user._id,
-                    name: user.userName,
-                    email: user.email
-                })
-            });
-        });
-    }));
+                        return done(null, {
+                            id: user._id,
+                            name: user.userName,
+                            email: user.email
+                        })
+                    });
+                }).catch(function (err) {
+                    return done(err);
+                });
+        })
+    );
 
     passport.serializeUser(function (user, done) {
         done(null, user.id);
