@@ -9,5 +9,6 @@ var passwordResetSchema = new Schema({
 }, {collection: 'resets'});
 
 passwordResetSchema.index({userRef: 1, isReset: 1, creationDate: 1}, {unique: true});
+passwordResetSchema.index({pwResetToken: 1, isReset: 1, creationDate: 1}, {unique: true});
 
 export default mongoose.model('PasswordResetRepository', passwordResetSchema);

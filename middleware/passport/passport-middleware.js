@@ -5,7 +5,7 @@ import { Strategy } from 'passport-local';
 import mongoose from 'mongoose';
 import UserService from '../../services/user-service.js';
 import flash from 'connect-flash';
-import { verifyPassword, hashPassword } from '../crypto/crypto-pbkdf2.js';
+import { verifyPassword } from '../crypto/crypto-pbkdf2.js';
 //https://github.com/kcbanner/connect-mongo
 import connectMongo from 'connect-mongo/es5';
 

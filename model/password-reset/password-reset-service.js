@@ -36,3 +36,31 @@ export function createResetPasswordObject(userId) {
             });
     }
 }
+
+export function verifyValidPwResetToken(pwResetToken) {
+    var gte = getCurrentDateMinusOne().toDate();
+    var lte = moment().toDate();
+
+    return new Promise(function(resolve, reject) {
+        PasswordResetRepository.findOne({
+            pwResetToken: pwResetToken,
+            isReset: false,
+            creationDate: {$gte: gte, $lte: lte}
+        }, (err, entry) => {
+            if (err || !entry) {
+                return reject(new Error(`valid reset password object for this user doesn't exist`));
+            }
+            return resolve(entry.userRef);
+        })
+    })
+}
+
+export function updatePasswordObject(pwResetToken) {
+    return new Promise(function (resolve, reject) {
+        PasswordResetRepository.findOneAndUpdate({pwResetToken: pwResetToken}, {$set: {isReset: true}}, {new: true}, function (err, updatedPasswordObject) {
+            if (err) return reject(err);
+            return resolve(updatedPasswordObject)
+        })
+    })
+
+}

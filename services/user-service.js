@@ -56,6 +56,15 @@ function updateVerificationEmailCounter(userId, verificationEmailCounter) {
     })
 }
 
+function updatePassword(userId, password) {
+    return new Promise(function (resolve, reject) {
+        User.findOneAndUpdate({_id: userId}, {$set: {pw: password}}, {new: true}, function (err, updatedUser) {
+            if (err) return reject(err);
+            return resolve(updatedUser)
+        })
+    })
+}
+
 function _mapUsersToSearchableUsers(users) {
     var searchableUsers = [];
     _(users).forEach(function (user) {
@@ -79,7 +88,6 @@ function getSearchableUsers(teamRef) {
             return resolve(_mapUsersToSearchableUsers(users));
         });
     });
-
 }
 
 export default {
@@ -89,5 +97,6 @@ export default {
     findById: findById,
     updateAccountVerified: updateAccountVerified,
     getSearchableUsers: getSearchableUsers,
-    updateVerificationEmailCounter: updateVerificationEmailCounter
+    updateVerificationEmailCounter: updateVerificationEmailCounter,
+    updatePassword: updatePassword
 };

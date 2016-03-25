@@ -43,7 +43,7 @@ class SupertestHelpers {
                     loopItems(item);
                 }
                 else if (str.indexOf(item) === -1) {
-                    errorCallback("Does not contain substring: " + item);
+                    errorCallback("Does not contain substring: " + item + ". But instead contains " + JSON.stringify(str));
                 }
             }
         }
