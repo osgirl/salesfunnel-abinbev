@@ -184,7 +184,7 @@ class Registration extends React.Component {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col s12 m6">
+                        <div className="col m6 hide-on-small-only">
                             <p>Pick a date:</p>
                         </div>
                         <div className="col s12 m6">

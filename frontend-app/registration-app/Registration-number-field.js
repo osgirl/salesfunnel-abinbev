@@ -14,7 +14,7 @@ export class RegistrationNumberField extends React.Component {
     render() {
         return (
             <div className="row">
-                <div className="col s12 m6">
+                <div className="col m6 hide-on-small-only">
                     <p>{this.props.hintText}:</p>
                 </div>
                 <div className="col s12 m6">
