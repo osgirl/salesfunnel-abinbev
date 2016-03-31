@@ -5,10 +5,10 @@ export const muiTheme = getMuiTheme({
     palette: {
         primary1Color: Colors.red400,
         primary2Color: Colors.amber500,
-        primary3Color: Colors.green300,
+        primary3Color: Colors.red400,
         accent1Color: Colors.red400,
         accent2Color: Colors.amber500,
-        accent3Color: Colors.green300
+        accent3Color: Colors.red400
     }
 }, {
     avatar: {
