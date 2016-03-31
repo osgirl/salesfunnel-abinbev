@@ -1,6 +1,43 @@
 import Registration from '../model/registration/registration-schema.js';
+import { getStartOfWeekDate, getEndOfWeekDate, getWeekNumber, getFromCurrentDate, getToCurrentDate } from './period-service.js';
 import _ from 'lodash';
+import moment from 'moment';
 
+export function getWorkWeekUserRegistrationData(userId, nrOfWeeks) {
+    var registrationByUserRefPromises = doGetWorkWeekUserRegistrationData();
+
+    return Promise.all(registrationByUserRefPromises).
+        then(function (result) {
+            return Promise.resolve(result);
+        }).catch(function (err) {
+            console.log("error!: " + err)
+        });
+
+    function doGetWorkWeekUserRegistrationData() {
+        var registrationByUserRefPromises = [];
+        for (var i = 0; i < nrOfWeeks; i++) {
+            registrationByUserRefPromises.push(getWorkWeekRegistrationData(i, userId));
+        }
+        return registrationByUserRefPromises;
+    }
+
+    function getWorkWeekRegistrationData(nrOfWeeksInThePast, userId) {
+        var fromDate = getStartOfWeekDate(nrOfWeeksInThePast);
+        var toDate = getEndOfWeekDate(nrOfWeeksInThePast);
+        var weekNumber = getWeekNumber(nrOfWeeksInThePast);
+
+        return getRegistrationsByUserRef(userId, fromDate, toDate)
+            .then(calculateAndResolveRegistrationData)
+            .then(function (result) {
+                var workWeekVisits = {
+                    period: weekNumber,
+                    nrOfVisits: result.visits
+                };
+
+                return Promise.resolve(workWeekVisits);
+            });
+    }
+}
 export function getCalculatedTeamRegistrationData(teamId, periodData) {
     var fromDate = periodData.fromDate;
     var toDate = periodData.toDate;
@@ -22,7 +59,7 @@ export function getCalculatedUserRegistrationData(userId, periodData) {
 export function saveRegistration(userId, teamId, date, registrationData) {
     var query = {
         userRef: userId,
-        date: date
+        date: {$gte: getFromCurrentDate(moment(date)).toDate(), $lte: getToCurrentDate(moment(date)).toDate()}
     };
 
     var registration = {

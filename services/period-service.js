@@ -1,12 +1,14 @@
 import _ from 'lodash';
 import moment from 'moment';
 
-var getFromCurrentDate = function () {
-    return moment().startOf('day');
+export function getFromCurrentDate(momentDate) {
+    var momentDate = (momentDate || moment());
+    return momentDate.startOf('day');
 };
 
-var getToCurrentDate = function () {
-    return moment().endOf('day');
+export function getToCurrentDate(momentDate) {
+    var momentDate = (momentDate || moment());
+    return momentDate.endOf('day');
 };
 
 var getLastYearDate = function () {
@@ -20,6 +22,18 @@ var getLastMonthDate = function () {
 var getLastWeekDate = function () {
     return moment(getFromCurrentDate()).subtract(1, 'week');
 };
+
+export function getStartOfWeekDate(nrOfWeeksInThePast) {
+    return moment().subtract(nrOfWeeksInThePast, 'weeks').startOf('isoWeek');
+};
+
+export function getEndOfWeekDate(nrOfWeeksInThePast) {
+    return moment().subtract(nrOfWeeksInThePast, 'weeks').endOf('isoWeek');
+};
+
+export function getWeekNumber(nrOfWeeksInThePast) {
+    return getStartOfWeekDate(nrOfWeeksInThePast).isoWeek();
+}
 
 export function getPeriods() {
     return new Promise(function (resolve) {

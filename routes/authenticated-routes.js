@@ -14,6 +14,7 @@ import { getTeams, getTeamById } from '../services/team-service.js';
 import UserService from '../services/user-service.js';
 import { getPeriods, DEFAULT_PERIOD } from '../services/period-service.js';
 import { Promise } from 'bluebird';
+import { getVisitReport } from '../middleware/registration/visit-reports.js';
 
 var router = express.Router();
 
@@ -22,6 +23,7 @@ router.get('/',
     ensureAuthenticated,
     getAuthenticatedUserObject,
     renderUnverifiedWelcomePage,
+    getVisitReport,
     renderM1Page,
     renderManagementPage
 );
@@ -76,7 +78,8 @@ function renderM1Page(req, res, next) {
     }
 
     var props = {
-        baseUrl: getBaseUrl(req)
+        baseUrl: getBaseUrl(req),
+        visitReport: res.visitReport
     };
 
     req.renderData.react = {

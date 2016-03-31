@@ -24,3 +24,8 @@ export function getUserSalesFunnelData(baseUrl, userRef, periodRef) {
     var url = `${baseUrl}salesfunnel/users/${userRef}/${periodRef}`;
     return axios.get(url);
 }
+
+export function getVisitReport(baseUrl) {
+    var url = `${baseUrl}registration/visits`;
+    return axios.get(url);
+}
