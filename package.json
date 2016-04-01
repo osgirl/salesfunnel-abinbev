@@ -65,6 +65,7 @@
   "devDependencies": {
     "babel-cli": "6.5.1",
     "chai": "3.5.0",
+    "chai-datetime": "1.4.1",
     "codecov.io": "0.1.6",
     "ghooks": "1.0.3",
     "istanbul": "^1.0.0-alpha.2",
