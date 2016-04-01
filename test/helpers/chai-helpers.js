@@ -6,3 +6,11 @@ export function check( done, f ) {
         done( e )
     }
 }
+
+export function checkAndContinue( done, f ) {
+    try {
+        f();
+    } catch( e ) {
+        done( e )
+    }
+}

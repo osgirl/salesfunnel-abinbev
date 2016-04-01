@@ -14,6 +14,7 @@ class RegistrationReport extends React.Component {
                 <TableRow key={index}>
                     <TableRowColumn>{visitReportItem.period}</TableRowColumn>
                     <TableRowColumn>{visitReportItem.nrOfVisits}</TableRowColumn>
+                    <TableRowColumn>{visitReportItem.nrOfDeals}</TableRowColumn>
                 </TableRow>
             )
         });
@@ -37,6 +38,7 @@ class RegistrationReport extends React.Component {
                                 <TableRow>
                                     <TableHeaderColumn>Week number</TableHeaderColumn>
                                     <TableHeaderColumn>Total visits</TableHeaderColumn>
+                                    <TableHeaderColumn>Total deals</TableHeaderColumn>
                                 </TableRow>
                             </TableHeader>
                             <TableBody displayRowCheckbox={false}>{visitReportItems}</TableBody>

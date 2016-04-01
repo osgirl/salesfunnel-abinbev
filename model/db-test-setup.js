@@ -1,7 +1,9 @@
 import fixtures from 'node-mongoose-fixtures';
 import staticData from '../data/config/index';
 import { getUserFixture } from './users/user-fixture.js';
+import { getRegistrationFixture } from './registration/registration-fixture.js';
 import teamFixture from './teams/team-fixture.js';
+import registrationFixture from './registration/registration-fixture.js';
 import roleFixture from './roles/role-fixture.js';
 import { connectToDatabase } from './db.js';
 
@@ -16,6 +18,12 @@ function addUserFixtures(callback) {
 function addAllFixtures(callback) {
     addDbAction(function () {
             doAddFixtures({Team: teamFixture, Role: roleFixture, User: getUserFixture()}, callback)
+        });
+};
+
+function addAllFixturesWithRegistrationData(callback) {
+    addDbAction(function () {
+            doAddFixtures({Team: teamFixture, Role: roleFixture, User: getUserFixture(), Registration: getRegistrationFixture()}, callback)
         });
 };
 
@@ -81,5 +89,6 @@ export default {
     addTeamFixtures: addTeamFixtures,
     addRoleFixtures: addRoleFixtures,
     addAllFixtures: addAllFixtures,
+    addAllFixturesWithRegistrationData: addAllFixturesWithRegistrationData,
     cleanDb: cleanDb
 };
