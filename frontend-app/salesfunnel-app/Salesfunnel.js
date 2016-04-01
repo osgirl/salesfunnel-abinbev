@@ -113,10 +113,10 @@ class Salesfunnel extends React.Component {
                         </div>
                     </div>
                     <div className = "row">
-                        <div className = "col s4">
+                        <div className = "col s12 m4">
                             <p> Date range: </p>
                         </div>
-                        <div className = "col s8">
+                        <div className = "col s12 m8">
                             <PeriodDropDown
                                 callback={this.changePeriod}
                                 periodData={this.props.periodData}
@@ -124,21 +124,21 @@ class Salesfunnel extends React.Component {
                         </div>
                     </div>
                     <div className = "row">
-                        <div className = "col s4">
+                        <div className = "col s12 m4">
                             <p> Team: </p>
                         </div>
-                        <div className = "col s8">
+                        <div className = "col s12 m8">
                             <TeamDropDown
                                 callback={this.changeTeamName}
                                 teamData={this.props.teamData}
                             />
                         </div>
                     </div>
-                    <div className = "row">
-                        <div className = "col s4">
+                    <div className = "row hide-on-small-only">
+                        <div className = "col s12 m4">
                             <p> Search for a specific user: </p>
                         </div>
-                        <div className = "col s8">
+                        <div className = "col s12 m8">
                             <UsersAutoCompleteDropDown
                                 callback={this.changeUser}
                                 users={this.state.filteredUsers}
