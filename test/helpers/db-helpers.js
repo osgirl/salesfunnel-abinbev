@@ -19,3 +19,13 @@ export function fillDbBefore() {
         dbTestSetup.cleanDb(done);
     });
 }
+
+export function fillDbBeforeWithRegistrationData() {
+    beforeEach(function cleanDbAndAddAllFixturesBefore(done) {
+        dbTestSetup.addAllFixturesWithRegistrationData(done);
+    });
+
+    afterEach(function cleanDbAfter(done) {
+        dbTestSetup.cleanDb(done);
+    });
+}

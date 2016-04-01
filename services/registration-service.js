@@ -31,7 +31,8 @@ export function getWorkWeekUserRegistrationData(userId, nrOfWeeks) {
             .then(function (result) {
                 var workWeekVisits = {
                     period: weekNumber,
-                    nrOfVisits: result.visits
+                    nrOfVisits: result.visits,
+                    nrOfDeals: result.deals
                 };
 
                 return Promise.resolve(workWeekVisits);
