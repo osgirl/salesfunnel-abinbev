@@ -13,12 +13,14 @@ class SalesfunnelCard extends React.Component {
         this.changeTeamName = this.changeTeamName.bind(this);
         this.changePeriod = this.changePeriod.bind(this);
         this.changeUser = this.changeUser.bind(this);
+        this._handleResult = this._handleResult.bind(this);
         this.state = {
             noData: this.props.noData,
             chosenTeam: this.props.teamData.teamRef,
             chosenPeriod: this.props.periodData.periodRef,
             chosenUser: undefined,
-            filteredUsers: this.props.userData.users
+            filteredUsers: this.props.userData.users,
+            data: this.props.data
         };
     }
 
@@ -32,11 +34,13 @@ class SalesfunnelCard extends React.Component {
                 });
                 if (!response.data || response.data.visits === 0) {
                     this.setState({
-                        noData: true
+                        noData: true,
+                        data: undefined
                     });
                 } else {
                     this.setState({
-                        noData: false
+                        noData: false,
+                        data: response.data
                     });
                     this.updateFunnelChart(response.data);
                 }
@@ -61,12 +65,14 @@ class SalesfunnelCard extends React.Component {
                 if (!response.data || response.data.visits === 0) {
                     this.setState({
                         noData: true,
-                        chosenPeriod: periodRef
+                        chosenPeriod: periodRef,
+                        data: undefined
                     });
                 } else {
                     this.setState({
                         noData: false,
-                        chosenPeriod: periodRef
+                        chosenPeriod: periodRef,
+                        data: response.data
                     });
                     this.updateFunnelChart(response.data);
                 }
@@ -82,11 +88,13 @@ class SalesfunnelCard extends React.Component {
                 });
                 if (!response.data || response.data.visits === 0) {
                     this.setState({
-                        noData: true
+                        noData: true,
+                        data: undefined
                     });
                 } else {
                     this.setState({
-                        noData: false
+                        noData: false,
+                        data: response.data
                     });
                     this.updateFunnelChart(response.data)
                 }
@@ -103,24 +111,53 @@ class SalesfunnelCard extends React.Component {
     }
 
     componentDidMount() {
-        if (!this.props.data || this.props.data.visits === 0) {
+        this.funnelChart = window.getFunnelChart();
+        if (!this.props.data) {
+            var promise = this.state.chosenUser ?
+                getUserSalesFunnelData(this.props.baseUrl, this.state.chosenUser, this.state.chosenPeriod) :
+                getTeamSalesFunnelData(this.props.baseUrl, this.state.chosenTeam, this.state.chosenPeriod);
+
+            promise
+                .then(response => {
+                    this._handleResult(response.data);
+                }
+            );
+        } else {
+            this._handleResult(this.props.data)
+        }
+
+
+    }
+
+    _handleResult(data) {
+        if (!data || data.visits === 0) {
             this.setState({
-                noData: true
+                noData: true,
+                data: undefined
             })
         } else {
-            this.funnelChart = window.getFunnelChart();
-            this.funnelChart.init(this.props.data);
-            this.updateFunnelChart(this.props.data)
+            this.setState({
+                noData: false,
+                data: data
+            });
+            this.funnelChart.init(this.state.data);
+            this.updateFunnelChart(this.state.data)
         }
     }
 
     componentWillReceiveProps() {
-        if (!this.props.data || this.props.data.visits === 0) {
-            this.setState({
-                noData: true
-            })
+        if (!this.props.data) {
+            var promise = this.state.chosenUser ?
+                getUserSalesFunnelData(this.props.baseUrl, this.state.chosenUser, this.state.chosenPeriod) :
+                getTeamSalesFunnelData(this.props.baseUrl, this.state.chosenTeam, this.state.chosenPeriod);
+
+            promise
+                .then(response => {
+                    this._handleResult(response.data);
+                }
+            );
         } else {
-            this.updateFunnelChart(this.props.data)
+            this._handleResult(this.props.data)
         }
     }
 

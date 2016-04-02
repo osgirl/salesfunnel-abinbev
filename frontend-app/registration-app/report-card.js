@@ -36,9 +36,7 @@ class ReportCard extends React.Component {
     }
 
     componentWillReceiveProps() {
-        console.log("componentWillReceiveProps state: " + this.activeTab)
         if (this.activeTab === this.TAB_STATE.SALES_FUNNEL) {
-            console.log("createSalesFunnelCard!: ")
             this._createSalesfunnelCard();
         }
     }
@@ -47,14 +45,12 @@ class ReportCard extends React.Component {
         getSalesfunnelData(this.props.baseUrl)
             .then(response => {
                 var salesfunnelData = response.data;
-                console.log("newData: " + JSON.stringify(salesfunnelData.registrationData));
                 this.setState({
                     salesfunnelCard: <SalesfunnelCard
                         header= "Consult your own sales graphs"
                         periodData= {salesfunnelData.periodData}
                         teamData= {salesfunnelData.teamData}
                         userData= {salesfunnelData.userData}
-                        data = {salesfunnelData.registrationData}
                         baseUrl={this.props.baseUrl}>
                     </SalesfunnelCard>
                 })

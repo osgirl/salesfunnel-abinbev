@@ -75,16 +75,11 @@ function getSalesfunnelData(req, res, next) {
         });
     };
 
-    var defaultPeriodData = {
-        fromDate: DEFAULT_PERIOD.getFromDate(),
-        toDate: DEFAULT_PERIOD.getToDate()
-    };
-
-    Promise.all([teamCall(), getCalculatedUserRegistrationData(req.user.id, defaultPeriodData), getPeriods(), getAuthenticatedUser(req.user.id)])
+    Promise.all([teamCall(), getPeriods(), getAuthenticatedUser(req.user.id)])
         .then((results) => {
-            res.status('200').send(createResponseObject(results[0],results[1],results[2],results[3]));
+            res.status('200').send(createResponseObject(results[0],results[1],results[2]));
 
-            function createResponseObject(teams, registrationData, periods, userObject) {
+            function createResponseObject(teams, periods, userObject) {
                 var searchableUser = new SearchableUser(userObject);
                 return {
                     userData: {
@@ -94,7 +89,6 @@ function getSalesfunnelData(req, res, next) {
                         periods: periods,
                         periodRef: DEFAULT_PERIOD._id
                     },
-                    registrationData: registrationData,
                     teamData: {
                         teamRef: userObject.teamRef,
                         teams: teams

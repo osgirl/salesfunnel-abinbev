@@ -97,19 +97,9 @@ function renderManagementPage(req, res, next) {
         return next();
     }
 
-    if (req.userObject.roleRef === getNationalSalesManager()._id) {
-        var header = "Check out the global sales";
-        var teamRef = req.userObject.teamRef;
-        var teamCall = getTeams;
-    } else {
-        var teamRef = req.userObject.teamRef;
-        var header = "Check out the sales of your team";
-        var teamCall = function () {
-            return getTeamById(req.userObject.teamRef).then(result => {
-                return [result];
-            });
-        }
-    }
+    var header = "Consult the sales graphs of all teams";
+    var teamRef = req.userObject.teamRef;
+    var teamCall = getTeams;
     var periodRef = DEFAULT_PERIOD._id;
     var periodData = {
         fromDate: DEFAULT_PERIOD.getFromDate(),
