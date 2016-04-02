@@ -103,13 +103,24 @@ class SalesfunnelCard extends React.Component {
     }
 
     componentDidMount() {
-        if (this.props.data.visits === 0) {
+        if (!this.props.data || this.props.data.visits === 0) {
             this.setState({
                 noData: true
             })
         } else {
             this.funnelChart = window.getFunnelChart();
             this.funnelChart.init(this.props.data);
+            this.updateFunnelChart(this.props.data)
+        }
+    }
+
+    componentWillReceiveProps() {
+        if (!this.props.data || this.props.data.visits === 0) {
+            this.setState({
+                noData: true
+            })
+        } else {
+            this.updateFunnelChart(this.props.data)
         }
     }
 
@@ -146,9 +157,9 @@ class SalesfunnelCard extends React.Component {
 SalesfunnelCard.propTypes = {
     header: React.PropTypes.string.isRequired,
     noData: React.PropTypes.bool,
-    teamData: React.PropTypes.object,
+    teamData: React.PropTypes.object.isRequired,
     periodData: React.PropTypes.object.isRequired,
-    userData: React.PropTypes.object,
+    userData: React.PropTypes.object.isRequired,
     data: React.PropTypes.object,
     baseUrl: React.PropTypes.string.isRequired
 };

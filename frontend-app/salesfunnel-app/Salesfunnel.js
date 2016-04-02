@@ -8,7 +8,6 @@ class Salesfunnel extends React.Component {
         return (
             <App>
                 <SalesfunnelCard
-                {...this.props}
                     header= {this.props.header}
                     noData= {this.props.noData}
                     teamData= {this.props.teamData}

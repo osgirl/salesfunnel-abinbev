@@ -15,6 +15,7 @@ import UserService from '../services/user-service.js';
 import { getPeriods, DEFAULT_PERIOD } from '../services/period-service.js';
 import { Promise } from 'bluebird';
 import { getVisitReport } from '../middleware/registration/visit-reports.js';
+import SearchableUser from '../model/users/searchable-user.js';
 
 var router = express.Router();
 
@@ -103,7 +104,7 @@ function renderManagementPage(req, res, next) {
     } else {
         var teamRef = req.userObject.teamRef;
         var header = "Check out the sales of your team";
-        var teamCall = function() {
+        var teamCall = function () {
             return getTeamById(req.userObject.teamRef).then(result => {
                 return [result];
             });
@@ -151,7 +152,7 @@ function renderManagementPage(req, res, next) {
         try {
             var salesRegistrationFactory = React.createFactory(Salesfunnel)(props);
             var salesRegistrationApp = ReactDOMServer.renderToString(salesRegistrationFactory);
-        } catch(err) {
+        } catch (err) {
             console.log("Unable to render React component: " + JSON.stringify(err));
             //TODO how to handle this error?
             return res.status('400').send("Unable to retrieve the data");

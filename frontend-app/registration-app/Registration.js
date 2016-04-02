@@ -70,8 +70,13 @@ class Registration extends React.Component {
         return (
             <App>
                 <div>
-                    <RegistrationCard onSubmitSales={this.submitSales.bind(this)} />
-                    <ReportCard visitReport={this.state.visitReport} />
+                    <RegistrationCard
+                        onSubmitSales={this.submitSales.bind(this)}
+                    />
+                    <ReportCard
+                        visitReport={this.state.visitReport}
+                        baseUrl={this.props.baseUrl}
+                    />
                     <Snackbar
                         open={this.state.alert.open}
                         message={this.state.alert.message}
@@ -85,8 +90,8 @@ class Registration extends React.Component {
 }
 
 Registration.propTypes = {
-    baseUrl: React.PropTypes.string,
-    visitReport: React.PropTypes.array
+    baseUrl: React.PropTypes.string.isRequired,
+    visitReport: React.PropTypes.array.isRequired
 };
 
 export default Registration;

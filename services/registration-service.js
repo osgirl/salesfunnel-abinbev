@@ -52,9 +52,12 @@ export function getCalculatedTeamRegistrationData(teamId, periodData) {
 export function getCalculatedUserRegistrationData(userId, periodData) {
     var fromDate = periodData.fromDate;
     var toDate = periodData.toDate;
-
     return getRegistrationsByUserRef(userId, fromDate, toDate)
-        .then(calculateAndResolveRegistrationData);
+        .then(calculateAndResolveRegistrationData)
+        .catch((err) => {
+            console.log("getCalculatedUserRegistrationData error: " + err);
+            throw err;
+        });
 }
 
 export function saveRegistration(userId, teamId, date, registrationData) {
