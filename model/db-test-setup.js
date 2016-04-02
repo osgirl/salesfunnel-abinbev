@@ -16,6 +16,7 @@ function addUserFixtures(callback) {
 };
 
 function addAllFixtures(callback) {
+    fixtures.reset();
     addDbAction(function () {
             doAddFixtures({Team: teamFixture, Role: roleFixture, User: getUserFixture()}, callback)
         });

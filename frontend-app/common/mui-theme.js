@@ -6,7 +6,7 @@ export const muiTheme = getMuiTheme({
         primary1Color: Colors.red400,
         primary2Color: Colors.amber500,
         primary3Color: Colors.red400,
-        accent1Color: Colors.red400,
+        accent1Color: Colors.amber500,
         accent2Color: Colors.amber500,
         accent3Color: Colors.red400
     }

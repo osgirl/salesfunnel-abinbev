@@ -29,3 +29,8 @@ export function getVisitReport(baseUrl) {
     var url = `${baseUrl}registration/visits`;
     return axios.get(url);
 }
+
+export function getSalesfunnelData(baseUrl) {
+    var url = `${baseUrl}salesfunnel`;
+    return axios.get(url);
+}

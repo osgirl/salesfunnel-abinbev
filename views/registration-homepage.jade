@@ -14,3 +14,7 @@ block append javascripts
     script.
         var registrationProps = !{JSON.stringify(react.initProps).replace(/<\//g, "<\\/")};
     script(type = 'text/javascript' src=react.bundle)
+    //can be loaded after because not needed at initial load
+    script(type = 'text/javascript' src=layout.funnelJs)
+    script
+        include pyk-charts/funnel-chart.js

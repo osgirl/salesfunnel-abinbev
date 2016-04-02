@@ -8,11 +8,23 @@ class UsersAutoCompleteDropDown extends React.Component {
     constructor(props) {
         super(props);
 
+        this._handleSelect = this._handleSelect.bind(this);
+        this._createInitialSearchText = this._createInitialSearchText.bind(this);
+
+        var initialSearchText = this._createInitialSearchText(props.users);
+
         this.state = {
             dataSource: this._createSearchableArray(props.users),
-            searchText: {value: undefined, text: undefined, userId: undefined}
+            searchText: initialSearchText
         };
-        this._handleSelect = this._handleSelect.bind(this);
+    }
+
+    _createInitialSearchText(users) {
+        if (users && users.length === 1) {
+            return this._createSearchableText(users[0])
+        } else {
+            return {value: undefined, text: undefined, userId: undefined}
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -29,11 +41,17 @@ class UsersAutoCompleteDropDown extends React.Component {
 
     _createSearchableArray(searchableUsers) {
         var searchableArray = [];
-        _(searchableUsers).forEach(function (searchableUser) {
-            var searchableArrayUser = `${searchableUser.userName} (${searchableUser.email})`;
-            searchableArray.push({value: searchableArrayUser, text: searchableArrayUser, userId: searchableUser.id});
+        _(searchableUsers).forEach((searchableUser) => {
+            var searchText = this._createSearchableText(searchableUser);
+            searchableArray.push(searchText);
         });
         return searchableArray;
+    }
+
+    _createSearchableText(searchableUser) {
+        var searchableArrayUser = `${searchableUser.userName} (${searchableUser.email})`;
+        var searchText = {value: searchableArrayUser, text: searchableArrayUser, userId: searchableUser.id};
+        return searchText;
     }
 
     render() {
@@ -51,5 +69,11 @@ class UsersAutoCompleteDropDown extends React.Component {
     }
 
 }
+
+UsersAutoCompleteDropDown.propTypes = {
+    selectedUser: React.PropTypes.string,
+    users: React.PropTypes.array.isRequired,
+    callback: React.PropTypes.func.isRequired
+};
 
 export default UsersAutoCompleteDropDown;

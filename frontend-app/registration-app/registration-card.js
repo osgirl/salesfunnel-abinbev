@@ -190,7 +190,8 @@ class RegistrationCard extends React.Component {
                     <div className = "row col s12">
                         <RaisedButton
                             label="Submit your sales"
-                            secondary={true}
+                            secondary={false}
+                            primary={true}
                             style={{margin: 12}}
                             onMouseUp={this.submitSales.bind(this)}
                         />

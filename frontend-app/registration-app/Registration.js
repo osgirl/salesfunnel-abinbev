@@ -3,7 +3,7 @@ import Snackbar from 'material-ui/lib/snackbar';
 import { saveRegistrationData, getVisitReport } from '../helpers/api-calls.js';
 import App from '../common/App.js';
 import RegistrationCard from './registration-card.js';
-import RegistrationReport from './registration-report.js';
+import ReportCard from './report-card.js';
 
 class Registration extends React.Component {
 
@@ -70,8 +70,13 @@ class Registration extends React.Component {
         return (
             <App>
                 <div>
-                    <RegistrationCard onSubmitSales={this.submitSales.bind(this)} />
-                    <RegistrationReport visitReport={this.state.visitReport} />
+                    <RegistrationCard
+                        onSubmitSales={this.submitSales.bind(this)}
+                    />
+                    <ReportCard
+                        visitReport={this.state.visitReport}
+                        baseUrl={this.props.baseUrl}
+                    />
                     <Snackbar
                         open={this.state.alert.open}
                         message={this.state.alert.message}
@@ -85,8 +90,8 @@ class Registration extends React.Component {
 }
 
 Registration.propTypes = {
-    baseUrl: React.PropTypes.string,
-    visitReport: React.PropTypes.array
+    baseUrl: React.PropTypes.string.isRequired,
+    visitReport: React.PropTypes.array.isRequired
 };
 
 export default Registration;

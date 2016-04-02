@@ -15,6 +15,7 @@ import UserService from '../services/user-service.js';
 import { getPeriods, DEFAULT_PERIOD } from '../services/period-service.js';
 import { Promise } from 'bluebird';
 import { getVisitReport } from '../middleware/registration/visit-reports.js';
+import SearchableUser from '../model/users/searchable-user.js';
 
 var router = express.Router();
 
@@ -96,19 +97,9 @@ function renderManagementPage(req, res, next) {
         return next();
     }
 
-    if (req.userObject.roleRef === getNationalSalesManager()._id) {
-        var header = "Check out the global sales";
-        var teamRef = req.userObject.teamRef;
-        var teamCall = getTeams;
-    } else {
-        var teamRef = req.userObject.teamRef;
-        var header = "Check out the sales of your team";
-        var teamCall = function() {
-            return getTeamById(req.userObject.teamRef).then(result => {
-                return [result];
-            });
-        }
-    }
+    var header = "Consult the sales graphs of all teams";
+    var teamRef = req.userObject.teamRef;
+    var teamCall = getTeams;
     var periodRef = DEFAULT_PERIOD._id;
     var periodData = {
         fromDate: DEFAULT_PERIOD.getFromDate(),
@@ -151,7 +142,7 @@ function renderManagementPage(req, res, next) {
         try {
             var salesRegistrationFactory = React.createFactory(Salesfunnel)(props);
             var salesRegistrationApp = ReactDOMServer.renderToString(salesRegistrationFactory);
-        } catch(err) {
+        } catch (err) {
             console.log("Unable to render React component: " + JSON.stringify(err));
             //TODO how to handle this error?
             return res.status('400').send("Unable to retrieve the data");
