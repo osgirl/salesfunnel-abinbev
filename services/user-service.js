@@ -79,7 +79,7 @@ function _mapUsersToSearchableUsers(users) {
 }
 
 function getSearchableUsers(teamRef) {
-    var query = {roleRef: "M1", isVerified: true};
+    var query = {roleRef: "M1", isDeleted: false};
     teamRef !== 'NA' && _.assign(query, {teamRef: teamRef});
 
     return new Promise(function (resolve, reject) {
