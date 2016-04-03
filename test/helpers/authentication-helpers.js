@@ -12,18 +12,21 @@ export function ensureUnverifiedUserIsAuthenticated(server) {
     return newUserAccountLoginFormData;
 }
 
-export function ensureVerifiedUserIsAuthenticated(server, roleRef) {
+export function ensureVerifiedUserIsAuthenticated(server, roleRef, isAdmin) {
     var verifiedUserAccountLoginFormData = getVerifiedUserAccountLoginFormData();
     var originalRoleRef = getVerifiedUserAccount().roleRef;
+    var originalIsAdmin = getVerifiedUserAccount().isAdmin;
 
-    if (roleRef) {
+    if (roleRef || isAdmin) {
         beforeEach(function overwriteRoleRef(done) {
-            getVerifiedUserAccount().roleRef = roleRef;
+            if (roleRef) getVerifiedUserAccount().roleRef = roleRef;
+            if (isAdmin) getVerifiedUserAccount().isAdmin = isAdmin;
             done();
         });
 
         afterEach(function overwriteRoleRef(done) {
-            getVerifiedUserAccount().roleRef = originalRoleRef;
+            if (roleRef) getVerifiedUserAccount().roleRef = originalRoleRef;
+            if (isAdmin) getVerifiedUserAccount().isAdmin = originalIsAdmin;
             done();
         });
     }

@@ -49,6 +49,7 @@ function getAuthenticatedUserObject(req, res, next) {
                     description: 'This is a reporting tool by and from AB Inbev to report about sales prospects'
                 },
                 isAuthenticated: true,
+                isAdmin: userObject.isAdmin,
                 content: {
                     error: error,
                     info: info,
