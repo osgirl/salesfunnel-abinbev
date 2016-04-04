@@ -1,7 +1,10 @@
 import { getRep } from '../../model/roles/role-fixture.js';
-import { getAuthenticatedUser } from '../../middleware/passport/passport-middleware.js';
 import { getWorkWeekUserRegistrationData } from '../../services/registration-service.js';
 
+/**
+ * Prerequisite: user has to be authenticated to perform this action
+ * @param req.userObject is mandatory
+ */
 export function getVisitReport(req, res, next) {
     return _ensureRep(req, res, next)
         .then(doGetVisitReport);
@@ -18,22 +21,14 @@ export function getVisitReport(req, res, next) {
 }
 
 function _ensureRep(req, res, next) {
-    if (!req.userObject) {
-        return getAuthenticatedUser(req.user.id)
-            .then(function (userObject) {
-                req.userObject = userObject;
-                return doEnsureRep();
-            });
-    } else {
-        return doEnsureRep();
-    }
-
-    function doEnsureRep() {
+    if (req.userObject) {
         if (req.userObject.roleRef !== getRep()._id) {
             next();
             return Promise.reject();
         } else {
             return Promise.resolve();
         }
+    } else {
+        console.log("req.userObject should exist, please use the ensureAuthentication method before calling the getVisitReport.");
     }
 }

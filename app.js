@@ -33,6 +33,7 @@ app.use('/signup', routes.signup);
 app.use('/reset-password', routes.resetPassword);
 app.use('/registration', routes.registration);
 app.use('/salesfunnel', routes.salesfunnel);
+app.use('/admin', routes.admin);
 app.use('/*', routes.redirect);
 
 // ERROR HANDLERS

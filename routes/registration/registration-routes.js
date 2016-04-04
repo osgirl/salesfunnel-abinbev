@@ -1,7 +1,6 @@
 import express from 'express';
 import { Promise } from 'bluebird';
 import { ensureAuthenticated } from '../../middleware/authentication/ensureAuthentication.js';
-import { getAuthenticatedUser } from '../../middleware/passport/passport-middleware.js';
 import { saveRegistration } from '../../services/registration-service.js';
 import { getVisitReport } from '../../middleware/registration/visit-reports.js';
 import moment from 'moment';
