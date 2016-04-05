@@ -3,11 +3,13 @@ import uuid from 'uuid';
 import _ from 'lodash';
 import SearchableUser from '../model/users/searchable-user.js';
 
-function getUsers(callback) {
-    User.find({}, null, {sort: {userName: -1}}, function (err, users) {
-            callback(err, users)
-        }
-    );
+function getUsers() {
+    return new Promise((resolve, reject) => {
+        User.find({}, null, {sort: {userName: -1}}, (err, users) => {
+            if (err) return reject(err);
+            return resolve(users);
+        });
+    });
 }
 
 function createUser(user, callback) {
