@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import app from '../../app';
 import TeamFixtures from '../../model/teams/team-fixture.js';
 import _ from 'lodash';
-import { getTeams, getTeamById } from '../../services/team-service.js';
+import { getTeams, getTeamById, getTeamsMappedById } from '../../services/team-service.js';
 import { cleanDbBefore, fillDbBefore } from '../helpers/db-helpers.js';
 
 describe("when teams are in the database", function () {
@@ -14,9 +14,12 @@ describe("when teams are in the database", function () {
             .catch(err => verifyResult(err));
 
         function verifyResult(err, result) {
-            expect(TeamFixtures.length).to.equal(result.length);
-
-            done();
+            try {
+                expect(TeamFixtures.length).to.equal(result.length);
+                done();
+            } catch (e) {
+                done(e);
+            }
         }
     });
 
@@ -27,40 +30,83 @@ describe("when teams are in the database", function () {
             .catch(err => verifyResult(err));
 
         function verifyResult(err, result) {
-            expect(result.teamName).not.to.be.null;
-            expect(team.teamName).to.equal(result.teamName);
+            try {
+                expect(result.teamName).not.to.be.null;
+                expect(team.teamName).to.equal(result.teamName);
 
-            done();
+                done();
+            } catch (e) {
+                done(e);
+            }
         }
     })
+
+    it("should return all teams mapped by id", function (done) {
+        getTeamsMappedById().then(verifyResult);
+
+        function verifyResult(result) {
+            try {
+                expect(TeamFixtures.length).to.equal(Object.keys(result).length);
+                expect(result[TeamFixtures[0]._id].teamName).to.equal(TeamFixtures[0].teamName);
+                done();
+            } catch (e) {
+                done(e);
+            }
+        }
+    });
 });
 
 describe("when no teams in database", function () {
     cleanDbBefore();
 
-    it("should return an empty teams object", function (done) {
+    it("getTeams, should return an empty teams object", function (done) {
         getTeams()
             .then(result => verifyResult(null, result))
             .catch(err => verifyResult(err));
 
         function verifyResult(err, result) {
-            expect(result).to.be.empty;
-            expect(err).to.be.null;
-            done();
+            try {
+                expect(result).to.be.empty;
+                expect(err).to.be.null;
+                done();
+            } catch (e) {
+                done(e);
+            }
+
+        }
+    });
+
+    it("get all teams mapped by id, should return an empty teams object", function (done) {
+        getTeamsMappedById()
+            .then(result => verifyResult(null, result))
+            .catch(err => verifyResult(err));
+
+        function verifyResult(err, result) {
+            try {
+                expect(result).to.be.empty;
+                expect(err).to.be.null;
+                done();
+            } catch (e) {
+                done(e);
+            }
         }
     });
 
 
-    it("should return empty team object", function (done) {
+    it("getTeamsById, should return empty team object", function (done) {
         var team = TeamFixtures[0];
         getTeamById(team._id)
             .then(result => verifyResult(null, result))
             .catch(err => verifyResult(err));
 
         function verifyResult(err, result) {
-            expect(result).to.be.empty;
-            expect(err).to.be.null;
-            done();
+            try {
+                expect(result).to.be.empty;
+                expect(err).to.be.null;
+                done();
+            } catch (e) {
+                done(e);
+            }
         }
 
     })

@@ -1,12 +1,24 @@
 import Role from '../model/roles/role-schema.js';
 
-function getRoles(callback) {
-    Role.find({}, null, {}, function (err, roles) {
-            callback(err, roles)
-        }
-    );
+export function getRoles() {
+    return new Promise((resolve, reject) => {
+        Role.find({}, (err, roles) => {
+                if (err) return reject(err);
+                return resolve(roles);
+            }
+        );
+    });
 }
 
-export default {
-    getRoles: getRoles
-};
+export function getRolesMappedById() {
+    return new Promise((resolve, reject) => {
+        var stream = Role.find().stream(), results = {};
+        stream.on('data', function (doc) {
+            results[doc._id] = doc;
+        }).on('error', function (err) {
+            return reject(err)
+        }).on('close', function () {
+            return resolve(results)
+        });
+    });
+}
