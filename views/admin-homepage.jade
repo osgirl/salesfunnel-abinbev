@@ -1,0 +1,16 @@
+extends layout
+
+block header
+    include ./header/admin-header
+
+block mainContent
+    div.container
+        include home-page/info-form
+        include home-page/error-form
+        div#admin-app
+            !=react.renderedApp
+
+block append javascripts
+    script.
+        var adminProps = !{JSON.stringify(react.initProps).replace(/<\//g, "<\\/")};
+    script(type = 'text/javascript' src=react.bundle)

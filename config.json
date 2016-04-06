@@ -69,6 +69,10 @@
       "salesfunnel": {
         "entry": "salesfunnel-app/salesfunnel-app.js",
         "bundle": "salesfunnel.bundle.js"
+      },
+      "admin": {
+        "entry": "admin-app/admin-app.js",
+        "bundle": "admin.bundle.js"
       }
     }
   }

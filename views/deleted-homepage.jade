@@ -1,0 +1,15 @@
+extends layout
+
+block mainContent
+    div.container
+        include home-page/info-form
+        include home-page/error-form
+        div.col.s12.offset-m2
+            div.card-panel.grey.lighten-5.z-depth-1
+                div.row.valign-wrapper
+                    div.col.s2
+                        i.large.material-icons thumb_down
+                    div.col.s10
+                        h4 Hi #{content.user.userName}.
+                        p Your account has been deleted by an admin.
+                        p If necessary, please contact one of the admins to undo this.

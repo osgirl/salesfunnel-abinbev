@@ -3,11 +3,22 @@ import uuid from 'uuid';
 import _ from 'lodash';
 import SearchableUser from '../model/users/searchable-user.js';
 
-function getUsers(callback) {
-    User.find({}, null, {sort: {userName: -1}}, function (err, users) {
-            callback(err, users)
-        }
-    );
+function getUsers() {
+    return new Promise((resolve, reject) => {
+        User.find({isDeleted: false}, null, {sort: {userName: -1}}, (err, users) => {
+            if (err) return reject(err);
+            return resolve(users);
+        });
+    });
+}
+
+function getDeletedUsers() {
+    return new Promise((resolve, reject) => {
+        User.find({isDeleted: true}, null, {sort: {userName: -1}}, (err, users) => {
+            if (err) return reject(err);
+            return resolve(users);
+        });
+    });
 }
 
 function createUser(user, callback) {
@@ -65,6 +76,18 @@ function updatePassword(userId, password) {
     })
 }
 
+function updateUser(userId, adminId, adminUser) {
+    return new Promise(function (resolve, reject) {
+        if (adminUser.role.roleRef === 'M1' && adminUser.team.teamRef === 'NA') {
+            return reject("Role 'M1' and Team 'Overall' is a bad combination")
+        }
+        User.findOneAndUpdate({_id: userId}, {$set: {roleRef: adminUser.role.roleRef, teamRef: adminUser.team.teamRef, isAdmin: adminUser.isAdmin, isDeleted: adminUser.isDeleted, updatedBy: adminId}}, {new: true}, (err, updatedUser) => {
+            if (err) return reject(err);
+            return resolve(updatedUser);
+        })
+    })
+}
+
 function _mapUsersToSearchableUsers(users) {
     var searchableUsers = [];
     _(users).forEach(function (user) {
@@ -79,7 +102,7 @@ function _mapUsersToSearchableUsers(users) {
 }
 
 function getSearchableUsers(teamRef) {
-    var query = {roleRef: "M1", isVerified: true};
+    var query = {roleRef: "M1", isDeleted: false};
     teamRef !== 'NA' && _.assign(query, {teamRef: teamRef});
 
     return new Promise(function (resolve, reject) {
@@ -92,11 +115,13 @@ function getSearchableUsers(teamRef) {
 
 export default {
     getUsers: getUsers,
+    getDeletedUsers: getDeletedUsers,
     createUser: createUser,
     findByEmail: findByEmail,
     findById: findById,
     updateAccountVerified: updateAccountVerified,
     getSearchableUsers: getSearchableUsers,
     updateVerificationEmailCounter: updateVerificationEmailCounter,
-    updatePassword: updatePassword
+    updatePassword: updatePassword,
+    updateUser: updateUser
 };

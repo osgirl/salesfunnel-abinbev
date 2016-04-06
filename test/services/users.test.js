@@ -13,11 +13,16 @@ describe("when there are users in the DB", function () {
     fillDbBefore();
 
     it("getUsers, should return all users", function (done) {
-        UserService.getUsers(verifyResult);
+        UserService.getUsers()
+            .then(verifyResult);
 
-        function verifyResult(err, result) {
-            expect(getUserFixture().length).to.equal(result.length);
-            done();
+        function verifyResult(result) {
+            try {
+                expect(getUserFixture().length).to.equal(result.length);
+                done();
+            } catch (e) {
+                done(e)
+            }
         }
     });
 
@@ -65,12 +70,16 @@ describe("when no users in database", function () {
     });
 
     it("getting the users should return no users", function (done) {
-        UserService.getUsers(verifyResult);
+        UserService.getUsers()
+            .then(verifyResult);
 
-        function verifyResult(err, result) {
-            expect(result).to.be.empty;
-            expect(err).to.be.null;
-            done();
+        function verifyResult(result) {
+            try {
+                expect(result).to.be.empty;
+                return done();
+            } catch (e) {
+                return done(e);
+            }
         }
     });
 
@@ -85,12 +94,25 @@ describe("when no users in database", function () {
         }, verifyResult);
 
         function verifyResult(err, result) {
-            expect(result._id).not.to.undefined;
-            UserService.getUsers(function (err, users) {
-                expect(users).not.to.be.empty;
-                expect(users[0].userName).to.equal(userName)
-            });
-            done();
+            if (err) return done(err);
+            try {
+                expect(result._id).not.to.undefined;
+                UserService.getUsers()
+                    .then((users) => {
+                        try {
+                            expect(users).not.to.be.empty;
+                            expect(users[0].userName).to.equal(userName);
+                            return done();
+                        } catch (e) {
+                            return done(e);
+                        }
+                    }
+                )
+                ;
+            } catch (e) {
+                return done(e);
+            }
+
         }
     });
 
@@ -136,11 +158,11 @@ describe("when no users in database", function () {
 
     it(`findById, should return an empty result`, function (done) {
         UserService.findById(getNewUserAccount._id)
-            .then(function (result) {
+            .then((result) => {
                 try {
                     expect(result).to.be.null;
                     done();
-                } catch(e) {
+                } catch (e) {
                     done(e);
                 }
             });

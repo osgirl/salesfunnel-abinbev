@@ -43,17 +43,17 @@ describe("When the user is authenticated but not yet verified", function () {
             }).end(done);
     });
 
-    it(`GET '${homePage}' with error shows the error on the screen`, function(done) {
+    it(`GET '${homePage}' with error shows the error on the screen`, function (done) {
         var errorText = getRandomString();
         var response = request.get(homePage + "?error=" + errorText);
 
         helpers.verifySuccess(response)
-        .expect(function (res) {
+            .expect(function (res) {
                 helpers.containsAllSubstrings(res.text, [userFormData.username, errorText])
             }).end(done);
     });
 
-    it(`GET '${homePage}' with error shows the info on the screen`, function(done) {
+    it(`GET '${homePage}' with error shows the info on the screen`, function (done) {
         var infoText = getRandomString();
         var response = request.get(homePage + "?info=" + infoText);
 
@@ -76,7 +76,7 @@ describe("When the user is authenticated and fully verified", function () {
             }).end(done);
     });
 
-    it(`GET '${homePage}' with error shows the error on the screen`, function(done) {
+    it(`GET '${homePage}' with error shows the error on the screen`, function (done) {
         var errorText = getRandomString();
         var response = request.get(homePage + "?error=" + errorText);
 
@@ -86,7 +86,7 @@ describe("When the user is authenticated and fully verified", function () {
             }).end(done);
     });
 
-    it(`GET '${homePage}' with error shows the info on the screen`, function(done) {
+    it(`GET '${homePage}' with error shows the info on the screen`, function (done) {
         var infoText = getRandomString();
         var response = request.get(homePage + "?info=" + infoText);
 
@@ -97,11 +97,11 @@ describe("When the user is authenticated and fully verified", function () {
     });
 });
 
-describe("When the NSM is authenticated and fully verified", function() {
+describe("When the NSM is authenticated and fully verified", function () {
     var nationalSalesManager = getNationalSalesManager();
     ensureVerifiedUserIsAuthenticated(request, nationalSalesManager._id);
 
-    it(`GET '${homePage}' gives the National Sales Manager homePage`, function(done) {
+    it(`GET '${homePage}' gives the National Sales Manager homePage`, function (done) {
         var response = request.get(homePage);
         var user = getVerifiedUserAccount();
 
@@ -112,34 +112,82 @@ describe("When the NSM is authenticated and fully verified", function() {
     });
 });
 
-describe("When the SM is authenticated and fully verified", function() {
+describe("When the SM is authenticated and fully verified", function () {
     var salesManager = getSalesManager();
     ensureVerifiedUserIsAuthenticated(request, salesManager._id);
 
-    it(`GET '${homePage}' gives the Sales Manager homePage`, function(done) {
+    it(`GET '${homePage}' gives the Sales Manager homePage`, function (done) {
 
         var response = request.get(homePage);
         var user = getVerifiedUserAccount();
-    helpers.verifySuccess(response)
-        .expect(function (res) {
-            helpers.containsAllSubstrings(res.text, ['<title>Sales funnel - reporting tool - AB Inbev</title>', `Welcome ${user.userName}`])
-        }).end(done);
+        helpers.verifySuccess(response)
+            .expect(function (res) {
+                helpers.containsAllSubstrings(res.text, ['<title>Sales funnel - reporting tool - AB Inbev</title>', `Welcome ${user.userName}`])
+            }).end(done);
     });
 
 });
 
-describe("When the Rep is authenticated and fully verified", function() {
+describe("When the Rep is authenticated and fully verified", function () {
     var rep = getRep();
     ensureVerifiedUserIsAuthenticated(request, rep._id);
 
-    it(`GET '${homePage}' gives the M1 homePage`, function(done) {
+    it(`GET '${homePage}' gives the M1 homePage`, function (done) {
 
-    var response = request.get(homePage);
-    var user = getVerifiedUserAccount();
-    helpers.verifySuccess(response)
-        .expect(function (res) {
-            helpers.containsAllSubstrings(res.text, ['<title>Sales funnel - reporting tool - AB Inbev</title>', 'Register the sales of the day',  `Welcome ${user.userName}`])
-        }).end(done);
+        var response = request.get(homePage);
+        var user = getVerifiedUserAccount();
+        helpers.verifySuccess(response)
+            .expect(function (res) {
+                helpers.containsAllSubstrings(res.text, ['<title>Sales funnel - reporting tool - AB Inbev</title>', 'Register the sales of the day', `Welcome ${user.userName}`])
+            }).end(done);
+    });
+
+});
+
+describe("When an admin NSM is authenticated and fully verified", function () {
+    var nationalSalesManager = getNationalSalesManager();
+    var isAdmin = true;
+
+    ensureVerifiedUserIsAuthenticated(request, nationalSalesManager._id, isAdmin);
+
+    it(`GET '${homePage}' gives the Admin link in the header`, function (done) {
+        var response = request.get(homePage);
+        helpers.verifySuccess(response)
+            .expect(function (res) {
+                helpers.containsAllSubstrings(res.text, ["Admin", "/admin"])
+            }).end(done);
+    });
+});
+
+describe("When an admin SM is authenticated and fully verified", function () {
+    var salesManager = getSalesManager();
+    var isAdmin = true;
+
+    ensureVerifiedUserIsAuthenticated(request, salesManager._id, isAdmin);
+
+    it(`GET '${homePage}' gives the Admin link in the header`, function (done) {
+
+        var response = request.get(homePage);
+        helpers.verifySuccess(response)
+            .expect(function (res) {
+                helpers.containsAllSubstrings(res.text, ["Admin", "/admin"])
+            }).end(done);
+    });
+
+});
+
+describe("When an admin rep is authenticated and fully verified", function () {
+    var rep = getRep();
+    var isAdmin = true;
+    ensureVerifiedUserIsAuthenticated(request, rep._id, isAdmin);
+
+    it(`GET '${homePage}' gives the Admin link in the header`, function (done) {
+
+        var response = request.get(homePage);
+        helpers.verifySuccess(response)
+            .expect(function (res) {
+                helpers.containsAllSubstrings(res.text, ["Admin", "/admin"])
+            }).end(done);
     });
 
 });

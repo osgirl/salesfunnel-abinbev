@@ -9,7 +9,9 @@ var newUserAccount = {
     pw: "testtest",
     verificationToken : getRandomUUID(),
     verificationEmailCounter: 0,
-    isVerified: false
+    isVerified: false,
+    isAdmin: false,
+    isDeleted: false
 };
 var verifiedUserAccount = {
     _id: getNewObjectId(),
@@ -20,7 +22,9 @@ var verifiedUserAccount = {
     pw: "testmsqifj",
     verificationToken: getRandomUUID(),
     verificationEmailCounter: 0,
-    isVerified: true
+    isVerified: true,
+    isAdmin: false,
+    isDeleted: false
 };
 
 var userFixture = [

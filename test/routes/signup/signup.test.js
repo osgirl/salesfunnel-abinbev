@@ -25,6 +25,18 @@ function getSignupUser() {
     }
 };
 
+function verifyUsers(expectedResult, callback) {
+    UserService.getUsers()
+        .then((users) => {
+            try {
+                expect(users.length).to.equal(expectedResult);
+                callback();
+            } catch (e) {
+                callback(e);
+            }
+        });
+}
+
 describe("When the user is authenticated", function () {
     ensureVerifiedUserIsAuthenticated(server);
 
@@ -39,7 +51,7 @@ describe("When the user is authenticated", function () {
             .end(done);
     });
 
-    it("it should not be possible to signup for a new account and this message should be shown to the user after redirection", function(done) {
+    it("it should not be possible to signup for a new account and this message should be shown to the user after redirection", function (done) {
         var expectedURI = `/?error=Please log out before signing up another user`;
         server.post(signupPage)
             .expect(302)
@@ -67,17 +79,11 @@ describe("When the user is not authenticated", function () {
                 .end(onResponse);
 
             function onResponse(err, res) {
-                if (err) throw err;
+                if (err) return done(err);
                 verifyUsers(getUserFixture().length + 1, done);
             }
         }
 
-        function verifyUsers(expectedResult, callback) {
-            UserService.getUsers(function (err, users) {
-                expect(users.length).to.equal(expectedResult);
-                callback();
-            });
-        }
     });
 
     it(`POST ${signupPage} a user with a password less then 8 characters returns a validation error`, function (done) {
@@ -100,16 +106,10 @@ describe("When the user is not authenticated", function () {
             .end(onResponse);
 
         function onResponse(err, res) {
-            if (err) throw err;
+            if (err) return done(err);
             verifyUsers(getUserFixture().length, done);
         }
 
-        function verifyUsers(expectedResult, callback) {
-            UserService.getUsers(function (err, users) {
-                expect(users.length).to.equal(expectedResult);
-                callback();
-            });
-        }
     });
 
     it(`POST ${signupPage} a user with an email addres that already exists returns a validation error`, function (done) {
@@ -133,17 +133,11 @@ describe("When the user is not authenticated", function () {
                 .end(onResponse);
 
             function onResponse(err, res) {
-                if (err) throw err;
+                if (err) return done(err);
                 verifyUsers(getUserFixture().length, done);
             }
         }
 
-        function verifyUsers(expectedResult, callback) {
-            UserService.getUsers(function (err, users) {
-                expect(users.length).to.equal(expectedResult);
-                callback();
-            });
-        }
     });
 
     it(`POST ${signupPage} a user with two different passwords returns a validation error`, function (done) {
@@ -168,17 +162,11 @@ describe("When the user is not authenticated", function () {
                 .end(onResponse);
 
             function onResponse(err, res) {
-                if (err) throw err;
+                if (err) return done(err);
                 verifyUsers(getUserFixture().length, done);
             }
         }
 
-        function verifyUsers(expectedResult, callback) {
-            UserService.getUsers(function (err, users) {
-                expect(users.length).to.equal(expectedResult);
-                callback();
-            });
-        }
     });
 
     it(`POST ${signupPage} a user who choses Overall team and is not a National Sales Manager returns a validation error`, function (done) {
@@ -203,17 +191,11 @@ describe("When the user is not authenticated", function () {
                 .end(onResponse);
 
             function onResponse(err, res) {
-                if (err) throw err;
+                if (err) return done(err);
                 verifyUsers(getUserFixture().length, done);
             }
         }
 
-        function verifyUsers(expectedResult, callback) {
-            UserService.getUsers(function (err, users) {
-                expect(users.length).to.equal(expectedResult);
-                callback();
-            });
-        }
     });
 
     it(`POST ${signupPage} with role NSM and with team Overall is allowed`, function (done) {
@@ -230,17 +212,11 @@ describe("When the user is not authenticated", function () {
                 .end(onResponse);
 
             function onResponse(err, res) {
-                if (err) throw err;
+                if (err) return done(err);
                 verifyUsers(getUserFixture().length + 1, done);
             }
         }
-
-        function verifyUsers(expectedResult, callback) {
-            UserService.getUsers(function (err, users) {
-                expect(users.length).to.equal(expectedResult);
-                callback();
-            });
-        }
     });
+
 
 });

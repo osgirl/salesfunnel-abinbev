@@ -6,7 +6,8 @@ var BUILD_DIR = path.resolve(__dirname, reactConfig.buildDir);
 var config = {
     entry: {
         registration: APP_DIR + "/" + reactConfig.components.registration.entry,
-        salesfunnel: APP_DIR + "/" + reactConfig.components.salesfunnel.entry
+        salesfunnel: APP_DIR + "/" + reactConfig.components.salesfunnel.entry,
+        admin: APP_DIR + "/" + reactConfig.components.admin.entry
     },
     output: {
         path: BUILD_DIR,

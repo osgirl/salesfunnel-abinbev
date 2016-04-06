@@ -3,7 +3,6 @@ import { Promise } from 'bluebird';
 import { ensureAuthenticated } from '../../middleware/authentication/ensureAuthentication.js';
 import { getCalculatedTeamRegistrationData, getCalculatedUserRegistrationData} from '../../services/registration-service.js';
 import { getPeriods, getPeriodById, DEFAULT_PERIOD } from '../../services/period-service.js';
-import { getAuthenticatedUser } from '../../middleware/passport/passport-middleware.js';
 import { getTeamById } from '../../services/team-service.js';
 import SearchableUser from '../../model/users/searchable-user.js';
 
@@ -75,12 +74,12 @@ function getSalesfunnelData(req, res, next) {
         });
     };
 
-    Promise.all([teamCall(), getPeriods(), getAuthenticatedUser(req.user.id)])
+    Promise.all([teamCall(), getPeriods()])
         .then((results) => {
-            res.status('200').send(createResponseObject(results[0],results[1],results[2]));
+            res.status('200').send(createResponseObject(results[0],results[1]));
 
-            function createResponseObject(teams, periods, userObject) {
-                var searchableUser = new SearchableUser(userObject);
+            function createResponseObject(teams, periods) {
+                var searchableUser = new SearchableUser(req.userObject);
                 return {
                     userData: {
                         users: [searchableUser]
@@ -90,7 +89,7 @@ function getSalesfunnelData(req, res, next) {
                         periodRef: DEFAULT_PERIOD._id
                     },
                     teamData: {
-                        teamRef: userObject.teamRef,
+                        teamRef: req.userObject.teamRef,
                         teams: teams
                     }
                 };

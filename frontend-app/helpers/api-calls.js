@@ -34,3 +34,13 @@ export function getSalesfunnelData(baseUrl) {
     var url = `${baseUrl}salesfunnel`;
     return axios.get(url);
 }
+
+export function getUsers(baseUrl) {
+    var url = `${baseUrl}admin/users`;
+    return axios.get(url);
+}
+
+export function updateUser(baseUrl, user) {
+    var url = `${baseUrl}admin/users/${user.id}`;
+    return axios.put(url, user);
+}

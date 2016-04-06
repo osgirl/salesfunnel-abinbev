@@ -6,6 +6,7 @@ import authenticatedRoutes from './authenticated-routes.js';
 import registration from './registration/registration-routes.js';
 import salesfunnel from './salesfunnel/salesfunnel-routes.js';
 import redirect from './redirect.js';
+import admin from './admin/admin-routes.js';
 
 export default {
     authenticatedRoutes: authenticatedRoutes,
@@ -15,5 +16,6 @@ export default {
     resetPassword: resetPassword,
     registration: registration,
     salesfunnel: salesfunnel,
+    admin: admin,
     redirect: redirect
 };
