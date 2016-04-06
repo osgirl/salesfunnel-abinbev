@@ -78,6 +78,9 @@ function updatePassword(userId, password) {
 
 function updateUser(userId, adminId, adminUser) {
     return new Promise(function (resolve, reject) {
+        if (adminUser.role.roleRef === 'M1' && adminUser.team.teamRef === 'NA') {
+            return reject("Role 'M1' and Team 'Overall' is a bad combination")
+        }
         User.findOneAndUpdate({_id: userId}, {$set: {roleRef: adminUser.role.roleRef, teamRef: adminUser.team.teamRef, isAdmin: adminUser.isAdmin, isDeleted: adminUser.isDeleted, updatedBy: adminId}}, {new: true}, (err, updatedUser) => {
             if (err) return reject(err);
             return resolve(updatedUser);

@@ -10,6 +10,7 @@ class Admin extends React.Component {
         super(props);
 
         this.setAlert = this.setAlert.bind(this);
+        this.setErrorAlert = this.setErrorAlert.bind(this);
         this.refreshData = this.refreshData.bind(this);
 
         this.state = {
@@ -25,6 +26,16 @@ class Admin extends React.Component {
     setAlert(message) {
         var alert = {
             message: message,
+            open: true
+        };
+        this.setState({
+            alert: alert
+        });
+    }
+
+    setErrorAlert(message) {
+        var alert = {
+            message: `ERROR: ${message}`,
             open: true
         };
         this.setState({
@@ -74,7 +85,7 @@ class Admin extends React.Component {
                             users={this.state.deletedUsers}
                             teams={this.props.teams}
                             roles={this.props.roles}
-                            onFailure={this.setAlert}
+                            onFailure={this.setErrorAlert}
                             onSuccess={this.setAlert}
                             onUpdate={this.refreshData}
                         />
@@ -82,7 +93,7 @@ class Admin extends React.Component {
                     <Snackbar
                         open={this.state.alert.open}
                         message={this.state.alert.message}
-                        autoHideDuration={4000}
+                        autoHideDuration={5000}
                         onRequestClose={this.handleRequestSnackBarClose.bind(this)}
                     />
                 </div>

@@ -37,9 +37,10 @@ class SelectedUserPopup extends React.Component {
                     this.changeDialogState(false);
                     this.props.onSubmit(this.updatedUser, response.data)
                 })
-                .catch(err => {
+                .catch(response => {
+                    var message = response.data ? response.data : "Unable to update, please try again";
                     this.cancel();
-                    this.props.onFailure(err);
+                    this.props.onFailure(message);
                 });
         } else {
             this.cancel();
@@ -98,7 +99,7 @@ class SelectedUserPopup extends React.Component {
         let title, label = "dummy";
         if (this.props.user) {
             title = `Modify the data of this user: ${this.props.user.userName}`;
-            label = this.props.user.isDeleted ? "Activate User" : "Delete User";
+            label = this.props.user.isDeleted ? "Activate User" : "Desactivate User";
         }
 
         const actions = [
