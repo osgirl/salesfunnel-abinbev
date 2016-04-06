@@ -37,23 +37,33 @@ function getAdminPageProps(req, res, next) {
         baseUrl: getBaseUrl(req)
     };
 
-    Promise.all([UserService.getUsers(), getTeamsMappedById(), getRolesMappedById()])
-        .then((results) => addAdminUsersToProps(results[0], results[1], results[2]))
+    Promise.all([UserService.getUsers(), UserService.getDeletedUsers(), getTeamsMappedById(), getRolesMappedById()])
+        .then((results) => addAdminUsersToProps(results[0], results[1], results[2], results[3]))
         .catch((err) => {
             console.log("error: " + JSON.stringify(err));
             return next(err);
         });
 
-    function addAdminUsersToProps(users, teamNames, roleNames) {
-        var adminUsers = [];
-        for (let user of users) {
-            adminUsers.push(new AdminUser(user, teamNames[user.teamRef].teamName, roleNames[user.roleRef].roleName));
-        }
+
+
+    function addAdminUsersToProps(users, deletedUsers, teamNames, roleNames) {
+        var adminUsers = createAdminUsers(users, teamNames, roleNames);
+        var deletedAdminUsers = createAdminUsers(deletedUsers, teamNames, roleNames);
+
         req.adminPageProps.users = adminUsers;
+        req.adminPageProps.deletedUsers = deletedAdminUsers;
         req.adminPageProps.teams = teamNames;
         req.adminPageProps.roles = roleNames;
 
         return next();
+
+        function createAdminUsers(users, teamNames, roleNames) {
+            var adminUsers = [];
+            for (let user of users) {
+                adminUsers.push(new AdminUser(user, teamNames[user.teamRef].teamName, roleNames[user.roleRef].roleName));
+            }
+            return adminUsers;
+        }
     }
 }
 
@@ -86,7 +96,7 @@ function updateUser(req, res, next) {
 }
 
 function getUsers(req, res, next) {
-    return res.status(200).send(req.adminPageProps.users);
+    return res.status(200).send({users : req.adminPageProps.users, deletedUsers: req.adminPageProps.deletedUsers});
 }
 
 export default router;

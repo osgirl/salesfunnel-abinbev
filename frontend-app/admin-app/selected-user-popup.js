@@ -19,6 +19,7 @@ class SelectedUserPopup extends React.Component {
         this.changeTeam = this.changeTeam.bind(this);
         this.changeIsAdmin = this.changeIsAdmin.bind(this);
         this.isUserUpdated = this.isUserUpdated.bind(this);
+        this.deleteUser = this.deleteUser.bind(this);
 
         this.state = {
             open: this.props.user ? true : false
@@ -56,10 +57,17 @@ class SelectedUserPopup extends React.Component {
         });
     }
 
+    deleteUser() {
+        this.updatedUser.isDeleted = !this.props.user.isDeleted;
+        this.updatedUser.isAdmin = false;
+        this.submit();
+    }
+
     isUserUpdated() {
         if (this.updatedUser.role.roleRef !== this.props.user.role.roleRef ||
             this.updatedUser.team.teamRef !== this.props.user.team.teamRef ||
-            this.updatedUser.isAdmin !== this.props.user.isAdmin) {
+            this.updatedUser.isAdmin !== this.props.user.isAdmin ||
+            this.updatedUser.isDeleted !== this.props.user.isDeleted) {
             return true;
         }
         return false;
@@ -87,9 +95,19 @@ class SelectedUserPopup extends React.Component {
     }
 
     render() {
-        const title = this.props.user ? `Modify the data of this user: ${this.props.user.userName}` : "";
+        let title, label = "dummy";
+        if (this.props.user) {
+            title = `Modify the data of this user: ${this.props.user.userName}`;
+            label = this.props.user.isDeleted ? "Activate User" : "Delete User";
+        }
 
         const actions = [
+            <FlatButton
+                label={label}
+                secondary={true}
+                keyboardFocused={false}
+                onTouchTap={this.deleteUser}
+            />,
             <FlatButton
                 label="Cancel"
                 primary={true}

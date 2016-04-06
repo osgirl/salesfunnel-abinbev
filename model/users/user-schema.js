@@ -18,5 +18,6 @@ var userSchema = new Schema({
 userSchema.index({teamRef: 1, isDeleted: 1});
 userSchema.index({isAdmin: 1, isDeleted: 1});
 userSchema.index({roleRef: 1, isDeleted: 1});
+userSchema.index({roleRef: 1, teamRef: 1, isDeleted: 1});
 
 export default mongoose.model('User', userSchema);

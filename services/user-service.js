@@ -5,7 +5,16 @@ import SearchableUser from '../model/users/searchable-user.js';
 
 function getUsers() {
     return new Promise((resolve, reject) => {
-        User.find({}, null, {sort: {userName: -1}}, (err, users) => {
+        User.find({isDeleted: false}, null, {sort: {userName: -1}}, (err, users) => {
+            if (err) return reject(err);
+            return resolve(users);
+        });
+    });
+}
+
+function getDeletedUsers() {
+    return new Promise((resolve, reject) => {
+        User.find({isDeleted: true}, null, {sort: {userName: -1}}, (err, users) => {
             if (err) return reject(err);
             return resolve(users);
         });
@@ -69,7 +78,7 @@ function updatePassword(userId, password) {
 
 function updateUser(userId, adminId, adminUser) {
     return new Promise(function (resolve, reject) {
-        User.findOneAndUpdate({_id: userId}, {$set: {roleRef: adminUser.role.roleRef, teamRef: adminUser.team.teamRef, isAdmin: adminUser.isAdmin, updatedBy: adminId}}, {new: true}, (err, updatedUser) => {
+        User.findOneAndUpdate({_id: userId}, {$set: {roleRef: adminUser.role.roleRef, teamRef: adminUser.team.teamRef, isAdmin: adminUser.isAdmin, isDeleted: adminUser.isDeleted, updatedBy: adminId}}, {new: true}, (err, updatedUser) => {
             if (err) return reject(err);
             return resolve(updatedUser);
         })
@@ -103,6 +112,7 @@ function getSearchableUsers(teamRef) {
 
 export default {
     getUsers: getUsers,
+    getDeletedUsers: getDeletedUsers,
     createUser: createUser,
     findByEmail: findByEmail,
     findById: findById,

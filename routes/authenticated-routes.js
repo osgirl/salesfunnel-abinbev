@@ -29,13 +29,18 @@ router.get('/',
 );
 
 function renderUnverifiedWelcomePage(req, res, next) {
-    if (!req.userObject || req.userObject.isVerified) {
+    if (req.userObject.isVerified && !req.userObject.isDeleted) {
         return next();
     }
 
-    req.renderData.content['resendEmailUrl'] = getResendEmailUrl(req.userObject._id);
+    if (req.userObject.isDeleted) {
+        res.render('deleted-homepage', req.renderData);
+    }
 
-    res.render('unverified-homepage', req.renderData);
+    if (!req.userObject.isVerified) {
+        req.renderData.content['resendEmailUrl'] = getResendEmailUrl(req.userObject._id);
+        res.render('unverified-homepage', req.renderData);
+    }
 }
 
 function renderM1Page(req, res, next) {

@@ -1,7 +1,6 @@
 import React from 'react';
 import UsersTableWrapper from './users-table-wrapper.js';
 import SelectedUserPopup from './selected-user-popup.js';
-import { getUsers } from '../helpers/api-calls.js';
 import _ from 'lodash';
 
 class UserList extends React.Component {
@@ -50,8 +49,13 @@ class UserList extends React.Component {
         this.props.onSuccess(message);
         this.deselectUser();
         this.locallyUpdateUser(updatedUser);
-        getUsers(this.props.baseUrl)
-            .then(response => this.setState({users: response.data}));
+        this.props.onUpdate();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            users: nextProps.users
+        });
     }
 
     render() {
@@ -78,6 +82,7 @@ class UserList extends React.Component {
 UserList.propTypes = {
     onSuccess: React.PropTypes.func.isRequired,
     onFailure: React.PropTypes.func.isRequired,
+    onUpdate: React.PropTypes.func.isRequired,
     baseUrl: React.PropTypes.string.isRequired,
     users: React.PropTypes.array.isRequired,
     teams: React.PropTypes.object.isRequired,
