@@ -29,6 +29,22 @@ describe("When the user is not authenticated", function () {
             })
             .end(done);
     });
+
+    it(`GET /admin/users redirects to the loginPage`, function(done) {
+        var expectedURI = `/login`;
+
+        request.get("/admin/users")
+            .expect(302)
+            .expect(function (res) {
+                if (res.redirect === false) {
+                    helpers.throwError("function should redirect")
+                }
+                if (res.header.location !== expectedURI) {
+                    helpers.throwError(`should redirect to ${expectedURI} but instead was redirected to "${res.header.location}"`)
+                }
+            })
+            .end(done);
+    });
 });
 
 describe("When the user is authenticated, but not yet verified", function () {
@@ -83,6 +99,15 @@ describe("When the user is authenticated and fully verified, and an admin", func
         helpers.verifySuccess(response)
             .expect(function (res) {
                 helpers.containsAllSubstrings(res.text, ['<title>Sales funnel - reporting tool - AB Inbev</title>', user.userName, 'admin section']);
+            }).end(done);
+    });
+
+    it(`GET /admin/users gets the users`, function(done) {
+        var response = request.get("/admin/users");
+
+        response
+            .expect(function (res) {
+                expect(res).not.to.be.null;
             }).end(done);
     });
 

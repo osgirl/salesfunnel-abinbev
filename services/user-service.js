@@ -67,6 +67,15 @@ function updatePassword(userId, password) {
     })
 }
 
+function updateUser(userId, adminId, adminUser) {
+    return new Promise(function (resolve, reject) {
+        User.findOneAndUpdate({_id: userId}, {$set: {roleRef: adminUser.role.roleRef, teamRef: adminUser.team.teamRef, updatedBy: adminId}}, {new: true}, (err, updatedUser) => {
+            if (err) return reject(err);
+            return resolve(updatedUser);
+        })
+    })
+}
+
 function _mapUsersToSearchableUsers(users) {
     var searchableUsers = [];
     _(users).forEach(function (user) {
@@ -100,5 +109,6 @@ export default {
     updateAccountVerified: updateAccountVerified,
     getSearchableUsers: getSearchableUsers,
     updateVerificationEmailCounter: updateVerificationEmailCounter,
-    updatePassword: updatePassword
+    updatePassword: updatePassword,
+    updateUser: updateUser
 };

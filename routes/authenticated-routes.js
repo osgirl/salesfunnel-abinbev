@@ -9,7 +9,7 @@ import React from 'react';
 import Registration from '../frontend-app/registration-app/Registration.js';
 import Salesfunnel from '../frontend-app/salesfunnel-app/Salesfunnel.js';
 import { getCalculatedTeamRegistrationData} from '../services/registration-service.js';
-import { getTeams, getTeamById } from '../services/team-service.js';
+import { getTeamsMappedById, getTeamById } from '../services/team-service.js';
 import UserService from '../services/user-service.js';
 import { getPeriods, DEFAULT_PERIOD } from '../services/period-service.js';
 import { Promise } from 'bluebird';
@@ -64,7 +64,7 @@ function renderManagementPage(req, res, next) {
 
     var header = "Consult the sales graphs of all teams";
     var teamRef = req.userObject.teamRef;
-    var teamCall = getTeams;
+    var teamCall = getTeamsMappedById;
     var periodRef = DEFAULT_PERIOD._id;
     var periodData = {
         fromDate: DEFAULT_PERIOD.getFromDate(),
@@ -80,7 +80,7 @@ function renderManagementPage(req, res, next) {
             return res.status('400').send("Unable to retrieve the data");
         });
 
-    function doRenderManagementPage(teams, data, periods, users) {
+    function doRenderManagementPage(teamsMappedById, data, periods, users) {
         function calculateNoData() {
             if (data.visits === 0) return true;
             return false;
@@ -93,7 +93,7 @@ function renderManagementPage(req, res, next) {
             noData: calculateNoData(),
             teamData: {
                 teamRef: teamRef,
-                teams: teams
+                teams: teamsMappedById
             },
             periodData: {
                 periodRef: periodRef,

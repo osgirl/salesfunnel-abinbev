@@ -11,7 +11,8 @@ var userSchema = new Schema({
     verificationToken: String,
     verificationEmailCounter: Number,
     isAdmin: { type: Boolean, index: true, default:false},
-    isDeleted: { type: Boolean, index: true, default:false}
+    isDeleted: { type: Boolean, index: true, default:false},
+    updatedBy: { type: String, ref: 'User'}
 }, {collection: 'users'});
 
 userSchema.index({teamRef: 1, isDeleted: 1});

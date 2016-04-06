@@ -2,7 +2,7 @@ import React from 'react';
 import { getTeamSalesFunnelData, getUserSalesFunnelData } from '../helpers/api-calls.js';
 import SalesfunnelHeader from './salesfunnel-header.js';
 import PeriodFilter from './filters/period-filter.js';
-import TeamFilter from './filters/team-filter.js';
+import TeamDropDownComponentWithTitle from '../common/filters/team-drop-down-component-with-title.js';
 import UserFilter from './filters/user-filter.js';
 import _ from 'lodash';
 
@@ -171,9 +171,11 @@ class SalesfunnelCard extends React.Component {
                     periodData={this.props.periodData}
                     callback={this.changePeriod}
                 />
-                <TeamFilter
-                    teamData={this.props.teamData}
-                    callback={this.changeTeamName}
+                <TeamDropDownComponentWithTitle
+                    dropDownTitle="Teams"
+                    teamsMappedById={this.props.teamData.teams}
+                    selectedRef={this.props.teamData.teamRef}
+                    onSelect={this.changeTeamName}
                 />
                 <UserFilter
                     filteredUsers={this.state.filteredUsers}
