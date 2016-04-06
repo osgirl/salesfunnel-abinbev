@@ -69,7 +69,7 @@ function updatePassword(userId, password) {
 
 function updateUser(userId, adminId, adminUser) {
     return new Promise(function (resolve, reject) {
-        User.findOneAndUpdate({_id: userId}, {$set: {roleRef: adminUser.role.roleRef, teamRef: adminUser.team.teamRef, updatedBy: adminId}}, {new: true}, (err, updatedUser) => {
+        User.findOneAndUpdate({_id: userId}, {$set: {roleRef: adminUser.role.roleRef, teamRef: adminUser.team.teamRef, isAdmin: adminUser.isAdmin, updatedBy: adminId}}, {new: true}, (err, updatedUser) => {
             if (err) return reject(err);
             return resolve(updatedUser);
         })

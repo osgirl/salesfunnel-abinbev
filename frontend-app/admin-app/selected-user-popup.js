@@ -17,6 +17,7 @@ class SelectedUserPopup extends React.Component {
         this.changeDialogState = this.changeDialogState.bind(this);
         this.changeRole = this.changeRole.bind(this);
         this.changeTeam = this.changeTeam.bind(this);
+        this.changeIsAdmin = this.changeIsAdmin.bind(this);
         this.isUserUpdated = this.isUserUpdated.bind(this);
 
         this.state = {
@@ -57,7 +58,8 @@ class SelectedUserPopup extends React.Component {
 
     isUserUpdated() {
         if (this.updatedUser.role.roleRef !== this.props.user.role.roleRef ||
-            this.updatedUser.team.teamRef !== this.props.user.team.teamRef) {
+            this.updatedUser.team.teamRef !== this.props.user.team.teamRef ||
+            this.updatedUser.isAdmin !== this.props.user.isAdmin) {
             return true;
         }
         return false;
@@ -71,6 +73,10 @@ class SelectedUserPopup extends React.Component {
     changeTeam(teamRef) {
         this.updatedUser.team.teamRef = teamRef;
         this.updatedUser.team.teamName = this.props.teams[teamRef].teamName;
+    }
+
+    changeIsAdmin(isAdmin) {
+        this.updatedUser.isAdmin = isAdmin;
     }
 
     componentWillReceiveProps(nextProps) {
@@ -111,6 +117,7 @@ class SelectedUserPopup extends React.Component {
                 roles={this.props.roles}
                 changeTeam={this.changeTeam}
                 changeRole={this.changeRole}
+                changeIsAdmin={this.changeIsAdmin}
             />)}
             </Dialog>
         )
