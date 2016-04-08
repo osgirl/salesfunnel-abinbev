@@ -18,7 +18,8 @@ html
     body
         block content
             nav
-                include nav/index
+                block nav
+                    include nav/index
             main
                 block header
                     include header/index

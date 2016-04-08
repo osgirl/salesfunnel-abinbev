@@ -30,11 +30,6 @@ export function getVisitReport(baseUrl) {
     return axios.get(url);
 }
 
-export function getSalesfunnelData(baseUrl) {
-    var url = `${baseUrl}salesfunnel`;
-    return axios.get(url);
-}
-
 export function getUsers(baseUrl) {
     var url = `${baseUrl}admin/users`;
     return axios.get(url);
