@@ -18,7 +18,7 @@ class SalesfunnelCard extends React.Component {
             noData: this.props.noData,
             chosenTeam: this.props.teamData.teamRef,
             chosenPeriod: this.props.periodData.periodRef,
-            chosenUser: undefined,
+            chosenUser: this.props.userData.userRef,
             filteredUsers: this.props.userData.users,
             data: this.props.data
         };

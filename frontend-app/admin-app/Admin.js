@@ -79,7 +79,7 @@ class Admin extends React.Component {
                         />
                     </div>
                     <div className="row">
-                        <h5 className="header"> Deleted users </h5>
+                        <h5 className="header"> Inactive users </h5>
                         <UserList
                             baseUrl={this.props.baseUrl}
                             users={this.state.deletedUsers}

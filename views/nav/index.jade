@@ -6,7 +6,7 @@ div.nav-wrapper
                 li: a.goToLogin(href="/#login") Log in
                 li: a.goToSignup(href="/#signup") Sign up
             else
+                li: a(href="/") Home
                 if isAdmin
-                    li: a(href="/") Home
                     li: a(href="/admin") Admin
                 li: a(href="/logout") Log out
