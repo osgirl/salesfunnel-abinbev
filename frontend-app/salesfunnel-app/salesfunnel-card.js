@@ -5,6 +5,12 @@ import PeriodFilter from './filters/period-filter.js';
 import TeamDropDownComponentWithTitle from '../common/filters/team-drop-down-component-with-title.js';
 import UserFilter from './filters/user-filter.js';
 import _ from 'lodash';
+import Table from 'material-ui/lib/table/table';
+import TableHeaderColumn from 'material-ui/lib/table/table-header-column';
+import TableRow from 'material-ui/lib/table/table-row';
+import TableHeader from 'material-ui/lib/table/table-header';
+import TableBody from 'material-ui/lib/table/table-body';
+import TableRowColumn from 'material-ui/lib/table/table-row-column';
 
 class SalesfunnelCard extends React.Component {
 
@@ -161,7 +167,48 @@ class SalesfunnelCard extends React.Component {
         }
     }
 
+    _createAbsoluteNumbers(data) {
+        if (!data) {
+            return (
+                <TableRow key={1}>
+                    <TableRowColumn>0</TableRowColumn>
+                    <TableRowColumn>0</TableRowColumn>
+                    <TableRowColumn>0</TableRowColumn>
+                    <TableRowColumn>0</TableRowColumn>
+                </TableRow>
+            )
+        }
+        return (
+            <TableRow key={1}>
+                <TableRowColumn>{data.visits}</TableRowColumn>
+                <TableRowColumn>{data.negos}</TableRowColumn>
+                <TableRowColumn>{data.proposals}</TableRowColumn>
+                <TableRowColumn>{data.deals}</TableRowColumn>
+            </TableRow>
+        );
+    }
+
+    _createRelativeNumbers(data) {
+        if (!data) {
+            return (
+                <TableRow key={2}>
+                </TableRow>
+            )
+        }
+        return (
+            <TableRow key={2}>
+                <TableRowColumn>{100}%</TableRowColumn>
+                <TableRowColumn>{+(data.negos / data.visits * 100).toFixed(2)}%</TableRowColumn>
+                <TableRowColumn>{+(data.proposals / data.visits * 100).toFixed(2)}%</TableRowColumn>
+                <TableRowColumn>{+(data.deals / data.visits * 100).toFixed(2)}%</TableRowColumn>
+            </TableRow>
+        );
+    }
+
     render() {
+        var absoluteNumbers = this._createAbsoluteNumbers(this.state.data);
+        var relativeNumbers = this._createRelativeNumbers(this.state.data);
+
         return (
             <div>
                 <SalesfunnelHeader
@@ -183,6 +230,22 @@ class SalesfunnelCard extends React.Component {
                     callback={this.changeUser}
                 />
 
+                <div className="row">
+                    <Table selectable={false}>
+                        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+                            <TableRow>
+                                <TableHeaderColumn>Visits</TableHeaderColumn>
+                                <TableHeaderColumn>Nego's</TableHeaderColumn>
+                                <TableHeaderColumn>Proposals</TableHeaderColumn>
+                                <TableHeaderColumn>Deals</TableHeaderColumn>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody displayRowCheckbox={false}>
+                        {absoluteNumbers}
+                        {relativeNumbers}
+                        </TableBody>
+                    </Table>
+                </div>
                 <div className="row">
                     {!this.state.noData && <div id="my_chart" />}
                     {this.state.noData && <p>No data found</p>}
