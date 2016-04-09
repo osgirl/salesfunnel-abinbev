@@ -26,6 +26,17 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 initialisePassport(app, process.env.SESSION_SECRET || staticData.getConfig().sessionSecret);
 
+//heroku route to https
+if (process.env.NODE_ENV === "production") {
+    var forceSsl = function (req, res, next) {
+        if (req.headers['x-forwarded-proto'] !== 'https') {
+            return res.redirect(['https://', req.get('Host'), req.url].join(''));
+        }
+        return next();
+    };
+
+    app.use(forceSsl);
+}
 app.use('/', routes.authenticatedRoutes);
 app.use('/logout', routes.logout);
 app.use('/login', routes.login);

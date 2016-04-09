@@ -1,4 +1,6 @@
 import { getAuthenticatedUser } from '../../middleware/passport/passport-middleware.js';
+import { getBaseUrl } from '../../routes/helpers/route-helpers.js';
+import path from 'path';
 
 export function ensureNotAuthenticated(req, res, next) {
     if (!req.isAuthenticated()) return next();

@@ -230,7 +230,7 @@ class SalesfunnelCard extends React.Component {
                     callback={this.changeUser}
                 />
 
-                <div className="row">
+                <div className="row hide-on-small-only">
                     <Table selectable={false}>
                         <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
                             <TableRow>
