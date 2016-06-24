@@ -235,7 +235,7 @@ class SalesfunnelCard extends React.Component {
                         <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
                             <TableRow>
                                 <TableHeaderColumn>Visits</TableHeaderColumn>
-                                <TableHeaderColumn>Nego's</TableHeaderColumn>
+                                <TableHeaderColumn>Prospects</TableHeaderColumn>
                                 <TableHeaderColumn>Proposals</TableHeaderColumn>
                                 <TableHeaderColumn>Deals</TableHeaderColumn>
                             </TableRow>

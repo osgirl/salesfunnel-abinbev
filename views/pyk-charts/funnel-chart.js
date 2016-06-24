@@ -16,9 +16,9 @@ function getFunnelChart() {
                     "weight": funnelChartData.proposals,
                     "tooltip": "<b>Total proposals:</b> " + funnelChartData.proposals
                 }, {
-                    "name": "negos",
+                    "name": "prospects",
                     "weight": funnelChartData.negos,
-                    "tooltip": "<b>Total negos:</b> " + funnelChartData.negos
+                    "tooltip": "<b>Total prospects:</b> " + funnelChartData.negos
                 }, {
                     "name": "deals",
                     "weight": funnelChartData.deals,
