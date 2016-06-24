@@ -45,9 +45,6 @@ class RegistrationCard extends React.Component {
         this.ensureRequiredFieldIsFilledIn(this.state.negos);
         this.ensureRequiredFieldIsFilledIn(this.state.proposals);
         this.ensureRequiredFieldIsFilledIn(this.state.deals);
-        this.ensureHigherThan(this.state.negos, this.state.visits, "Visits should be higher than nego's");
-        this.ensureHigherThan(this.state.proposals, this.state.negos, "Nego's should be higher than Proposals");
-        this.ensureHigherThan(this.state.deals, this.state.proposals, "Proposals should be higher than Nego's");
 
         this.setState({
             visits: this.state.visits,
@@ -67,17 +64,6 @@ class RegistrationCard extends React.Component {
         return field;
     }
 
-    ensureHigherThan(lowerField, higherField, errorText) {
-        if (lowerField.value && higherField.value) {
-            if (Number(lowerField.value) > Number(higherField.value)) {
-                lowerField.errorText = errorText;
-                this.isValid = false;
-            } else {
-                lowerField.errorText = undefined;
-            }
-        }
-    }
-
     submitSales() {
         this.ensureAllFormFieldsAreValid();
         if (this.isValid) {
@@ -94,7 +80,6 @@ class RegistrationCard extends React.Component {
     visitsTextChanged(value) {
         this.state.visits.value = value;
         this.ensureRequiredFieldIsFilledIn(this.state.visits);
-        this.ensureHigherThan(this.state.negos, this.state.visits, "Visits should be higher than nego's");
 
         this.setState({
             visits: this.state.visits
@@ -104,8 +89,6 @@ class RegistrationCard extends React.Component {
     negosTextChanged(value) {
         this.state.negos.value = value;
         this.ensureRequiredFieldIsFilledIn(this.state.negos);
-        this.ensureHigherThan(this.state.negos, this.state.visits, "Visits should be higher than nego's");
-        this.ensureHigherThan(this.state.proposals, this.state.negos, "Nego's should be higher than Proposals");
 
         this.setState({
             negos: this.state.negos
@@ -115,8 +98,6 @@ class RegistrationCard extends React.Component {
     proposalsTextChanged(value) {
         this.state.proposals.value = value;
         this.ensureRequiredFieldIsFilledIn(this.state.proposals);
-        this.ensureHigherThan(this.state.proposals, this.state.negos, "Nego's should be higher than Proposals");
-        this.ensureHigherThan(this.state.deals, this.state.proposals, "Proposals should be higher than Deals");
 
         this.setState({
             proposals: this.state.proposals
@@ -126,7 +107,6 @@ class RegistrationCard extends React.Component {
     dealsTextChanged(value) {
         this.state.deals.value = value;
         this.ensureRequiredFieldIsFilledIn(this.state.deals);
-        this.ensureHigherThan(this.state.deals, this.state.proposals, "Proposals should be higher than Deals");
 
         this.setState({
             deals: this.state.deals
@@ -165,8 +145,8 @@ class RegistrationCard extends React.Component {
                     />
                     <RegistrationNumberField
                         id="negos"
-                        hintText="Nego's"
-                        floatingLabelText="Total nego's of the day"
+                        hintText="Prospects"
+                        floatingLabelText="Total prospects of the day"
                         errorText={this.state.negos.errorText}
                         value={this.state.negos.value}
                         textChanged={this.negosTextChanged.bind(this)}
