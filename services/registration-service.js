@@ -26,6 +26,7 @@ export function getWorkWeekUserRegistrationData(userId, nrOfWeeks) {
         var toDate = getEndOfWeekDate(nrOfWeeksInThePast);
         var weekNumber = getWeekNumber(nrOfWeeksInThePast);
 
+        console.log(`getWorkWeekRegistratrionData - from, to:${nrOfWeeksInThePast} from ${fromDate.toDate()} to ${toDate.toDate()}`);
         return getRegistrationsByUserRef(userId, fromDate, toDate)
             .then(calculateAndResolveRegistrationData)
             .then(function (result) {
@@ -109,9 +110,6 @@ function getRegistrationsByTeamRef(teamRef, fromDate, toDate) {
 }
 
 function getRegistrationsByUserRef(userRef, fromDate, toDate) {
-    console.log("getRegistrationsByUserRef");
-    console.log(`fromDate:${JSON.stringify(fromDate.creationData())}`);
-    console.log(`toDate:${JSON.stringify(toDate.creationData())}`);
     return new Promise(function (resolve, reject) {
         Registration.find({
             userRef: userRef,

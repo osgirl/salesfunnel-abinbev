@@ -15,14 +15,12 @@ export const LAST_YEAR = `LAST_YEAR`;
 export function getFromCurrentDate(momentDate) {
     var momentDate = (momentDate || moment());
     var fromCurrentDate = momentDate.startOf('day');
-    console.log(`fromCurrentDate:${JSON.stringify(fromCurrentDate.creationData())}`);
     return fromCurrentDate;
 };
 
 export function getToCurrentDate(momentDate) {
     var momentDate = (momentDate || moment());
     var endCurrentDate = momentDate.endOf('day');
-    console.log(`endCurrentDate:${JSON.stringify(endCurrentDate.creationData())}`);
     return endCurrentDate;
 };
 
