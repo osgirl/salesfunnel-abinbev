@@ -21,12 +21,19 @@ function postRegistrationData(req, res, next) {
     var momentDate = moment(date);
     console.log(`saved as day:${momentDate.date()}`);
     console.log(`saved as hour:${momentDate.hour()}`);
+    if (momentDate.hour() > 22) {
+        momentDate.hour(0);
+        momentDate.date(momentDate.date() + 1);
+    }
+
+    console.log(`really saved as day:${momentDate.date()}`);
+    console.log(`really saved as hour:${momentDate.hour()}`);
 
     var formattedDate = momentDate.format("YYYY-MM-DD");
 
     return saveRegistration(req.user.id, req.user.teamRef, momentDate, req.body)
         .then(function (result) {
-            return res.status('200').send("Thank you for registering your sales of: " + moment(date));
+            return res.status('200').send("Thank you for registering your sales of: " + formattedDate);
         })
         .
         catch(function (err) {
