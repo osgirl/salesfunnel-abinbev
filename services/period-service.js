@@ -14,12 +14,16 @@ export const LAST_YEAR = `LAST_YEAR`;
 
 export function getFromCurrentDate(momentDate) {
     var momentDate = (momentDate || moment());
-    return momentDate.startOf('day');
+    var fromCurrentDate = momentDate.startOf('day');
+    console.log(`fromCurrentDate:${JSON.stringify(fromCurrentDate.creationData())}`);
+    return fromCurrentDate;
 };
 
 export function getToCurrentDate(momentDate) {
     var momentDate = (momentDate || moment());
-    return momentDate.endOf('day');
+    var endCurrentDate = momentDate.endOf('day');
+    console.log(`endCurrentDate:${JSON.stringify(endCurrentDate.creationData())}`);
+    return endCurrentDate;
 };
 
 var getLastYearDate = function () {
@@ -35,24 +39,24 @@ var getLastWeekDate = function () {
 };
 
 export function getStartOfWeekDate(nrOfWeeksInThePast) {
-    return moment().subtract(nrOfWeeksInThePast, 'weeks').startOf('isoWeek');
+    return moment({hour: 0, minute: 0, seconds: 0}).subtract(nrOfWeeksInThePast, 'weeks').startOf('isoWeek');
 };
 
 export function getEndOfWeekDate(nrOfWeeksInThePast) {
-    return moment().subtract(nrOfWeeksInThePast, 'weeks').endOf('isoWeek');
+    return moment({hour: 23, minute: 59, seconds: 59}).subtract(nrOfWeeksInThePast, 'weeks').endOf('isoWeek');
 };
 
 export function getStartOfMonthDate(nrOfMonthsInThePast) {
-    return moment().subtract(nrOfMonthsInThePast, 'months').startOf('month');
+    return moment({hour: 0, minute: 0, seconds: 0}).subtract(nrOfMonthsInThePast, 'months').startOf('month');
 };
 export function getEndOfMonthDate(nrOfMonthsInThePast) {
-    return moment().subtract(nrOfMonthsInThePast, 'months').endOf('month');
+    return moment({hour: 23, minute: 59, seconds: 59}).subtract(nrOfMonthsInThePast, 'months').endOf('month');
 };
 export function getStartOfYearDate(nrOfYearsInThePast) {
-    return moment().subtract(nrOfYearsInThePast, 'years').startOf('year');
+    return moment({hour: 0, minute: 0, seconds: 0}).subtract(nrOfYearsInThePast, 'years').startOf('year');
 };
 export function getEndOfYearDate(nrOfYearsInThePast) {
-    return moment().subtract(nrOfYearsInThePast, 'years').endOf('year');
+    return moment({hour: 23, minute: 59, seconds: 59}).subtract(nrOfYearsInThePast, 'years').endOf('year');
 };
 
 export function getWeekNumber(nrOfWeeksInThePast) {

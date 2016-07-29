@@ -109,6 +109,9 @@ function getRegistrationsByTeamRef(teamRef, fromDate, toDate) {
 }
 
 function getRegistrationsByUserRef(userRef, fromDate, toDate) {
+    console.log("getRegistrationsByUserRef");
+    console.log(`fromDate:${JSON.stringify(fromDate.creationData())}`);
+    console.log(`toDate:${JSON.stringify(toDate.creationData())}`);
     return new Promise(function (resolve, reject) {
         Registration.find({
             userRef: userRef,
