@@ -18,11 +18,15 @@ router.get('/visits',
 
 function postRegistrationData(req, res, next) {
     var date = req.params.date;
-    var formattedDate = moment(date).format("YYYY-MM-DD");
+    var momentDate = moment(date);
+    console.log(`saved as day:${momentDate.date()}`);
+    console.log(`saved as hour:${momentDate.hour()}`);
 
-    return saveRegistration(req.user.id, req.user.teamRef, moment(date), req.body)
+    var formattedDate = momentDate.format("YYYY-MM-DD");
+
+    return saveRegistration(req.user.id, req.user.teamRef, momentDate, req.body)
         .then(function (result) {
-            return res.status('200').send("Thank you for registering your sales of: " + formattedDate);
+            return res.status('200').send("Thank you for registering your sales of: " + moment(date));
         })
         .
         catch(function (err) {
