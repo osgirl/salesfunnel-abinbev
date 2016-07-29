@@ -21,9 +21,8 @@ function postRegistrationData(req, res, next) {
     var momentDate = moment(date);
     console.log(`saved as day:${momentDate.date()}`);
     console.log(`saved as hour:${momentDate.hour()}`);
-    if (momentDate.hour() === 22) {
-        momentDate.hour(0);
-        momentDate.date(momentDate.date() + 1);
+    if (momentDate.hour() >= 22) {
+        momentDate.add(2, 'hours');
         console.log(`really saved as day:${momentDate.date()}`);
         console.log(`really saved as hour:${momentDate.hour()}`);
     }
