@@ -3,7 +3,7 @@ import { Schema } from 'mongoose';
 
 var userSchema = new Schema({
     userName: String,
-    email: { type: String, index: {unique: true}},
+    email: { type: String, lowercase: true, index: {unique: true}},
     roleRef: { type: String, ref: 'Role', required: true},
     teamRef: { type: String, ref: 'Team', index:true},
     pw: String,

@@ -1,12 +1,10 @@
-import {expect, assert} from 'chai';
-import app from '../../app';
+import { expect, assert } from 'chai';
 import { getNewUserAccount, getUserFixture } from '../../model/users/user-fixture.js';
 import RoleFixtures from '../../model/roles/role-fixture.js';
 import TeamFixtures from '../../model/teams/team-fixture.js';
-import _ from 'lodash';
 import dbTestSetup from '../../model/db-test-setup.js';
 import UserService from '../../services/user-service.js';
-import { getRandomString } from '../helpers/random-helpers.js'
+import { getRandomString } from '../helpers/random-helpers.js';
 import { fillDbBefore } from '../helpers/db-helpers.js';
 
 describe("when there are users in the DB", function () {
@@ -56,6 +54,17 @@ describe("when there are users in the DB", function () {
                 }
             })
     });
+
+    it('findByEmail with uppercase should return the user with lower case', (done) => {
+        const userFixture = getNewUserAccount();
+
+        UserService.findByEmail(userFixture.email)
+            .then((result) => {
+                expect(result.email).to.equal(userFixture.email.toLowerCase());
+                done();
+            })
+            .catch(done);
+    });
 });
 
 describe("when no users in database", function () {
@@ -99,15 +108,15 @@ describe("when no users in database", function () {
                 expect(result._id).not.to.undefined;
                 UserService.getUsers()
                     .then((users) => {
-                        try {
-                            expect(users).not.to.be.empty;
-                            expect(users[0].userName).to.equal(userName);
-                            return done();
-                        } catch (e) {
-                            return done(e);
+                            try {
+                                expect(users).not.to.be.empty;
+                                expect(users[0].userName).to.equal(userName);
+                                return done();
+                            } catch (e) {
+                                return done(e);
+                            }
                         }
-                    }
-                )
+                    )
                 ;
             } catch (e) {
                 return done(e);
