@@ -46,15 +46,7 @@ export function sendVerificationEmails(user, baseUrl) {
     });
 
     function createVerificationUrl(baseUrl, user) {
-        console.log(`--- quickfix:${baseUrl}`);
-        const fixBaseUrl = baseUrl.replace('https:/s', 'https://s');
-        console.log(`--- fixBaseUrl:${fixBaseUrl}`);
-
-        const verificationUrl = path.join(fixBaseUrl, 'signup', 'accept', user.id, user.verificationToken);
-        
-        console.log(`--- verif-url:${verificationUrl}`);
-
-        return verificationUrl;
+        return `${baseUrl}${path.join('signup', 'accept', user.id, user.verificationToken)}`;
     }
 }
 
@@ -90,15 +82,7 @@ export function sendPasswordResetEmail(user, pwResetToken, baseUrl) {
     });
 
     function createResetPasswordUrl(baseUrl, pwResetToken) {
-        console.log(`--- quickfix:${baseUrl}`);
-        const fixBaseUrl = baseUrl.replace('https:/s', 'https://s');
-        console.log(`--- fixBaseUrl:${fixBaseUrl}`);
-
-        const verificationUrl = path.join(fixBaseUrl, 'reset-password', 'reset', pwResetToken);
-
-        console.log(`--- verif-url:${verificationUrl}`);
-
-        return verificationUrl;
+        return `${baseUrl}${path.join('reset-password', 'reset', pwResetToken)}`;
     }
 }
 
