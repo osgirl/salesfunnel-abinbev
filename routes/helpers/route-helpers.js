@@ -1,6 +1,5 @@
 import url from 'url';
 
-
 export function getBaseUrl(req) {
     //Because of Heroku's automatic https enabled
     var protocol = req.protocol;

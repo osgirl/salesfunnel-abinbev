@@ -20,6 +20,9 @@ export function sendVerificationEmails(user, baseUrl) {
         if (user.verificationEmailCounter > 5) {
             return reject(new Error("Already more than five emails have been sent"));
         }
+        var actionUrl = createVerificationUrl(baseUrl, user);
+
+        console.log(`--- actionUrl:${actionUrl}`);
 
         var emailObject = {
             "From": "Sales Registration App <jonathan@cazamundo.be>",
@@ -28,7 +31,7 @@ export function sendVerificationEmails(user, baseUrl) {
             "TemplateModel": {
                 "product_name": "The Sales Registration App",
                 "name": user.userName,
-                "action_url": createVerificationUrl(baseUrl, user),
+                "action_url": actionUrl,
                 "username": user.email,
                 "sender_name": "AB Inbev Sales Management Team"
             }
