@@ -20,9 +20,6 @@ export function sendVerificationEmails(user, baseUrl) {
         if (user.verificationEmailCounter > 5) {
             return reject(new Error("Already more than five emails have been sent"));
         }
-        var actionUrl = createVerificationUrl(baseUrl, user);
-
-
         var emailObject = {
             "From": "Sales Registration App <jonathan@cazamundo.be>",
             "To": user.email,
@@ -30,7 +27,7 @@ export function sendVerificationEmails(user, baseUrl) {
             "TemplateModel": {
                 "product_name": "The Sales Registration App",
                 "name": user.userName,
-                "action_url": actionUrl,
+                "action_url": createVerificationUrl(baseUrl, user),
                 "username": user.email,
                 "sender_name": "AB Inbev Sales Management Team"
             }
@@ -53,7 +50,11 @@ export function sendVerificationEmails(user, baseUrl) {
         const fixBaseUrl = baseUrl.replace('https:/s', 'https://s');
         console.log(`--- fixBaseUrl:${fixBaseUrl}`);
 
-        return path.join(fixBaseUrl, 'signup', 'accept', user.id, user.verificationToken);
+        const verificationUrl = path.join(fixBaseUrl, 'signup', 'accept', user.id, user.verificationToken);
+        
+        console.log(`--- verif-url:${verificationUrl}`);
+
+        return verificationUrl;
     }
 }
 
@@ -89,7 +90,15 @@ export function sendPasswordResetEmail(user, pwResetToken, baseUrl) {
     });
 
     function createResetPasswordUrl(baseUrl, pwResetToken) {
-        return path.join(baseUrl, 'reset-password', 'reset', pwResetToken);
+        console.log(`--- quickfix:${baseUrl}`);
+        const fixBaseUrl = baseUrl.replace('https:/s', 'https://s');
+        console.log(`--- fixBaseUrl:${fixBaseUrl}`);
+
+        const verificationUrl = path.join(fixBaseUrl, 'reset-password', 'reset', pwResetToken);
+
+        console.log(`--- verif-url:${verificationUrl}`);
+
+        return verificationUrl;
     }
 }
 
