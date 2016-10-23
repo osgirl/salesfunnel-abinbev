@@ -22,7 +22,6 @@ export function sendVerificationEmails(user, baseUrl) {
         }
         var actionUrl = createVerificationUrl(baseUrl, user);
 
-        console.log(`--- actionUrl:${actionUrl}`);
 
         var emailObject = {
             "From": "Sales Registration App <jonathan@cazamundo.be>",
@@ -50,7 +49,11 @@ export function sendVerificationEmails(user, baseUrl) {
     });
 
     function createVerificationUrl(baseUrl, user) {
-        return path.join(baseUrl, 'signup', 'accept', user.id, user.verificationToken);
+        console.log(`--- quickfix:${baseUrl}`);
+        const fixBaseUrl = baseUrl.replace('https:/s', 'https://s');
+        console.log(`--- fixBaseUrl:${fixBaseUrl}`);
+
+        return path.join(fixBaseUrl, 'signup', 'accept', user.id, user.verificationToken);
     }
 }
 
